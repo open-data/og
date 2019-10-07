@@ -1,0 +1,94 @@
+name: Open Government
+type: profile
+description: 'Distribution profile for the Open Government project for Government of Canada'
+core: 8.x
+
+distribution:
+  name: 'Open Government'
+  langcode: en
+
+# Required modules to install to support the profile
+install:
+  # core
+  - action
+  - block
+  - block_content
+  - breakpoint
+  - ckeditor
+  - comment
+  - config
+  - content_moderation
+  - contextual
+  - dblog
+  - dynamic_page_cache
+  - editor
+  - field
+  - field_ui
+  - filter
+  - layout_builder
+  - layout_discovery
+  - media
+  - menu_link_content
+  - menu_ui
+  - node
+  - page_cache
+  - path
+  - quickedit
+  - rdf
+  - shortcut
+  - system
+  - taxonomy
+  - toolbar
+  - user
+  - views
+  - views_ui
+  - workflows
+  #core (Field types)
+  - file
+  - image
+  - link
+  - options
+  - text
+  # core (Multilingual)
+  - config_translation
+  - content_translation
+  - language
+  - locale
+  # core (Experimental)
+  - media_library
+  # core (Web services)
+  - rest
+  - serialization
+  # contrib
+  - admin_toolbar
+  - admin_toolbar_links_access_filter
+  - admin_toolbar_tools
+  - autologout
+  - bootstrap_layouts
+  - ckeditor_codemirror
+  - csv_serialization
+  - ctools
+  - facets
+  - fontawesome
+  - google_analytics
+  - honeypot
+  - memcache
+  - menu_breadcrumb
+  - metatag
+  - metatag_dc
+  - metatag_twitter_cards
+  - pathauto
+  - redirect
+  - search_api
+  - search_api_solr
+  - simple_sitemap
+  - token
+  - token_filter
+  - views_bootstrap
+  - webform_ui
+  - webform
+
+themes:
+  - bartik
+  - seven
+  - gcweb

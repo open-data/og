@@ -1,0 +1,143 @@
+{
+    "name": "opengov/og",
+    "description": "Project template for Drupal 8 Open Government project with composer",
+    "type": "drupal-profile",
+    "license": "GPL-2.0-or-later",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type"    : "package",
+            "package" : {
+                "name"    : "w8tcha/ckeditor-codemirror",
+                "version" : "v1.17",
+                "type"    : "drupal-library",
+                "dist"    : {
+                    "url"  : "https://github.com/w8tcha/CKEditor-CodeMirror-Plugin/archive/v1.17.11.tar.gz",
+                    "type" : "tar"
+                },
+                "source"  : {
+                    "url"       : "https://github.com/w8tcha/CKEditor-CodeMirror-Plugin.git",
+                    "type"      : "git",
+                    "reference" : "v1.17"
+                }
+            }
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "ext-json": "*",
+        "composer/installers": "^1.2",
+        "cweagans/composer-patches": "^1.6.5",
+        "drupal-composer/drupal-scaffold": "^2.5",
+        "drupal/admin_toolbar": "1.27.0",
+        "drupal/autologout": "1.0.0",
+        "drupal/bootstrap_layouts": "5.1.0",
+        "drupal/ckeditor_codemirror": "2.2.0",
+        "drupal/console": "1.9.1",
+        "drupal/core": "8.7.7",
+        "drupal/csv_serialization": "1.4.0",
+        "drupal/facets": "1.4.0",
+        "drupal/fontawesome": "2.14.0",
+        "drupal/google_analytics": "2.4.0",
+        "drupal/honeypot": "1.29.0",
+        "drupal/memcache": "2.0.0",
+        "drupal/menu_breadcrumb": "1.11.0",
+        "drupal/metatag": "1.10.0",
+        "drupal/pathauto": "1.4.0",
+        "drupal/redirect": "1.4.0",
+        "drupal/search_api": "1.14.0",
+        "drupal/search_api_solr": "3.4.0",
+        "drupal/simple_sitemap": "3.3.0",
+        "drupal/token_filter": "1.1.0",
+        "drupal/views_bootstrap": "4.1.0",
+        "drupal/webform": "5.4.0",
+        "drush/drush": "^9.7",
+        "fortawesome/font-awesome": "5.9.0",
+        "oomphinc/composer-installers-extender": "^1.1",
+        "opengov/gcweb": "dev-master",
+        "vlucas/phpdotenv": "^2.4",
+        "w8tcha/ckeditor-codemirror": "1.17",
+        "webflo/drupal-finder": "^1.0.0",
+        "webmozart/path-util": "^2.3",
+        "zaporylie/composer-drupal-optimizations": "^1.0"
+    },
+    "require-dev": {
+        "webflo/drupal-core-require-dev": "^8.6.0"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "classmap": [
+            "scripts/composer/ScriptHandler.php"
+        ],
+        "files": ["load.environment.php"]
+    },
+    "scripts": {
+        "pre-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "pre-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "post-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ],
+        "post-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ]
+    },
+    "extra": {
+        "composer-exit-on-patch-failure": false,
+        "patchLevel": {
+            "drupal/core": "-p2"
+        },
+        "patches": {
+            "drupal/views_bootstrap": {
+                "Setting \"columns\" is missing on buildOptionsForm": "https://www.drupal.org/files/issues/2019-02-19/setting-columns-is-missing-on-buildOptionsForm-3034141-1.patch"
+            },
+            "drupal/core": {
+                "Submitting a comment in the non default language redirects you to the default language": "https://www.drupal.org/files/issues/2019-05-08/2751269-redirect_to_current_node_language_after_post_comment-24.patch",
+                "Comments created in translation are displayed only for admin role": "https://www.drupal.org/files/issues/2018-04-13/drupal-comment_translation_displayed_only_admin-2958935-9-D8.patch",
+                "Notice: Undefined index: target_bundles when new reference media field created": "https://www.drupal.org/files/issues/2019-05-18/undefined_index_target_bundles-3055516-4.patch",
+                "Allow exposed form for non-ajax block displays": "https://www.drupal.org/files/issues/2692297-8.patch",
+                "Undefined index: identifier in view's DisplayPluginBase->isIdentifierUnique()": "https://www.drupal.org/files/issues/2882031-10_0.patch",
+                "Error: Call to a member function getLabel() after enable layout_builder": "https://www.drupal.org/files/issues/2018-07-16/2985882-entityfield-2.patch",
+                "Performance Degradation in Layout Builder and other places likely": "https://www.drupal.org/files/issues/2019-08-21/d8_entity_validation.patch",
+                "Terrible performance when rendering multi-value fields in views": "https://www.drupal.org/files/issues/2018-04-03/views-multivalue_field_rendering_performance-2846485-23.patch",
+                "Views exposed sort filters does not sort with facets": "https://www.drupal.org/files/issues/2018-10-30/views-exposed-sort-filters-2992672-10.patch"
+            }
+        },
+       "installer-types": [
+            "npm-asset",
+            "bower-asset"
+        ],
+        "installer-paths": {
+            "html/core": [ "type:drupal-core" ],
+            "html/libraries/{$name}": [
+                "type:drupal-library",
+                "type:npm-asset",
+                "type:bower-asset"
+            ],
+            "html/modules/contrib/{$name}": [ "type:drupal-module" ],
+            "html/profiles/{$name}": [ "type:drupal-profile" ],
+            "html/themes/custom/{$name}": [ "opengov/gcweb" ],
+            "html/themes/contrib/{$name}": [ "type:drupal-theme" ],
+            "drush/Commands/{$name}": [ "type:drupal-drush" ]
+        },
+        "drupal-scaffold": {
+            "initial": {
+                ".editorconfig": "../.editorconfig",
+                ".gitattributes": "../.gitattributes"
+            }
+        }
+    }
+}

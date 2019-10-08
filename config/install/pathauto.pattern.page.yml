@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - language
+    - node
+id: page
+label: Page
+type: 'canonical_entities:node'
+pattern: 'content/[node:title]'
+selection_criteria:
+  c3b9c427-fcac-4301-b846-cb02795e5522:
+    id: node_type
+    bundles:
+      page: page
+    negate: false
+    context_mapping:
+      node: node
+  3fb2e2f3-a537-4e2e-9183-88953d41f7c8:
+    id: language
+    langcodes:
+      en: en
+    negate: false
+    context_mapping:
+      language: 'node:langcode:language'
+selection_logic: and
+weight: -8
+relationships:
+  'node:langcode:language':
+    label: Language

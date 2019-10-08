@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: slideshow
+label: Slideshow
+revision: 1
+description: 'slideshow carousel '

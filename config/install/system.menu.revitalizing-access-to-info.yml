@@ -1,0 +1,7 @@
+langcode: und
+status: true
+dependencies: {  }
+id: revitalizing-access-to-info
+label: 'Revitalizing access to information'
+description: 'Side menu - Revitalizing access to information'
+locked: false

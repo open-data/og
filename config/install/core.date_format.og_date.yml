@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: og_date
+label: 'OG Date'
+locked: false
+pattern: 'F d, Y - g:i A'

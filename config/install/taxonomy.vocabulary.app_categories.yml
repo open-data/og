@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'App Categories'
+vid: app_categories
+description: 'App categories for help with organizing content.'
+weight: 0

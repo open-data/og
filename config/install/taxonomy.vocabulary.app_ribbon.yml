@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'App Ribbon'
+vid: app_ribbon
+description: 'The ribbon to use for each App.'
+weight: 0

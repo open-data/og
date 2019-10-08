@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: suggested_dataset
+label: 'Suggested Dataset'
+type: 'canonical_entities:node'
+pattern: 'suggestion/dataset/[node:title]'
+selection_criteria:
+  2434a551-2bc6-4cd6-a09c-036ec39d5b9d:
+    id: node_type
+    bundles:
+      suggested_dataset: suggested_dataset
+    negate: false
+    context_mapping:
+      node: node
+selection_logic: and
+weight: 5
+relationships: {  }

@@ -1,0 +1,85 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_display.comment.comment.default
+    - field.field.node.map.body
+    - field.field.node.map.comment
+    - field.field.node.map.field_dataset_used
+    - field.field.node.map.field_developed_by
+    - field.field.node.map.field_map_key
+    - field.field.node.map.field_media
+    - field.field.node.map.field_meta_tags
+    - node.type.map
+  module:
+    - comment
+    - link
+    - metatag
+    - text
+    - user
+id: node.map.default
+targetEntityType: node
+bundle: map
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  comment:
+    weight: 5
+    label: above
+    settings:
+      view_mode: default
+      pager_id: 0
+    third_party_settings: {  }
+    type: comment_default
+    region: content
+  content_moderation_control:
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_dataset_used:
+    type: link
+    weight: 4
+    region: content
+    label: above
+    settings:
+      trim_length: 250
+      url_only: false
+      url_plain: false
+      rel: '0'
+      target: '0'
+    third_party_settings: {  }
+  field_developed_by:
+    weight: 3
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_map_key:
+    weight: 2
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_meta_tags:
+    type: metatag_empty_formatter
+    weight: 1
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_media: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

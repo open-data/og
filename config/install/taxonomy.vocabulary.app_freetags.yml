@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'App FreeTags'
+vid: app_freetags
+description: 'App with "Free Tagging" support.'
+weight: 0

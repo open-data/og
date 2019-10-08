@@ -1,0 +1,12 @@
+name: 'Open Government, Government of Canada'
+mail: OG.donotreply-nepasrepondre.GO@open-ouvert.canada.ca
+slogan: 'Collaborative open source project led by the Government of Canada'
+page:
+  403: ''
+  404: ''
+  front: /node/1
+admin_compact_mode: false
+weight_select_max: 100
+langcode: en
+default_langcode: en
+mail_notification: ''

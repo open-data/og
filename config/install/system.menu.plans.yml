@@ -1,0 +1,7 @@
+langcode: und
+status: true
+dependencies: {  }
+id: plans
+label: 'Mid-Term Self-Assessment Report 2016-2018'
+description: 'Side menu - Menu for Mid-Term Self-Assessment Report on Canada’s Third Biennial Plan to the Open Government Partnership 2016-2018'
+locked: false

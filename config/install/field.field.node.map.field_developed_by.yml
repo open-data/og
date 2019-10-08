@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_developed_by
+    - node.type.map
+id: node.map.field_developed_by
+field_name: field_developed_by
+entity_type: node
+bundle: map
+label: 'Developed by'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

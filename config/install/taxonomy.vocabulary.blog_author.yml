@@ -1,0 +1,7 @@
+langcode: und
+status: true
+dependencies: {  }
+name: 'Blog author'
+vid: blog_author
+description: 'Name of author for blog articles'
+weight: 0

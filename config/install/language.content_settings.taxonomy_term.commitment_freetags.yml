@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.commitment_freetags
+id: taxonomy_term.commitment_freetags
+target_entity_type_id: taxonomy_term
+target_bundle: commitment_freetags
+default_langcode: site_default
+language_alterable: false

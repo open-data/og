@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Device Formats'
+vid: device_formats
+description: 'Device formats for various types of applications.'
+weight: 0

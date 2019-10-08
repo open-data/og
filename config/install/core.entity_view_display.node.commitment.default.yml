@@ -1,0 +1,268 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_display.comment.comment.default
+    - field.field.node.commitment.body
+    - field.field.node.commitment.comment
+    - field.field.node.commitment.field_commitment_ambition
+    - field.field.node.commitment.field_commitment_end_date
+    - field.field.node.commitment.field_commitment_pillars
+    - field.field.node.commitment.field_commitment_relevance
+    - field.field.node.commitment.field_commitment_status
+    - field.field.node.commitment.field_commitment_tags
+    - field.field.node.commitment.field_department
+    - field.field.node.commitment.field_meta_tags
+    - field.field.node.commitment.field_previousnodeid
+    - field.field.node.commitment.field_reference_landing
+    - field.field.node.commitment.layout_builder__layout
+    - node.type.commitment
+  content:
+    - 'block_content:basic:cf8209e7-dbe5-4f66-8146-5fc52de7832d'
+  module:
+    - block_content
+    - bootstrap_layouts
+    - comment
+    - layout_builder
+    - layout_discovery
+    - metatag
+    - options
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    allow_custom: true
+    enabled: true
+    sections:
+      -
+        layout_id: bs_2col
+        layout_settings:
+          layout:
+            wrapper: div
+            classes:
+              row: row
+            add_layout_class: 1
+            attributes: ''
+          regions:
+            left:
+              wrapper: div
+              classes:
+                col-md-8: col-md-8
+              add_region_classes: 1
+              attributes: ''
+            right:
+              wrapper: div
+              classes:
+                col-md-4: col-md-4
+              add_region_classes: 1
+              attributes: ''
+        components:
+          b3cd98bb-104e-4fcf-baa4-06ad39f89fdb:
+            region: right
+            configuration:
+              id: 'block_content:cf8209e7-dbe5-4f66-8146-5fc52de7832d'
+              label: 'Pillars - social media'
+              provider: block_content
+              label_display: '0'
+              status: true
+              info: ''
+              view_mode: full
+              context_mapping: {  }
+            additional: {  }
+            weight: 0
+          fd821434-91e8-49e1-89bf-eff6d6a24bb4:
+            region: left
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:node:commitment:content_moderation_control'
+            additional: {  }
+            weight: 0
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings: {  }
+        components:
+          994417e9-dcf6-479e-9297-771726051541:
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:commitment:body'
+              formatter:
+                label: hidden
+                type: text_default
+                settings: {  }
+                third_party_settings: {  }
+            additional: {  }
+            weight: -10
+          4aa3bd21-eeef-40d0-83ae-e21b6edddb83:
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:commitment:field_commitment_ambition'
+              formatter:
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+                type: text_default
+            additional: {  }
+            weight: -8
+          4f508ff3-6adc-4308-955c-1825f03f0082:
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:commitment:field_commitment_relevance'
+              formatter:
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+                type: text_default
+            additional: {  }
+            weight: -9
+        third_party_settings: {  }
+      -
+        layout_id: bs_1col
+        layout_settings:
+          layout:
+            wrapper: div
+            classes:
+              row: row
+            add_layout_class: 1
+            attributes: ''
+          regions:
+            main:
+              wrapper: div
+              classes:
+                col-sm-12: col-sm-12
+              add_region_classes: 1
+              attributes: ''
+        components:
+          36b5d558-f566-4d6e-8f49-d1836dc471cb:
+            region: main
+            configuration:
+              id: 'field_block:node:commitment:comment'
+              label: Comments
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: above
+                type: comment_default
+                settings:
+                  view_mode: default
+                  pager_id: 0
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+            additional: {  }
+            weight: 0
+        third_party_settings: {  }
+id: node.commitment.default
+targetEntityType: node
+bundle: commitment
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  comment:
+    weight: 4
+    label: above
+    settings:
+      view_mode: default
+      pager_id: 0
+    third_party_settings: {  }
+    type: comment_default
+    region: content
+  content_moderation_control:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_commitment_ambition:
+    weight: 3
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_commitment_end_date:
+    weight: 10
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_commitment_pillars:
+    weight: 8
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_commitment_relevance:
+    weight: 9
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_commitment_status:
+    weight: 11
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  field_commitment_tags:
+    weight: 12
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_department:
+    weight: 6
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_meta_tags:
+    weight: 7
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_empty_formatter
+    region: content
+  field_reference_landing:
+    weight: 5
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  links:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_previousnodeid: true
+  langcode: true
+  layout_builder__layout: true
+  search_api_excerpt: true

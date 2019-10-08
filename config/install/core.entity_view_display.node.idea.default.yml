@@ -1,0 +1,251 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_display.comment.comment.default
+    - field.field.node.idea.body
+    - field.field.node.idea.comment
+    - field.field.node.idea.field_idea_permalink
+    - field.field.node.idea.field_idea_status
+    - field.field.node.idea.field_idea_submission_name
+    - field.field.node.idea.field_idea_tags
+    - field.field.node.idea.field_meta_tags
+    - field.field.node.idea.field_previousnodeid
+    - field.field.node.idea.field_vote_up_down
+    - node.type.idea
+    - webform.webform.vote_up_down
+  content:
+    - 'block_content:basic:cf8209e7-dbe5-4f66-8146-5fc52de7832d'
+  module:
+    - block_content
+    - bootstrap_layouts
+    - comment
+    - layout_builder
+    - text
+    - user
+    - webform
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: true
+    sections:
+      -
+        layout_id: bs_2col
+        layout_settings:
+          layout:
+            wrapper: div
+            classes:
+              row: row
+            add_layout_class: 1
+            attributes: ''
+          regions:
+            left:
+              wrapper: div
+              classes:
+                col-md-8: col-md-8
+              add_region_classes: 1
+              attributes: ''
+            right:
+              wrapper: div
+              classes:
+                col-md-4: col-md-4
+              add_region_classes: 1
+              attributes: ''
+        components:
+          57bde159-69e1-458c-83b5-0ef38e24382e:
+            region: right
+            configuration:
+              id: 'block_content:cf8209e7-dbe5-4f66-8146-5fc52de7832d'
+              label: 'Pillars - social media'
+              provider: block_content
+              label_display: '0'
+              status: true
+              info: ''
+              view_mode: full
+              context_mapping: {  }
+            additional: {  }
+            weight: 0
+          b64b7c94-f71b-4818-907f-b3f86d28d4d0:
+            region: left
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:node:idea:content_moderation_control'
+            additional: {  }
+            weight: 1
+        third_party_settings: {  }
+      -
+        layout_id: bs_2col
+        layout_settings:
+          layout:
+            wrapper: div
+            classes:
+              row: row
+            add_layout_class: 1
+            attributes: ''
+          regions:
+            left:
+              wrapper: div
+              classes:
+                col-sm-3: col-sm-3
+              add_region_classes: 1
+              attributes: ''
+            right:
+              wrapper: div
+              classes:
+                col-sm-9: col-sm-9
+              add_region_classes: 1
+              attributes: class|well
+        components:
+          a116fbe4-d942-4a3e-8551-fea4cfdcfed2:
+            region: left
+            configuration:
+              id: 'field_block:node:idea:field_idea_tags'
+              label: Étiquettes
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: visually_hidden
+                type: entity_reference_label
+                settings:
+                  link: false
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+            additional: {  }
+            weight: -9
+          fbb1af4c-7e62-43e3-8e8d-1eb0fcdbcc5e:
+            region: right
+            configuration:
+              id: 'field_block:node:idea:body'
+              label: Détails
+              provider: layout_builder
+              label_display: '0'
+              formatter:
+                label: hidden
+                type: text_default
+                settings: {  }
+                third_party_settings: {  }
+              context_mapping:
+                entity: layout_builder.entity
+            additional: {  }
+            weight: 4
+          89376394-1226-493b-a156-39b670d3295b:
+            region: left
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:idea:field_idea_submission_name'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: -10
+          cfa8ceab-aa2e-4d3f-a024-45c4cd95d86d:
+            region: left
+            configuration:
+              id: webform_block
+              label: Webform
+              provider: webform
+              label_display: '0'
+              webform_id: vote_up_down
+              default_data: ''
+              redirect: false
+              context_mapping: {  }
+            additional: {  }
+            weight: -8
+        third_party_settings: {  }
+      -
+        layout_id: bs_1col
+        layout_settings:
+          layout:
+            wrapper: div
+            classes:
+              row: row
+            add_layout_class: 1
+            attributes: ''
+          regions:
+            main:
+              wrapper: div
+              classes:
+                col-sm-12: col-sm-12
+              add_region_classes: 1
+              attributes: ''
+        components:
+          c04b74d2-5572-4646-be51-87df4964e6fc:
+            region: main
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:idea:comment'
+              formatter:
+                label: above
+                settings:
+                  view_mode: default
+                  pager_id: 0
+                third_party_settings: {  }
+                type: comment_default
+            additional: {  }
+            weight: 4
+        third_party_settings: {  }
+id: node.idea.default
+targetEntityType: node
+bundle: idea
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  comment:
+    weight: 4
+    label: above
+    settings:
+      view_mode: default
+      pager_id: 0
+    third_party_settings: {  }
+    type: comment_default
+    region: content
+  content_moderation_control:
+    weight: -20
+    settings: {  }
+    third_party_settings: {  }
+    region: left
+  field_idea_submission_name:
+    weight: 2
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_idea_tags:
+    weight: 1
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  links:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_idea_permalink: true
+  field_idea_status: true
+  field_meta_tags: true
+  field_previousnodeid: true
+  field_vote_up_down: true
+  langcode: true
+  search_api_excerpt: true

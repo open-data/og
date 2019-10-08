@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: app
+label: App
+type: 'canonical_entities:node'
+pattern: 'app/[node:title]'
+selection_criteria:
+  972fd13c-6d6c-42be-a211-b251ff893aff:
+    id: node_type
+    bundles:
+      app: app
+    negate: false
+    context_mapping:
+      node: node
+selection_logic: and
+weight: -4
+relationships: {  }

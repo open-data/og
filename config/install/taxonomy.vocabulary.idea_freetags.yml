@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Idea FreeTags'
+vid: idea_freetags
+description: 'Idea with "Free Tagging" support.'
+weight: 0

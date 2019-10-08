@@ -1,0 +1,44 @@
+label: 'Galerie d''applis'
+display:
+  default:
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Rechercher
+          exposed_sorts_label: Trier
+      pager:
+        options:
+          tags:
+            first: '« Précédent'
+            last: 'Suivant »'
+      filters:
+        field_ribbon_target_id:
+          expose:
+            label: Éditeur
+        field_device_formats_target_id:
+          expose:
+            label: Disponibilité
+        combine:
+          expose:
+            label: Recherche
+  block_1:
+    display_options:
+      header:
+        result:
+          content: '<p><strong>@total résultats trouvé(s)</strong></p>'
+      filters:
+        combine:
+          expose:
+            label: Recherche
+        field_ribbon_target_id:
+          expose:
+            label: Éditeur
+        field_subject_target_id:
+          expose:
+            label: Sujet
+        field_device_formats_target_id:
+          expose:
+            label: 'Format du dispositif'
+      empty:
+        area_text_custom:
+          content: "<p><strong>Aucun résultat trouvé.</strong></p> \r\n<p>Veuillez entrer un nouveau mot-clé.</p>\r\n<br/><br/>\r\n"

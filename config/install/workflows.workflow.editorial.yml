@@ -1,0 +1,99 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.app
+    - node.type.article
+    - node.type.commitment
+    - node.type.consultation
+    - node.type.external
+    - node.type.idea
+    - node.type.landing_page
+    - node.type.map
+    - node.type.page
+    - node.type.suggested_dataset
+    - node.type.webform
+  module:
+    - content_moderation
+id: editorial
+label: Editorial
+type: content_moderation
+type_settings:
+  states:
+    archived:
+      label: Archived
+      weight: 1
+      published: false
+      default_revision: true
+    draft:
+      label: Draft
+      published: false
+      default_revision: false
+      weight: -2
+    in_review:
+      published: false
+      default_revision: false
+      label: 'In review'
+      weight: -1
+    published:
+      label: Published
+      published: true
+      default_revision: true
+      weight: 0
+  transitions:
+    archive:
+      label: Archive
+      from:
+        - draft
+        - published
+      to: archived
+      weight: 0
+    archived_draft:
+      label: 'Restore to Draft'
+      from:
+        - archived
+      to: draft
+      weight: 1
+    archived_published:
+      label: Restore
+      from:
+        - archived
+      to: published
+      weight: 2
+    create_new_draft:
+      label: 'Create New Draft'
+      to: draft
+      weight: -3
+      from:
+        - draft
+        - in_review
+        - published
+    publish:
+      label: Publish
+      to: published
+      weight: -1
+      from:
+        - draft
+        - in_review
+        - published
+    review:
+      label: Review
+      from:
+        - draft
+        - in_review
+      to: in_review
+      weight: -2
+  entity_types:
+    node:
+      - app
+      - article
+      - commitment
+      - consultation
+      - external
+      - idea
+      - landing_page
+      - map
+      - page
+      - suggested_dataset
+      - webform
+  default_moderation_state: draft

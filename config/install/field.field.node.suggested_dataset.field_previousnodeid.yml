@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_previousnodeid
+    - node.type.suggested_dataset
+id: node.suggested_dataset.field_previousnodeid
+field_name: field_previousnodeid
+entity_type: node
+bundle: suggested_dataset
+label: previousNodeId
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

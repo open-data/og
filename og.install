@@ -21,5 +21,12 @@ function open_government_install() {
   \Drupal::configFactory()
     ->getEditable('system.theme')
     ->set('default', 'gcweb')
+    ->set('admin', 'seven')
     ->save();
+
+  // Enable the admin theme.
+  \Drupal::configFactory()
+    ->getEditable('node.settings')
+    ->set('use_admin_theme', TRUE)
+    ->save(TRUE);
 }

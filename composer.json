@@ -61,7 +61,7 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1",
         "ext-json": "*",
         "composer/installers": "^1.2",
         "cweagans/composer-patches": "^1.6.5",
@@ -70,8 +70,8 @@
         "drupal/autologout": "1.0.0",
         "drupal/bootstrap_layouts": "5.1.0",
         "drupal/ckeditor_codemirror": "2.2.0",
-        "drupal/console": "1.9.3",
-        "drupal/core": "8.7.8",
+        "drupal/console": "^1.0.2",
+        "drupal/core": "^8.7.0",
         "drupal/csv_serialization": "1.4.0",
         "drupal/facets": "1.4.0",
         "drupal/fontawesome": "2.14.0",
@@ -88,7 +88,7 @@
         "drupal/token_filter": "1.1.0",
         "drupal/views_bootstrap": "4.1.0",
         "drupal/webform": "5.4.0",
-        "drush/drush": "^9.7",
+        "drush/drush": "^9.0.0",
         "fortawesome/font-awesome": "5.9.0",
         "oomphinc/composer-installers-extender": "^1.1",
         "opengov/gcweb": "dev-master",

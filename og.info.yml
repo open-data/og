@@ -87,7 +87,15 @@ install:
   - views_bootstrap
   - webform_ui
   - webform
-
+  # custom
+  - alter_block
+  - alter_view
+  - content_type_breadcrumb
+  - external_comment
+  - map
+  - og_ext_webform
+  - voting_webform
+  - webform_resend
 themes:
   - bartik
   - seven

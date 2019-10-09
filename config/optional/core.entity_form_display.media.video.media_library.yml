@@ -1,3 +1,4 @@
+uuid: b379d4a8-6394-4c92-b78d-2997df7edb1d
 langcode: en
 status: true
 dependencies:
@@ -5,6 +6,8 @@ dependencies:
     - core.entity_form_mode.media.media_library
     - field.field.media.video.field_media_video_file
     - media.type.video
+_core:
+  default_config_hash: tDAk5WjHHzEBR0eK2k8ZlWr7Ji5lCSh_ddgoQnmfsCY
 id: media.video.media_library
 targetEntityType: media
 bundle: video

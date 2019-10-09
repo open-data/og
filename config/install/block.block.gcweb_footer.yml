@@ -1,3 +1,4 @@
+uuid: 6b0019c0-fbf1-484e-9d4e-cdeedddfbe34
 langcode: en
 status: true
 dependencies:
@@ -8,6 +9,8 @@ dependencies:
     - system
   theme:
     - gcweb
+_core:
+  default_config_hash: kkISXE1LT2FJEoYnqCrCpeFB-2pmGmMxMklVk7rQcfg
 id: gcweb_footer
 theme: gcweb
 region: footer

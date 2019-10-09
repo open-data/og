@@ -1,3 +1,4 @@
+uuid: 5a4ac79e-8494-4a3c-b6eb-8ac91ea2323c
 langcode: en
 status: true
 dependencies:
@@ -12,6 +13,8 @@ dependencies:
     - media
     - media_library
     - user
+_core:
+  default_config_hash: 1F1cSZ5MlvxdwjdyrwnH2I8CWngOp8Pu2SXDzix2QUc
 id: media_library
 label: 'Media library'
 module: views

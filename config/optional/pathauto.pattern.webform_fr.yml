@@ -1,3 +1,4 @@
+uuid: d32024bc-72db-405a-9648-23b76d1d1a62
 langcode: en
 status: true
 dependencies:
@@ -16,6 +17,7 @@ selection_criteria:
     negate: false
     context_mapping:
       node: node
+    uuid: 732c40dc-9def-4a26-aa12-bfe3a7bd82e0
   13c1b8a0-d2bd-480e-9055-86ef497cb1e3:
     id: language
     langcodes:
@@ -23,6 +25,7 @@ selection_criteria:
     negate: false
     context_mapping:
       language: 'node:langcode:language'
+    uuid: 13c1b8a0-d2bd-480e-9055-86ef497cb1e3
 selection_logic: and
 weight: -5
 relationships:

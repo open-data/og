@@ -1,3 +1,4 @@
+uuid: 396388b2-f29d-4194-b5a3-44cae773270b
 langcode: en
 status: true
 dependencies:
@@ -5,6 +6,8 @@ dependencies:
     - core.entity_form_mode.media.media_library
     - field.field.media.file.field_media_file
     - media.type.file
+_core:
+  default_config_hash: RFmywOcuem167havmD4VLgBTO1Swq9hyA-_f5aYTi8c
 id: media.file.media_library
 targetEntityType: media
 bundle: file

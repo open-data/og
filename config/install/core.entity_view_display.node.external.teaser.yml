@@ -1,3 +1,4 @@
+uuid: 0a00f828-e932-4869-a66d-ff6a96826a6b
 langcode: en
 status: true
 dependencies:
@@ -24,4 +25,5 @@ hidden:
   comment: true
   field_type: true
   field_url: true
+  field_uuid: true
   langcode: true

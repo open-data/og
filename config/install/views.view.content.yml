@@ -1,3 +1,4 @@
+uuid: dde85ad2-ec1c-496b-a4ab-6f0899c7ad20
 langcode: en
 status: true
 dependencies:
@@ -7,6 +8,8 @@ dependencies:
     - content_moderation
     - node
     - user
+_core:
+  default_config_hash: tS8PbpJX90aRFC3-UTgXzdqkq7_2frk2pz4TMijEebM
 id: content
 label: Content
 module: node

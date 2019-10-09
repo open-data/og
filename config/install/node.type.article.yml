@@ -1,3 +1,4 @@
+uuid: 7ec02257-0b82-493e-814d-585797780498
 langcode: en
 status: true
 dependencies:
@@ -7,6 +8,8 @@ third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
+_core:
+  default_config_hash: AeW1SEDgb1OTQACAWGhzvMknMYAJlcZu0jljfeU3oso
 name: 'Blog post'
 type: article
 description: 'Use for multi-user blogs. Every user gets a personal blog.'

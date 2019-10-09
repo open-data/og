@@ -1,3 +1,4 @@
+uuid: 0a38a770-81f9-43dc-a306-ccdad254799a
 langcode: en
 status: true
 dependencies:
@@ -14,6 +15,8 @@ dependencies:
     - metatag
     - path
     - text
+_core:
+  default_config_hash: sb0qCkzU_8mNq29NehYAU8jCBXWPLeX0UN8sYFVGVcw
 id: node.page.default
 targetEntityType: node
 bundle: page

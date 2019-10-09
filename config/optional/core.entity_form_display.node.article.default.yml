@@ -1,3 +1,4 @@
+uuid: 9c9ec5db-cce3-44c8-8924-79a49da5159b
 langcode: en
 status: true
 dependencies:
@@ -17,6 +18,8 @@ dependencies:
     - metatag
     - path
     - text
+_core:
+  default_config_hash: vPb_yvhA-xuNoV_yOmOwYxGuHNRIH1CoMK2qi7BSga0
 id: node.article.default
 targetEntityType: node
 bundle: article

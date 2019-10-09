@@ -1,3 +1,4 @@
+uuid: 7c150eb4-286f-439d-b467-c344e0f7e32e
 langcode: en
 status: open
 dependencies:
@@ -7,6 +8,8 @@ third_party_settings:
   honeypot:
     honeypot: true
     time_restriction: true
+_core:
+  default_config_hash: jn1mOzzxA8PWcnp73NWo4GDT6kqtfXZXxOSk4aSvfqU
 open: null
 close: null
 weight: 0

@@ -1,3 +1,4 @@
+uuid: b17fb1bf-3331-4e21-abf9-16ce66725e6f
 langcode: en
 status: true
 dependencies:
@@ -7,6 +8,8 @@ dependencies:
     - content_moderation
     - node
     - user
+_core:
+  default_config_hash: tS8PbpJX90aRFC3-UTgXzdqkq7_2frk2pz4TMijEebM
 id: external_content
 label: 'External Content'
 module: node

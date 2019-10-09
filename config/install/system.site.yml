@@ -1,3 +1,4 @@
+uuid: 1d045e10-3955-4e8d-9861-a3f21f341098
 name: 'Open Government, Government of Canada'
 mail: OG.donotreply-nepasrepondre.GO@open-ouvert.canada.ca
 slogan: 'Collaborative open source project led by the Government of Canada'
@@ -9,4 +10,6 @@ admin_compact_mode: false
 weight_select_max: 100
 langcode: en
 default_langcode: en
+_core:
+  default_config_hash: yXadRE77Va-G6dxhd2kPYapAvbnSvTF6hO4oXiOEynI
 mail_notification: ''

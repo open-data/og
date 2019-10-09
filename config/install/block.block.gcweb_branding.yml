@@ -1,3 +1,4 @@
+uuid: 6d45c504-0340-422c-848d-f3795bec7783
 langcode: en
 status: true
 dependencies:
@@ -5,6 +6,8 @@ dependencies:
     - system
   theme:
     - gcweb
+_core:
+  default_config_hash: NDwadleLD3YVSbDUaakxyYZyINYtkFtOVGShfq4kWy8
 id: gcweb_branding
 theme: gcweb
 region: banner

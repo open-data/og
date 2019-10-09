@@ -1,3 +1,4 @@
+uuid: 488a9bad-9078-4330-815a-fc249f599df7
 langcode: en
 status: true
 dependencies:
@@ -7,6 +8,8 @@ dependencies:
     - system
   theme:
     - bootstrap
+_core:
+  default_config_hash: R2K_qX0ZUMbUL6ie_-S9tZVjvqmlWKlscikgeRv9vhw
 id: bootstrap_account_menu
 theme: bootstrap
 region: navigation_collapsible

@@ -1,3 +1,4 @@
+uuid: 0f807312-3017-41ac-a683-0fd59fa28dfa
 langcode: en
 status: true
 dependencies:
@@ -7,6 +8,8 @@ dependencies:
   module:
     - media
     - path
+_core:
+  default_config_hash: uWhRDlQVs_4mPe2Ndg4OPnEbSc_MDRwz-QBCGlnm-zs
 id: media.remote_video.default
 targetEntityType: media
 bundle: remote_video

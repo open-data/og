@@ -1,3 +1,4 @@
+uuid: c662836c-cd8e-4cf9-8402-58dd15363e84
 langcode: en
 status: true
 dependencies:
@@ -15,6 +16,8 @@ dependencies:
     - node.type.webform
   module:
     - content_moderation
+_core:
+  default_config_hash: T_JxNjYlfoRBi7Bj1zs5Xv9xv1btuBkKp5C1tNrjMhI
 id: editorial
 label: Editorial
 type: content_moderation

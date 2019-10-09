@@ -1,3 +1,4 @@
+uuid: 280ccb97-6346-47ce-9d99-df4b1686fb96
 langcode: en
 status: true
 dependencies:
@@ -16,6 +17,7 @@ selection_criteria:
     negate: false
     context_mapping:
       node: node
+    uuid: 9edd4572-3411-42f5-9fb8-dfce0f444c54
   ea37f702-0c49-4298-b162-8197d996ca92:
     id: language
     langcodes:
@@ -23,6 +25,7 @@ selection_criteria:
     negate: false
     context_mapping:
       language: 'node:langcode:language'
+    uuid: ea37f702-0c49-4298-b162-8197d996ca92
 selection_logic: and
 weight: -9
 relationships:

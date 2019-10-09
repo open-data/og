@@ -1,3 +1,4 @@
+uuid: d5980f29-5c1f-4cac-9ec4-ee79813ca41f
 langcode: en
 status: true
 dependencies:
@@ -13,6 +14,8 @@ dependencies:
     - serialization
     - text
     - user
+_core:
+  default_config_hash: cCq1vjj1qmyd39oBIUyOe8YPDsobJ5fZRhp2Xy5O7lA
 id: comment
 label: Comments
 module: comment

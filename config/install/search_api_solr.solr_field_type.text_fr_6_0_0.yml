@@ -1,6 +1,9 @@
+uuid: 2fddbf04-8132-4fed-b9ca-b7d0f0028741
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: 5qQmvENiGl_qoJMSHmp1WLRNtnzBWVv5ljxvPLMDaHI
 id: text_fr_6_0_0
 label: 'French Text Field'
 minimum_solr_version: 6.0.0

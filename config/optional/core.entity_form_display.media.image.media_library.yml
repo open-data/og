@@ -1,3 +1,4 @@
+uuid: 736b2a4b-6410-485f-ab13-6cf7a596f3ad
 langcode: en
 status: true
 dependencies:
@@ -8,6 +9,8 @@ dependencies:
     - media.type.image
   module:
     - image
+_core:
+  default_config_hash: PlyfyVZfALLkP7nbxLpaVKIDUWRioZghWpFDv0_rJ68
 id: media.image.media_library
 targetEntityType: media
 bundle: image

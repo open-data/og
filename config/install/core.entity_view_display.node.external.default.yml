@@ -1,3 +1,4 @@
+uuid: e5de2bb0-588c-4f1f-9ba2-4ac13f0fac96
 langcode: en
 status: true
 dependencies:
@@ -33,6 +34,7 @@ content:
 hidden:
   field_type: true
   field_url: true
+  field_uuid: true
   langcode: true
   links: true
   search_api_excerpt: true

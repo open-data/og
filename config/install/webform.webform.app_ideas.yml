@@ -1,3 +1,4 @@
+uuid: d13592b0-b114-4847-bba9-e1c1582959ec
 langcode: en
 status: closed
 dependencies:
@@ -7,6 +8,8 @@ third_party_settings:
   honeypot:
     honeypot: true
     time_restriction: true
+_core:
+  default_config_hash: CNnU7U0MxhjBRJkCsweSMZQjhw1pCQyXgEeQ_SeN-qc
 open: null
 close: null
 weight: 0

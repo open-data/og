@@ -1,3 +1,4 @@
+uuid: 707d5a30-62dc-48a1-947b-9c482e2be52e
 langcode: en
 status: true
 dependencies:
@@ -53,6 +54,7 @@ third_party_settings:
               attributes: ''
         components:
           57bde159-69e1-458c-83b5-0ef38e24382e:
+            uuid: 57bde159-69e1-458c-83b5-0ef38e24382e
             region: right
             configuration:
               id: 'block_content:cf8209e7-dbe5-4f66-8146-5fc52de7832d'
@@ -66,6 +68,7 @@ third_party_settings:
             additional: {  }
             weight: 0
           b64b7c94-f71b-4818-907f-b3f86d28d4d0:
+            uuid: b64b7c94-f71b-4818-907f-b3f86d28d4d0
             region: left
             configuration:
               label_display: '0'
@@ -99,6 +102,7 @@ third_party_settings:
               attributes: class|well
         components:
           a116fbe4-d942-4a3e-8551-fea4cfdcfed2:
+            uuid: a116fbe4-d942-4a3e-8551-fea4cfdcfed2
             region: left
             configuration:
               id: 'field_block:node:idea:field_idea_tags'
@@ -116,6 +120,7 @@ third_party_settings:
             additional: {  }
             weight: -9
           fbb1af4c-7e62-43e3-8e8d-1eb0fcdbcc5e:
+            uuid: fbb1af4c-7e62-43e3-8e8d-1eb0fcdbcc5e
             region: right
             configuration:
               id: 'field_block:node:idea:body'
@@ -132,6 +137,7 @@ third_party_settings:
             additional: {  }
             weight: 4
           89376394-1226-493b-a156-39b670d3295b:
+            uuid: 89376394-1226-493b-a156-39b670d3295b
             region: left
             configuration:
               label_display: '0'
@@ -147,6 +153,7 @@ third_party_settings:
             additional: {  }
             weight: -10
           cfa8ceab-aa2e-4d3f-a024-45c4cd95d86d:
+            uuid: cfa8ceab-aa2e-4d3f-a024-45c4cd95d86d
             region: left
             configuration:
               id: webform_block
@@ -178,6 +185,7 @@ third_party_settings:
               attributes: ''
         components:
           c04b74d2-5572-4646-be51-87df4964e6fc:
+            uuid: c04b74d2-5572-4646-be51-87df4964e6fc
             region: main
             configuration:
               label_display: '0'

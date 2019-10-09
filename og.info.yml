@@ -19,6 +19,7 @@ install:
   - config
   - content_moderation
   - contextual
+  - datetime
   - dblog
   - dynamic_page_cache
   - editor
@@ -69,6 +70,7 @@ install:
   - csv_serialization
   - ctools
   - facets
+  - facets_summary
   - fontawesome
   - google_analytics
   - honeypot

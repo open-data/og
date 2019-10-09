@@ -99,7 +99,8 @@ install:
   - voting_webform
   - webform_resend
 themes:
-  - bartik
+  - stable
+  - classy
   - seven
   - bootstrap
   - gcweb

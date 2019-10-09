@@ -1,4 +1,3 @@
-uuid: 1fb057a4-9ab3-498e-97be-dd1ee2ed070a
 langcode: en
 status: open
 dependencies:
@@ -19,8 +18,6 @@ id: informal_request_for_travel_or_h
 title: 'Informal Request for Travel or Hospitality Receipts'
 description: '&quot;Informal Request for Travel or Hospitality Receipts&quot; webform.'
 category: ''
-elements: "given_name:\n  '#type': textfield\n  '#title': 'Given Name'\n  '#required': true\nfamily_name:\n  '#type': textfield\n  '#title': 'Family Name'\n  '#required': true\nyour_e_mail_address:\n  '#type': email\n  '#title': 'Your E-mail Address'\n  '#required': true\nadditional_comments:\n  '#type': textarea\n  '#title': 'Additional Comments'\n  '#description': 'Explain what you want or why you are contacting this organization.'\nsolr_core:\n  '#type': hidden\n  '#title': 'Solr core'\n  '#value': 'pd_core_[current-page:url:args:value:1]'\nentity_id:\n  '#type': hidden\n  '#title': 'Entity ID'\n  '#value': '[current-page:url:args:last]'\norg_name_en:\n  '#type': hidden\n  '#title': 'Organization name'\nref_number:\n  '#type': hidden\n  '#title': 'Reference number'\nati_email:\n  '#type': hidden\n  '#title': 'ATI e-mail'\nmarkup:\n  '#type': webform_markup\n  '#markup': \"<br />\\nPlease note that institutions will respond to your request within 5 business days. If your requests is submitted outside of business hours, the first business day commence on the next business day.&nbsp;\\n\"\ni_have_read_understood_and_agree_with_the_above_privacy_notice_:\n  '#type': select\n  '#title': 'I have read, understood and agree with the above Privacy Notice and disclaimer.'\n  '#options':\n    'Yes': 'Yes'\n  '#required': true\n"
-css: ''
 javascript: ''
 settings:
   ajax: false
@@ -218,8 +215,6 @@ handlers:
       subject: 'Informal request for receipts / Requête de demande pour les reçus #[webform_submission:sid]'
       body: _default
       excluded_elements:
-        solr_core: solr_core
-        entity_id: entity_id
         ati_email: ati_email
       ignore_access: false
       exclude_empty: true
@@ -255,8 +250,6 @@ handlers:
       subject: 'Informal request for receipts / Requête de demande pour les reçus #[webform_submission:sid]'
       body: "Submitted on [webform_submission:created]\nSubmitted by: [webform_submission:user]\n\nSubmitted values are:\n[webform_submission:values]\n"
       excluded_elements:
-        solr_core: solr_core
-        entity_id: entity_id
         org_name_en: org_name_en
         ref_number: ref_number
         ati_email: ati_email

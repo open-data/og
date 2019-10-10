@@ -14,8 +14,6 @@ dependencies:
     - serialization
     - text
     - user
-_core:
-  default_config_hash: cCq1vjj1qmyd39oBIUyOe8YPDsobJ5fZRhp2Xy5O7lA
 id: comment
 label: Comments
 module: comment

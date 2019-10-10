@@ -8,8 +8,6 @@ dependencies:
   module:
     - file
     - path
-_core:
-  default_config_hash: nJ_pAVLU1NRMcrKA5fWh2CgKJ805y9T77jH8KS97rkY
 id: media.file.default
 targetEntityType: media
 bundle: file

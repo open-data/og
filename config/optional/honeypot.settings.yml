@@ -25,5 +25,3 @@ form_settings:
   node_suggested_dataset_form: false
   node_webform_form: false
   comment_comment_form: true
-_core:
-  default_config_hash: 9bVDfWSa_In6VzTXmy04jJ_3ZQobihKjO9isuuUCPaw

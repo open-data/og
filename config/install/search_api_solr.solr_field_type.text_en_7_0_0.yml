@@ -2,8 +2,6 @@ uuid: 8d3fc3bf-1335-49fa-979b-6123dd382c2a
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: XY3ZPQEl9ATqv57Sq1b_wMxVqWwWxTGyZRzDjycZKC0
 id: text_en_7_0_0
 label: 'English Text Field'
 minimum_solr_version: 7.0.0

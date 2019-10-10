@@ -8,8 +8,6 @@ third_party_settings:
   honeypot:
     honeypot: true
     time_restriction: true
-_core:
-  default_config_hash: zpzcNikkWSCG8bj3tFEM7ba80eaob2-GJTBrl53rZZI
 open: null
 close: null
 weight: 0

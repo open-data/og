@@ -2,8 +2,6 @@ uuid: 173e40d8-bea8-4044-a15b-211e19c840be
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: s6qJnINiq7zI-ZoQOXM_gtiDpIsHT3fm7RySP1F_BE0
 id: file
 label: Document
 description: 'Use local files for reusable media.'

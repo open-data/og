@@ -111,8 +111,6 @@ third_party_settings:
             additional: {  }
             weight: -7
         third_party_settings: {  }
-_core:
-  default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
 id: node.page.default
 targetEntityType: node
 bundle: page

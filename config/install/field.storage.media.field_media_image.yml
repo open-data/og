@@ -9,8 +9,6 @@ dependencies:
     - file
     - image
     - media
-_core:
-  default_config_hash: 7ZBrcl87ZXaw42v952wwcw_9cQgTBq5_5tgyUkE-VV0
 id: media.field_media_image
 field_name: field_media_image
 entity_type: media

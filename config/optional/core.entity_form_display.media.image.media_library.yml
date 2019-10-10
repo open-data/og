@@ -9,8 +9,6 @@ dependencies:
     - media.type.image
   module:
     - image
-_core:
-  default_config_hash: PlyfyVZfALLkP7nbxLpaVKIDUWRioZghWpFDv0_rJ68
 id: media.image.media_library
 targetEntityType: media
 bundle: image

@@ -9,8 +9,6 @@ third_party_settings:
     available_menus:
       - main
     parent: 'main:menu_link_content:691dc0a1-5b6a-4a55-9675-434687155849'
-_core:
-  default_config_hash: KuyA4NHPXcmKAjRtwa0vQc2ZcyrUJy6IlS2TAyMNRbc
 name: 'Basic page'
 type: page
 description: 'Use <em>basic pages</em> for your static content, such as an ''About us'' page.'

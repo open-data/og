@@ -4,8 +4,6 @@ status: true
 dependencies:
   config:
     - search_api_solr.solr_field_type.text_fr_7_0_0
-_core:
-  default_config_hash: vr_6mYevn0R8_W8IhxxnrixGcafUDeJT6mDOM0xXIAo
 id: text_phonetic_fr_7_0_0
 label: 'Fulltext Phonetic French'
 minimum_solr_version: 7.0.0

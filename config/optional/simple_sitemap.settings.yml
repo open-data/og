@@ -11,5 +11,3 @@ custom_links_include_images: false
 excluded_languages: {  }
 enabled_entity_types:
   - node
-_core:
-  default_config_hash: LWI5gcV7qtIl5h1xg7AWMtepAzBAvTaw_TOmsQbw9Tk

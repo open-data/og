@@ -17,8 +17,6 @@ dependencies:
     - comment
     - text
     - user
-_core:
-  default_config_hash: ChmU3AVqDKU32A_fyChG0W9dTRKmVBR58B6OClCLvZI
 id: node.article.search_result
 targetEntityType: node
 bundle: article

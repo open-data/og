@@ -8,8 +8,6 @@ dependencies:
     - content_moderation
     - node
     - user
-_core:
-  default_config_hash: 1UIjNd6iIhogbx50cJPDN7Me8cUQx2xCP2IBgrKG6Ms
 id: moderated_content
 label: 'Moderated content'
 module: views

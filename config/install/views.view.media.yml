@@ -8,8 +8,6 @@ dependencies:
     - image
     - media
     - user
-_core:
-  default_config_hash: rRzAWaXpJGYA2gPG6BmGxy8gfFd4srCc-LQY3JB6tR8
 id: media
 label: Media
 module: views

@@ -16,8 +16,6 @@ dependencies:
     - node.type.webform
   module:
     - content_moderation
-_core:
-  default_config_hash: T_JxNjYlfoRBi7Bj1zs5Xv9xv1btuBkKp5C1tNrjMhI
 id: editorial
 label: Editorial
 type: content_moderation

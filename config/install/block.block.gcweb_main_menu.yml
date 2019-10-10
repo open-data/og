@@ -8,8 +8,6 @@ dependencies:
     - system
   theme:
     - gcweb
-_core:
-  default_config_hash: rx9IrdDv7Ldc4kpalZAxdhIPZfYIeOMh1N-qKoQZwHo
 id: gcweb_main_menu
 theme: gcweb
 region: navigation

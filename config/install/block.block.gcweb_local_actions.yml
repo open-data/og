@@ -4,8 +4,6 @@ status: true
 dependencies:
   theme:
     - gcweb
-_core:
-  default_config_hash: 13GQpeITIJsp1kyPniXtWZfyFH87vb1xxJCHifL4UeE
 id: gcweb_local_actions
 theme: gcweb
 region: header

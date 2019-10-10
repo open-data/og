@@ -126,8 +126,10 @@ function alter_view_cron() {
 
   foreach ($pd_views as $view_name) {
     $view = Views::getView($view_name);
-    $tags = $view->getCacheTags();
-    Cache::invalidateTags($tags);
-    \Drupal::logger('cron')->notice('Cache cleared for ' . $view->getTitle());
+    if ($view) {
+      $tags = $view->getCacheTags();
+      Cache::invalidateTags($tags);
+      \Drupal::logger('cron')->notice('Cache cleared for ' . $view->getTitle());
+    }
   }
 }

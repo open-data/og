@@ -12,7 +12,7 @@
  *
  * @see system_install()
  */
-function open_government_install() {
+function og_install() {
   // First, do everything that is done in the standard profile.
   include_once DRUPAL_ROOT . '/core/profiles/standard/standard.install';
   standard_install();

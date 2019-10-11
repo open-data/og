@@ -84,7 +84,7 @@
         "drupal/redirect": "1.4.0",
         "drupal/search_api": "1.14.0",
         "drupal/search_api_solr": "3.4.0",
-        "drupal/simple_sitemap": "3.3.0",
+        "drupal/simple_sitemap": "3.4.0",
         "drupal/token_filter": "1.1.0",
         "drupal/views_bootstrap": "4.1.0",
         "drupal/webform": "5.4.0",

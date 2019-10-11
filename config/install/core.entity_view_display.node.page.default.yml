@@ -1,4 +1,3 @@
-uuid: 1a758961-a491-45e8-bedb-5e16b3a779c3
 langcode: en
 status: true
 dependencies:
@@ -50,7 +49,6 @@ third_party_settings:
               attributes: ''
         components:
           aea63d77-60bf-408e-8694-654978632575:
-            uuid: aea63d77-60bf-408e-8694-654978632575
             region: left
             configuration:
               label_display: '0'
@@ -60,7 +58,6 @@ third_party_settings:
             additional: {  }
             weight: -10
           00ae618b-2e31-4de6-aa06-1cdee5000376:
-            uuid: 00ae618b-2e31-4de6-aa06-1cdee5000376
             region: right
             configuration:
               id: 'block_content:cf8209e7-dbe5-4f66-8146-5fc52de7832d'
@@ -79,7 +76,6 @@ third_party_settings:
         layout_settings: {  }
         components:
           099b8e08-2a3c-4f2a-8491-9da999f3715f:
-            uuid: 099b8e08-2a3c-4f2a-8491-9da999f3715f
             region: content
             configuration:
               label_display: '0'
@@ -94,7 +90,6 @@ third_party_settings:
             additional: {  }
             weight: -8
           bc7bd5e3-b1f7-41bf-851f-7ac98937291b:
-            uuid: bc7bd5e3-b1f7-41bf-851f-7ac98937291b
             region: content
             configuration:
               label_display: '0'

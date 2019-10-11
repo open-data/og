@@ -1,4 +1,3 @@
-uuid: 50a018a8-4fc7-40ff-b63f-d4756218ae0c
 langcode: en
 status: true
 dependencies:
@@ -27,7 +26,6 @@ selection_criteria:
     negate: false
     context_mapping:
       taxonomy_term: taxonomy_term
-    uuid: 2bfc75d4-ff78-40a0-9ffb-08be1ed66340
 selection_logic: and
 weight: 6
 relationships: {  }

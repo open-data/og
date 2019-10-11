@@ -3,10 +3,6 @@ type: profile
 description: 'Distribution profile for the Open Government project for Government of Canada'
 core: 8.x
 
-distribution:
-  name: 'Open Government'
-  langcode: en
-
 # Required modules to install to support the profile
 install:
   # core

@@ -65,6 +65,7 @@ third_party_settings:
               attributes: ''
         components:
           be5d2eb7-38d7-433a-9d03-4e4c54d535a9:
+            uuid: be5d2eb7-38d7-433a-9d03-4e4c54d535a9
             region: right
             configuration:
               id: 'block_content:cf8209e7-dbe5-4f66-8146-5fc52de7832d'
@@ -78,6 +79,7 @@ third_party_settings:
             additional: {  }
             weight: 0
           63aef179-29bb-4618-afe3-1662c3f991b5:
+            uuid: 63aef179-29bb-4618-afe3-1662c3f991b5
             region: left
             configuration:
               label_display: '0'
@@ -105,6 +107,7 @@ third_party_settings:
               attributes: ''
         components:
           5d243cd1-8370-4a81-a7c9-cf2fe816814b:
+            uuid: 5d243cd1-8370-4a81-a7c9-cf2fe816814b
             region: main
             configuration:
               id: 'field_block:node:app:body'
@@ -121,6 +124,7 @@ third_party_settings:
             additional: {  }
             weight: -10
           ec9a1c10-cf58-4890-ae0a-a63ae4e7caef:
+            uuid: ec9a1c10-cf58-4890-ae0a-a63ae4e7caef
             region: main
             configuration:
               id: 'field_block:node:app:field_url'
@@ -166,6 +170,7 @@ third_party_settings:
               attributes: ''
         components:
           a8c2280d-53de-4dc0-8476-a528e8ca7d09:
+            uuid: a8c2280d-53de-4dc0-8476-a528e8ca7d09
             region: left
             configuration:
               id: 'field_block:node:app:field_developed_by'
@@ -183,6 +188,7 @@ third_party_settings:
             additional: {  }
             weight: -10
           53965480-266a-492e-ab95-e7805ca66733:
+            uuid: 53965480-266a-492e-ab95-e7805ca66733
             region: left
             configuration:
               label_display: '0'
@@ -198,6 +204,7 @@ third_party_settings:
             additional: {  }
             weight: -9
           67b2e87f-082c-46bb-8e8a-230f22552c61:
+            uuid: 67b2e87f-082c-46bb-8e8a-230f22552c61
             region: left
             configuration:
               label_display: '0'
@@ -213,6 +220,7 @@ third_party_settings:
             additional: {  }
             weight: -6
           06f21032-5dc0-40f8-93cb-6295f4ffd31f:
+            uuid: 06f21032-5dc0-40f8-93cb-6295f4ffd31f
             region: left
             configuration:
               id: 'field_block:node:app:field_date_published'
@@ -231,6 +239,7 @@ third_party_settings:
             additional: {  }
             weight: -7
           e5d97aca-6674-4e52-8f70-3dcf4329f85b:
+            uuid: e5d97aca-6674-4e52-8f70-3dcf4329f85b
             region: right
             configuration:
               id: 'field_block:node:app:field_media'
@@ -248,6 +257,7 @@ third_party_settings:
             additional: {  }
             weight: -9
           531256b4-4985-4743-9ef9-dafec11afd69:
+            uuid: 531256b4-4985-4743-9ef9-dafec11afd69
             region: right
             configuration:
               label_display: '0'
@@ -262,6 +272,7 @@ third_party_settings:
             additional: {  }
             weight: -10
           f4bb91ea-6747-4fd8-9eda-00d214af9631:
+            uuid: f4bb91ea-6747-4fd8-9eda-00d214af9631
             region: left
             configuration:
               id: 'field_block:node:app:field_device_formats'
@@ -279,6 +290,7 @@ third_party_settings:
             additional: {  }
             weight: -8
           3372bc16-e19a-4514-92de-fe6a9d1a8b59:
+            uuid: 3372bc16-e19a-4514-92de-fe6a9d1a8b59
             region: left
             configuration:
               id: webform_block
@@ -310,6 +322,7 @@ third_party_settings:
               attributes: ''
         components:
           538f8390-c5eb-49de-890f-7473f8bd6479:
+            uuid: 538f8390-c5eb-49de-890f-7473f8bd6479
             region: main
             configuration:
               label_display: '0'

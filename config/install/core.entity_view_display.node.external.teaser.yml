@@ -24,4 +24,5 @@ hidden:
   comment: true
   field_type: true
   field_url: true
+  field_uuid: true
   langcode: true

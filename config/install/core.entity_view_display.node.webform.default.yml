@@ -46,6 +46,7 @@ third_party_settings:
               attributes: ''
         components:
           02d71a62-ff21-407c-a472-9851b5418ba3:
+            uuid: 02d71a62-ff21-407c-a472-9851b5418ba3
             region: right
             configuration:
               id: 'block_content:cf8209e7-dbe5-4f66-8146-5fc52de7832d'
@@ -59,6 +60,7 @@ third_party_settings:
             additional: {  }
             weight: 0
           01a50162-d3ae-439f-b3c1-5778f18792bf:
+            uuid: 01a50162-d3ae-439f-b3c1-5778f18792bf
             region: left
             configuration:
               label_display: '0'
@@ -73,6 +75,7 @@ third_party_settings:
         layout_settings: {  }
         components:
           529a4ee8-d761-4eb8-9e11-a8c2acd46753:
+            uuid: 529a4ee8-d761-4eb8-9e11-a8c2acd46753
             region: content
             configuration:
               label_display: '0'
@@ -87,6 +90,7 @@ third_party_settings:
             additional: {  }
             weight: -10
           f93993c1-d3d4-4335-b50f-40c83590f234:
+            uuid: f93993c1-d3d4-4335-b50f-40c83590f234
             region: content
             configuration:
               id: 'block_content:54ed5b8f-aa43-4de2-8b44-96d07d012a56'
@@ -100,6 +104,7 @@ third_party_settings:
             additional: {  }
             weight: -9
           cfc9e63c-567d-42ea-85ec-3fced657e9a7:
+            uuid: cfc9e63c-567d-42ea-85ec-3fced657e9a7
             region: content
             configuration:
               id: 'field_block:node:webform:field_webform'

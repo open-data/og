@@ -33,6 +33,7 @@ content:
 hidden:
   field_type: true
   field_url: true
+  field_uuid: true
   langcode: true
   links: true
   search_api_excerpt: true

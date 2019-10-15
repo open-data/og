@@ -17,6 +17,7 @@ selection_criteria:
     negate: false
     context_mapping:
       taxonomy_term: taxonomy_term
+    uuid: bd2db378-4a72-4da9-a847-5875b4973f30
   80198249-6367-4111-96b5-71ab270eabe1:
     id: language
     langcodes:
@@ -24,6 +25,7 @@ selection_criteria:
     negate: false
     context_mapping:
       language: 'taxonomy_term:langcode:language'
+    uuid: 80198249-6367-4111-96b5-71ab270eabe1
 selection_logic: and
 weight: -2
 relationships:

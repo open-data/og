@@ -54,6 +54,7 @@ third_party_settings:
               attributes: ''
         components:
           48ef1aff-2ea8-41c6-b506-8e46e7d39367:
+            uuid: 48ef1aff-2ea8-41c6-b506-8e46e7d39367
             region: right
             configuration:
               id: 'block_content:cf8209e7-dbe5-4f66-8146-5fc52de7832d'
@@ -67,6 +68,7 @@ third_party_settings:
             additional: {  }
             weight: 0
           dda22670-38f6-408a-9526-29c84125ce9a:
+            uuid: dda22670-38f6-408a-9526-29c84125ce9a
             region: left
             configuration:
               id: 'field_block:node:article:field_blog_author_name'
@@ -84,6 +86,7 @@ third_party_settings:
             additional: {  }
             weight: -10
           f3b99357-2d6a-4eb7-9960-9b6dd1e5f682:
+            uuid: f3b99357-2d6a-4eb7-9960-9b6dd1e5f682
             region: left
             configuration:
               id: 'field_block:node:article:created'
@@ -127,6 +130,7 @@ third_party_settings:
               attributes: ''
         components:
           414b1588-f28a-465d-a97a-f2fb6103c6e9:
+            uuid: 414b1588-f28a-465d-a97a-f2fb6103c6e9
             region: left
             configuration:
               id: 'field_block:node:article:body'
@@ -143,6 +147,7 @@ third_party_settings:
             additional: {  }
             weight: 0
           472ea4a9-e3e1-4992-866d-b8ffe7c47e8b:
+            uuid: 472ea4a9-e3e1-4992-866d-b8ffe7c47e8b
             region: left
             configuration:
               label_display: '0'
@@ -159,6 +164,7 @@ third_party_settings:
             additional: {  }
             weight: 5
           f21c8364-5705-4785-b35e-4ca6317b5463:
+            uuid: f21c8364-5705-4785-b35e-4ca6317b5463
             region: right
             configuration:
               id: 'views_block:blog-recent'
@@ -189,6 +195,7 @@ third_party_settings:
               attributes: ''
         components:
           d31533d9-32b0-463b-9f2a-aa11e5d47e21:
+            uuid: d31533d9-32b0-463b-9f2a-aa11e5d47e21
             region: main
             configuration:
               label_display: '0'

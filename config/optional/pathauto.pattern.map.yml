@@ -16,6 +16,7 @@ selection_criteria:
     negate: false
     context_mapping:
       node: node
+    uuid: 2e32fe25-e883-4a5b-b58a-6fbc16996594
   fc3f306c-4844-43b6-9ab4-dbeae7f431ee:
     id: language
     langcodes:
@@ -23,6 +24,7 @@ selection_criteria:
     negate: false
     context_mapping:
       language: 'node:langcode:language'
+    uuid: fc3f306c-4844-43b6-9ab4-dbeae7f431ee
 selection_logic: and
 weight: 3
 relationships:

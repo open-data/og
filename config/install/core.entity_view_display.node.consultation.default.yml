@@ -49,6 +49,7 @@ third_party_settings:
               attributes: ''
         components:
           96d16765-2858-4e6a-865b-75f6857f3a43:
+            uuid: 96d16765-2858-4e6a-865b-75f6857f3a43
             region: right
             configuration:
               id: 'block_content:cf8209e7-dbe5-4f66-8146-5fc52de7832d'
@@ -62,6 +63,7 @@ third_party_settings:
             additional: {  }
             weight: 0
           56a19ae8-8ee7-4e45-9cd1-c63b6adf8893:
+            uuid: 56a19ae8-8ee7-4e45-9cd1-c63b6adf8893
             region: left
             configuration:
               label_display: '0'
@@ -95,6 +97,7 @@ third_party_settings:
               attributes: class|mrgn-tp-xl
         components:
           f5a412be-c388-48ec-9eec-f438112176bd:
+            uuid: f5a412be-c388-48ec-9eec-f438112176bd
             region: right
             configuration:
               id: 'field_block:node:consultation:body'
@@ -111,6 +114,7 @@ third_party_settings:
             additional: {  }
             weight: 0
           2cb545fc-b08d-408e-b68d-17b896d3c5f8:
+            uuid: 2cb545fc-b08d-408e-b68d-17b896d3c5f8
             region: right
             configuration:
               id: 'views_block:suggested_ideas-block_1'

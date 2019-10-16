@@ -35,6 +35,7 @@ class VotingWebformController extends ControllerBase {
         $query->fields('v', ['vote_count', 'vote_average']);
         $result = $query->execute();
         $vote_average = 0;
+        $imgsrc = '/profiles/og/modules/custom/voting_webform/images/';
 
         foreach ($result as $record) {
           $vote_average = round($record->vote_average);
@@ -42,31 +43,31 @@ class VotingWebformController extends ControllerBase {
 
         switch ($vote_average) {
           case '1':
-            $renderHTML .= '<img class="image-actual" alt="This dataset is currently ranked one star" src="/modules/custom/voting_webform/images/onestar.png">';
+            $renderHTML .= '<img class="image-actual" alt="This dataset is currently ranked one star" src="' . $imgsrc . 'onestar.png">';
             break;
           case '2':
-            $renderHTML .= '<img class="image-actual" alt="This dataset is currently ranked two star" src="/modules/custom/voting_webform/images/twostar.png">';
+            $renderHTML .= '<img class="image-actual" alt="This dataset is currently ranked two star" src="' . $imgsrc . 'twostar.png">';
             break;
           case '3':
-            $renderHTML .= '<img class="image-actual" alt="This dataset is currently ranked three star" src="/modules/custom/voting_webform/images/threestar.png">';
+            $renderHTML .= '<img class="image-actual" alt="This dataset is currently ranked three star" src="' . $imgsrc . 'threestar.png">';
             break;
           case '4':
-            $renderHTML .= '<img class="image-actual" alt="This dataset is currently ranked four star" src="/modules/custom/voting_webform/images/fourstar.png">';
+            $renderHTML .= '<img class="image-actual" alt="This dataset is currently ranked four star" src="' . $imgsrc . 'fourstar.png">';
             break;
           case '5':
-            $renderHTML .= '<img class="image-actual" alt="This dataset is currently ranked five star" src="/modules/custom/voting_webform/images/fivestar.png">';
+            $renderHTML .= '<img class="image-actual" alt="This dataset is currently ranked five star" src="' . $imgsrc . 'fivestar.png">';
             break;
           case '6':
-            $renderHTML .= '<img class="image-actual" alt="This dataset is currently ranked five star" src="/modules/custom/voting_webform/images/fivestar.png">';
+            $renderHTML .= '<img class="image-actual" alt="This dataset is currently ranked five star" src="' . $imgsrc . 'fivestar.png">';
             break;
           default :
-            $renderHTML .= '<img class="image-actual" alt="This dataset is currently unrated" src="/modules/custom/voting_webform/images/zerostar.png">';
+            $renderHTML .= '<img class="image-actual" alt="This dataset is currently unrated" src="' . $imgsrc . 'zerostar.png">';
             break;
         }
       }
       catch (\Exception $e) {
         \Drupal::logger('vote')->warning('Vote-Rating (external): Exception thrown while trying to get average vote with uuid: ' . $uuid);
-        $renderHTML .= '<img class="image-actual" alt="This dataset is currently unrated" src="/modules/custom/voting_webform/images/zerostar.png">';
+        $renderHTML .= '<img class="image-actual" alt="This dataset is currently unrated" src="' . $imgsrc . 'zerostar.png">';
       }
     }
 

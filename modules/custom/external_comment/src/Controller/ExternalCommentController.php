@@ -68,7 +68,7 @@ class ExternalCommentController extends CommentController {
 
         // if node exist then load the node with comments
         if ($node) {
-          $css = '<link rel="stylesheet" type="text/css" href="/modules/custom/external_comment/css/style.css" />';
+          $css = '<link rel="stylesheet" type="text/css" href="/profiles/og/modules/custom/external_comment/css/style.css" />';
           $commentsHTML = comment_node_update_index($node);
           $renderHTML .= ($commentsHTML) ? $css . '<h2>' . t('Comments') . '</h2>' . $commentsHTML : '';
 

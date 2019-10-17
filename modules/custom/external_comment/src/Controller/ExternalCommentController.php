@@ -256,15 +256,15 @@ class ExternalCommentController extends CommentController {
             ->loadMultiple($comment_ids);
           foreach($comments as $comment) {
             // Loop over and get fields for published comments
-            if ($comment->get('status') == 1) {
+            if ($comment->getStatus() == 1) {
               $comments_json['comments'][] = [
                 'comment_id' => $comment->id(),
-                'parent_id' => $comment->get('pid')->getValue()[0]['target_id'],
-                'subject' => $comment->get('subject')->getValue()[0]['value'],
+                'parent_id' => $comment->getParentComment() ? $comment->getParentComment()->id() : null,
+                'subject' => $comment->getSubject(),
                 'comment_body' => $comment->get('comment_body')->getValue()[0]['value'],
-                'comment_posted_by' => $comment->get('name')->getValue()[0]['value'],
-                'date_posted' => $comment->get('created')->getValue()[0]['value'],
-                'thread' => $comment->get('thread')->getValue()[0]['value'],
+                'comment_posted_by' => $comment->getAuthorName(),
+                'date_posted' => $comment->getCreatedTime(),
+                'thread' => $comment->getThread(),
               ];
             }
           }

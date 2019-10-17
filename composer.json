@@ -111,10 +111,7 @@
         "sort-packages": true
     },
     "extra": {
-        "composer-exit-on-patch-failure": false,
-        "patchLevel": {
-            "drupal/core": "-p2"
-        },
+        "enable-patching": true,
         "patches": {
             "drupal/views_bootstrap": {
                 "Setting \"columns\" is missing on buildOptionsForm": "https://www.drupal.org/files/issues/2019-02-19/setting-columns-is-missing-on-buildOptionsForm-3034141-1.patch"

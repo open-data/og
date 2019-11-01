@@ -1,4 +1,4 @@
-# Composer template for the Open Government project
+# Installation Profile for the Open Government project
 
 [![Build Status](https://travis-ci.org/open-data/og.svg?branch=master)](https://travis-ci.org/open-data/og)
 
@@ -16,44 +16,38 @@ If skipping, you may need to replace `composer` with `php composer.phar` for you
 composer create-project opengov/opengov-project:dev-master MYPROJECT --no-interaction
 ```
 
-3. Install using interface, choose `Open Government` as your installation profile. As an alternative, 
-you can also use drush for installation
-
-```
-drush site:install og
-```
-
-## What does the template do?
-
-The template will setup:
-
-1. Drupal core in `html/core` directory.
-2. Profiles in `html/profiles` directory.
-3. Contributed modules in `html/modules/contrib` directory.
-4. Libraries for WET-BOEW in `html/libraries` directory.
-5. Themes in `html/themes` directory and enables GCWeb as default theme.
-6. `settings.php` and `services.yml` in `html/sites/default` directory. 
-7. Drush in `vendor/bin/drush` directory.
-8. DrupalConsole in `vendor/bin/drupal` directory.
-9. Setup configurations for the Open Government project.
+3. Install using interactive installer, choose `Open Government` as your installation profile. 
 
 
-## Updating core and/or contributed modules
+## Scope
+The installation profile installs Drupal Core, contributed and custom modules and theme.
 
-1. Check for outdated modules
-```
-composer outdated "drupal/*"
-```
+### Contributed Modules
 
-2. If updates are required, it is very important to make a backup of both codebase and database befor updating
+The following contributed modules are installed as part of the profile
+	- admin_toolbar
+	- autologout
+	- bootstrap_layouts
+	- ckeditor_codemirror
+	- csv_serialization
+	- ctools
+	- facets
+	- fontawesome
+	- google_analytics
+	- honeypot
+	- memcache
+	- menu_breadcrumb
+	- metatag
+	- pathauto
+	- redirect
+	- search_api
+	- search_api_solr
+	- simple_sitemap
+	- token
+	- token_filter
+	- views_bootstrap
+	- webform
 
-3. Update modules that are outdated
-```
-composer update drupal/MODULE --with-dependencies
-drush updatedb
-drush cr
-```
-If you want to know all packages that will be updated by the composer update command, 
-use the `--dry-run` option first.
+### Theme
 
-For more detailed information on updating Drupal check [Drupal Documentation](https://www.drupal.org/docs/8/update).
+The theme [GCWeb](https://github.com/open-data/gcweb_bootstrap) is installed and enabled by the profile.

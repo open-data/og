@@ -1,6 +1,6 @@
 # Composer template for the Open Government project
 
-[![Build Status](https://travis-ci.org/RabiaSajjad/og.svg?branch=master)](https://travis-ci.org/RabiaSajjad/og)
+[![Build Status](https://travis-ci.org/open-data/og.svg?branch=master)](https://travis-ci.org/open-data/og)
 
 
 ## Usage

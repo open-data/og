@@ -25,28 +25,28 @@ The installation profile installs Drupal Core, contributed and custom modules an
 ### Contributed Modules
 
 The following contributed modules are installed as part of the profile
-	- admin_toolbar
-	- autologout
-	- bootstrap_layouts
-	- ckeditor_codemirror
-	- csv_serialization
-	- ctools
-	- facets
-	- fontawesome
-	- google_analytics
-	- honeypot
-	- memcache
-	- menu_breadcrumb
-	- metatag
-	- pathauto
-	- redirect
-	- search_api
-	- search_api_solr
-	- simple_sitemap
-	- token
-	- token_filter
-	- views_bootstrap
-	- webform
+- admin_toolbar
+- autologout
+- bootstrap_layouts
+- ckeditor_codemirror
+- csv_serialization
+- ctools
+- facets
+- fontawesome
+- google_analytics
+- honeypot
+- memcache
+- menu_breadcrumb
+- metatag
+- pathauto
+- redirect
+- search_api
+- search_api_solr
+- simple_sitemap
+- token
+- token_filter
+- views_bootstrap
+- webform
 
 ### Theme
 

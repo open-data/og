@@ -299,7 +299,6 @@ third_party_settings:
               label_display: '0'
               webform_id: app_vote
               default_data: ''
-              redirect: false
               context_mapping: {  }
             additional: {  }
             weight: -5

@@ -161,7 +161,6 @@ third_party_settings:
               label_display: '0'
               webform_id: vote_up_down
               default_data: ''
-              redirect: false
               context_mapping: {  }
             additional: {  }
             weight: -8

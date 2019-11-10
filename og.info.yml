@@ -61,7 +61,7 @@ install:
   - admin_toolbar_links_access_filter
   - admin_toolbar_tools
   - autologout
-  - bootstrap_layouts
+  # - bootstrap_layouts
   - ckeditor_codemirror
   - csv_serialization
   - ctools
@@ -76,7 +76,7 @@ install:
   - metatag_dc
   - metatag_twitter_cards
   - pathauto
-  - redirect
+  # - redirect
   - search_api
   - search_api_solr
   - simple_sitemap

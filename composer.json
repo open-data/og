@@ -92,7 +92,6 @@
         "fortawesome/font-awesome": "5.9.0",
         "oomphinc/composer-installers-extender": "^1.1",
         "opengov/gcweb": "dev-master",
-        "symfony/event-dispatcher":"4.3.4 as 3.4.99",
         "vlucas/phpdotenv": "^2.4",
         "w8tcha/ckeditor-codemirror": "1.17",
         "webflo/drupal-finder": "^1.0.0",

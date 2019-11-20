@@ -1,0 +1,180 @@
+<?php
+
+/**
+ * @file
+ * Contains comment_spam.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\comment\Entity\Comment;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Database\Query\Condition;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_help().
+ */
+function comment_spam_help($route_name, RouteMatchInterface $route_match) {
+    switch ($route_name) {
+        // Main module help for the comment_profanity_filter module.
+        case 'help.page.comment_spam':
+            $output = '';
+            $output .= '<h3>' . t('About') . '</h3>';
+            $output .= '<p>' . t('This module will filter BAD comments') . '</p>';
+            return $output;
+
+        default:
+    }
+}
+
+function comment_spam_form_comment_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+    $form['#validate'][] = '_comment_spam_user_form_validate';
+}
+
+function _comment_spam_user_form_validate(&$form, &$form_state) {
+    $lang=\Drupal::languageManager()->getCurrentLanguage()->getId();
+
+    //get comment subject and body
+    $comment_subject=$form_state->getValue('subject');
+    $comment_subject=strtoupper($comment_subject[0]['value']);
+    $comment_body=$form_state->getValue('comment_body');
+    $comment_body=strtoupper($comment_body[0]['value']);
+
+    $config = \Drupal::config('comment_spam.settings');
+    $myWords = $config->get('custom_list');
+
+    foreach ($myWords as $word){
+        $upperWord=strtoupper($word);
+        //USE THIS to only filter independent words
+
+       $patt = "/(?:^|[^a-zA-Z])" . preg_quote($upperWord, '/') . "(?:$|[^a-zA-Z])/i";
+       if(preg_match($patt, $comment_subject)|| preg_match($patt, $comment_body)){
+            $form_state->setValue('field_spam',1);
+       }
+
+/*        //USE THIS to filter any sequence of letters that match a banned word in string
+        if(strpos($comment_subject,$upperWord) !==false){
+            $form_state->setValue('field_spam',1);
+        }if(strpos($comment_body,$upperWord)!==false) {
+            $form_state->setValue('field_spam',1);
+        }*/
+
+    }
+}
+function comment_spam_preprocess_links__comment(&$variables) {
+    // No links are available without permission or in pre-view mode.
+    if (!isset($variables['links']['comment-edit'])) {
+        return;
+    }
+
+    $user = \Drupal::currentUser();
+    $setSpamPermission = $user->hasPermission('comment_spam set spam');
+    $adminCommentPermission = $user->hasPermission('administer comments');
+
+    if ($adminCommentPermission && $setSpamPermission) {
+        /** @var \Drupal\Core\Url $url */
+        $url = $variables['links']['comment-edit']['link']['#url'];
+        $routeParameters = $url->getRouteParameters();
+        $commentid = $routeParameters['comment'];
+
+        $comment = Comment::load($commentid);
+        if ($comment === NULL || !$comment->hasField('field_spam') || $comment->get('field_spam')->value) {
+            return;
+        }
+        $variables['links']['comment_report'] = [
+            'link' => [
+                '#type' => 'link',
+                '#title' => t('Spam'),
+                '#options' => ['ajax' => NULL],
+                //'#url' => new Url('comment_spam.set.spam', ['comment' => $commentid]),
+                '#ajax' => NULL,
+            ],
+            'text' => t('Spam'),
+        ];
+    }
+}
+function comment_spam_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+    if ($view->id() == 'comment' || $view->id() == 'comments_recent') {
+        $definition = [
+            'type' => 'LEFT OUTER',
+            'table' => 'comment__field_spam',
+            'field' => 'entity_id',
+            'left_table' => 'comment_field_data',
+            'left_field' => 'cid',
+        ];
+        $join = Drupal::service('plugin.manager.views.join')->createInstance('standard', $definition);
+        $query->addRelationship('comment__field_spam', $join, 'comment__field_spam');
+
+        $query->addWhere('1', (new Condition('OR'))
+            ->condition('comment__field_spam.field_spam_value', FALSE, '=')
+            ->condition('comment__field_spam.field_spam_value', NULL, 'IS NULL')
+        );
+    }
+}
+function comment_spam_menu_local_tasks_alter(&$data, $route_name, &$cacheability) {
+    if ($route_name == 'comment.admin' ||
+        $route_name == 'comment.admin_approval' ||
+        $route_name == 'comment_spam.admin_comment_spam'
+    ) {
+        $data['tabs'][1]['comment.admin_approval']['#link']['title'] =
+            t('Unapproved comments (@count)', [
+                '@count' => get_actual_unapproved_comments(),
+            ]);
+    }
+}
+function get_actual_unapproved_comments() {
+    $query = \Drupal::entityQuery('comment');
+    $query->condition('status', 0);
+    $orCondition = $query->orConditionGroup();
+    $orCondition->condition('field_spam', NULL, 'IS NULL');
+    $orCondition->condition('field_spam', FALSE, '=');
+    $query->condition($orCondition);
+    $ids = $query->execute();
+    return count($ids);
+}
+function comment_spam_uninstall() {
+
+      /** @var \Drupal\Core\Config\ConfigFactoryInterface $configFactory */
+      $configFactory = \Drupal::configFactory();
+
+      $configNames = [
+            'comment_spam.settings',
+            'field.field.comment.comment.field_spam',
+            'field.storage.comment.field_spam',
+            'views.view.comment_spam',
+          ];
+
+      foreach ($configNames as $configName) {
+            try {
+                  $configFactory->getEditable($configName)->delete();
+                }
+    catch (\Exception $e) {
+               }
+  }
+}
+function comment_spam_cron(){
+    $time = time();
+    $query = \Drupal::entityQuery('comment');
+    $query->condition('status', 0);
+    $query->condition('field_spam', TRUE, '=');
+    $cids = $query->execute();
+    $comments = \Drupal\comment\Entity\Comment::loadMultiple($cids);
+
+    foreach($comments as $comment){
+        $created=$comment->get('created')->value;
+        //one week expiry
+        $date_diff = ($time-$created)/604800;
+        if($date_diff>=1){
+            $comment->delete();
+        }
+    }
+}
+
+
+
+
+
+

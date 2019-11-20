@@ -1,0 +1,83 @@
+<?php
+/**
+ * Implements hook_page_attachments().
+ */
+function adobe_analytics_page_attachments(array &$page) {
+
+  $request = \Drupal::request();
+  $route = \Drupal::routeMatch()->getRouteObject();
+  $current_path = \Drupal::service('path.current')->getPath();
+  $host = \Drupal::request()->getHost();
+
+  $title = \Drupal::service('title_resolver')->getTitle($request, $route);
+  $metatitle = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'property' => 'dcterms:title',
+      'content' => $title,
+    ],
+  ];
+
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if ($language == 'en') {
+    $langcode = 'eng';
+    $creator = 'Treasury Board of Canada Secretariat';
+  } elseif ($language == 'fr') {
+    $langcode = 'fra';
+    $creator = 'Secrétariat du Conseil du Trésor du Canada';
+  }
+
+  $metalanguage = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'property' => 'dcterms:language',
+      'content' => $langcode,
+    ],
+  ];
+
+  $metacreator = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'property' => 'dcterms:creator',
+      'content' => $creator,
+    ],
+  ];
+
+  // 'accessRights' should equal '1' if the page requires a user login, and '2' otherwise
+  $accessRights = '2';
+  if (\Drupal::service('router.admin_context')->isAdminRoute() || preg_match('/(user\/(\d+)|node\/(\d+)\/)/', $current_path)) {
+     $accessRights = '1';
+  }
+  $metaservices = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'property' => 'dcterms:services',
+      'content' => 'OG-GO',
+    ],
+  ];
+
+
+  $metaaccessrights = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'property' => 'dcterms:accessRights',
+      'content' => $accessRights,
+    ],
+  ];
+
+
+  $page['#attached']['html_head'][] = [$metatitle, 'dcterms:title'];
+  $page['#attached']['html_head'][] = [$metalanguage, 'dcterms:language'];
+  $page['#attached']['html_head'][] = [$metacreator, 'dcterms:creator'];
+  $page['#attached']['html_head'][] = [$metaservices, 'dcterms:services'];
+  $page['#attached']['html_head'][] = [$metaaccessrights, 'dcterms:accessRights'];
+  $page['#attached']['library'][] = 'adobe_analytics/analytics-footer';
+  if ($host == 'staging.open.canada.ca') {
+    $page['#attached']['library'][] = 'adobe_analytics/analytics-staging';
+  } elseif ($host == 'open.canada.ca') {
+    $page['#attached']['library'][] = 'adobe_analytics/analytics-prod';
+  }
+
+
+}
+

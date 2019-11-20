@@ -2,6 +2,8 @@
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\views\Views;
 use \Drupal\views\ViewExecutable;
 
@@ -131,5 +133,155 @@ function alter_view_cron() {
       Cache::invalidateTags($tags);
       \Drupal::logger('cron')->notice('Cache cleared for ' . $view->getTitle());
     }
+  }
+}
+
+/**
+ * Set dynamic allowed values for organization field
+ * The options will be same as CKAN
+ */
+function fetch_orgs_from_ckan(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $filename = './od-do-orgs.jsonl';
+  $contents = file($filename);
+  $options = [];
+  $idx = $langcode == 'en' ? 0 : 1;
+  foreach ($contents as $line)
+  {
+      $data = json_decode($line);
+      $title = explode('|', $data->title);
+      if (array_key_exists($idx, $title)) { $options[trim($title[$idx])] = trim($title[$idx]); }
+  }
+
+  ksort($options);
+  return $options;
+}
+
+/**
+ * Provide dynamic allowed values for the status field of Suggested Dataset
+ */
+function get_suggested_dataset_status(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if ($langcode == 'fr') {
+    $options = [
+      'department_contacted' => 'Ministère contacté',
+      'under_review' => 'Sous examen',
+      'in_progress' => 'En cours',
+      'released' => 'Publié',
+      'not_collected' => 'Non recueillies par le gouvernement du Canada',
+    ];
+  }
+  else {
+    $options = [
+      'department_contacted' => 'Department Contacted',
+      'under_review' => 'Under Review',
+      'in_progress' => 'In-progress',
+      'released' => 'Released',
+      'not_collected' => 'Not Collected by the Government of Canada',
+    ];
+  }
+  
+  return $options;
+}
+
+/**
+ * Migrate values for new fields of Suggested Dataset
+ * New fields include:
+ * Allowed list for field_organization
+ * Allowed list for field_sd_status
+ * field_date_published for dataset release date
+ */
+function alter_view_update_8001() {
+  // 1. gather organizations
+  $filename = '/data/static/od-do-orgs.jsonl';
+  $contents = file($filename);
+  $organization_en = [];
+  $organization_fr = [];
+
+  foreach ($contents as $line)
+  {
+      $data = json_decode($line);
+      $title = explode('|', $data->title);
+      if (array_key_exists(0, $title)) { $organization_en[trim($title[0])] = trim($title[0]); }
+      if (array_key_exists(1, $title)) { $organization_fr[trim($title[1])] = trim($title[1]); }
+  }
+
+  // 2. gather status
+  $status_en = [
+    'department_contacted' => 'Department Contacted',
+    'under_review' => 'Under Review',
+    'in_progress' => 'In-progress',
+    'released' => 'Released',
+    'not_collected' => 'Not Collected by the Government of Canada',
+  ];
+
+  $status_fr = [
+    'department_contacted' => 'Ministère contacté',
+    'under_review' => 'Sous examen',
+    'in_progress' => 'En cours',
+    'released' => 'Publié',
+    'not_collected' => 'Non recueillies par le gouvernement du Canada',
+  ];
+
+  // 3. fetch the file with clean data
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = $module_handler->getModule(basename(__FILE__, '.module'))->getPath();
+  $files = file_scan_directory($module_path, '/.csv$/');
+
+  foreach($files as $file) {
+    $csv = fopen($file->uri, 'r');
+    $fields = fgetcsv($csv);
+    $key_nid = array_search('ID', $fields);
+    $key_org = array_search('Organization', $fields);
+    $key_status = array_search('Status', $fields);
+    $key_released = array_search('Date Dataset was Released', $fields);
+    $key_langcode = array_search('Language', $fields);
+
+    while (($row = fgetcsv($csv, 1024, ",")) !== FALSE) {
+      $row = array_map("utf8_encode", $row);
+      try {
+        $node = \Drupal::entityTypeManager()->getStorage('node')->load($row[$key_nid]);
+        if ($node && $node->bundle() == 'suggested_dataset') {
+          $organization = $row[$key_langcode] == 'English' ? $organization_en : $organization_fr;
+          $status = $row[$key_langcode] == 'English' ? $status_en : $status_fr;
+          if ($row[$key_langcode] != 'English') {
+            $node = $node->getTranslation('fr');
+          }
+
+          // check if valid organization name
+          if (array_search($row[$key_org], $organization) == FALSE) {
+            \Drupal::logger('migration')->error($row[$key_langcode] . ' - ' . $row[$key_nid] . ' - Invalid organization: ' . $row[$key_org]);
+          } else {
+            $node->set('field_organization', $row[$key_org]);
+          }
+          // check if valid status
+          $idx = array_search($row[$key_status], $status);
+          if ($idx == FALSE) {
+            \Drupal::logger('migration')->error($row[$key_langcode] . ' - ' . $row[$key_nid] . ' - Invalid status: ' . $row[$key_status]);
+          } else {
+            $node->set('field_sd_status', $idx);
+            if ($idx == 'released' && $row[$key_released]) {
+              // check if valid released date
+              $released_date = DateTime::createFromFormat('Y/m', $row[$key_released]);
+              if ($released_date == FALSE) {
+                \Drupal::logger('migration')->error($row[$key_langcode] . ' - ' . $row[$key_nid] . ' - Invalid date: ' . $row[$key_released]);
+              } else {
+                $released_date;
+                $node->set('field_date_published', $released_date->format('Y-m-01'));
+              }
+            }
+          }
+        $node->save();
+        } else {
+          // node not found
+          \Drupal::logger('migration')->error($row[$key_langcode] . $row[$key_nid] . ' node not found');
+          dump($row[$key_langcode] . $row[$key_nid] . ' node not found');
+        }
+      } catch (Exception $e) {
+        \Drupal::logger('migration')->error($e->getMessage());
+      }
+    }
+
+    fclose($csv);
   }
 }

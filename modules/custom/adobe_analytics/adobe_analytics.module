@@ -72,9 +72,9 @@ function adobe_analytics_page_attachments(array &$page) {
   $page['#attached']['html_head'][] = [$metaservices, 'dcterms:services'];
   $page['#attached']['html_head'][] = [$metaaccessrights, 'dcterms:accessRights'];
   $page['#attached']['library'][] = 'adobe_analytics/analytics-footer';
-  if ($host == 'staging.open.canada.ca') {
+  if ($host == 'staging.open.canada.ca' || $host == 'stadification.ouvert.canada.ca') {
     $page['#attached']['library'][] = 'adobe_analytics/analytics-staging';
-  } elseif ($host == 'open.canada.ca') {
+  } elseif ($host == 'open.canada.ca' || $host == 'ouvert.canada.ca') {
     $page['#attached']['library'][] = 'adobe_analytics/analytics-prod';
   }
 

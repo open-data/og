@@ -12,3 +12,10 @@ comment_spam.admin_comment_spam:
     _view: page_comment_spam
   requirements:
     _permission: 'administer comments'
+comment_spam.set.spam:
+  path: '/comment/{comment}/spam'
+  defaults:
+    _form: '\Drupal\comment_spam\Form\ConfirmSpamForm'
+    _title: 'Spam'
+  requirements:
+    _permission: 'comment_spam set spam'

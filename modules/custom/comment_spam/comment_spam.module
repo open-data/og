@@ -48,12 +48,12 @@ function _comment_spam_user_form_validate(&$form, &$form_state) {
 
     foreach ($myWords as $word){
         $upperWord=strtoupper($word);
-/*        //USE THIS to only filter independent words
+        /*        //USE THIS to only filter independent words
 
-       $patt = "/(?:^|[^a-zA-Z])" . preg_quote($upperWord, '/') . "(?:$|[^a-zA-Z])/i";
-       if(preg_match($patt, $comment_subject)|| preg_match($patt, $comment_body)){
-            $form_state->setValue('field_spam',1);
-       }*/
+               $patt = "/(?:^|[^a-zA-Z])" . preg_quote($upperWord, '/') . "(?:$|[^a-zA-Z])/i";
+               if(preg_match($patt, $comment_subject)|| preg_match($patt, $comment_body)){
+                    $form_state->setValue('field_spam',1);
+               }*/
 
         //USE THIS to filter any sequence of letters that match a banned word in string
         if(strpos($comment_subject,$upperWord) !==false){
@@ -89,13 +89,14 @@ function comment_spam_preprocess_links__comment(&$variables) {
                 '#type' => 'link',
                 '#title' => t('Spam'),
                 '#options' => ['ajax' => NULL],
-                //'#url' => new Url('comment_spam.set.spam', ['comment' => $commentid]),
+                '#url' => new Url('comment_spam.set.spam', ['comment' => $commentid]),
                 '#ajax' => NULL,
             ],
-            'text' => t('Spam'),
+            'text' => t('Mark as Spam'),
         ];
     }
 }
+
 function comment_spam_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
     if ($view->id() == 'comment' || $view->id() == 'comments_recent') {
         $definition = [
@@ -137,23 +138,23 @@ function get_actual_unapproved_comments() {
 }
 function comment_spam_uninstall() {
 
-      /** @var \Drupal\Core\Config\ConfigFactoryInterface $configFactory */
-      $configFactory = \Drupal::configFactory();
+    /** @var \Drupal\Core\Config\ConfigFactoryInterface $configFactory */
+    $configFactory = \Drupal::configFactory();
 
-      $configNames = [
-            'comment_spam.settings',
-            'field.field.comment.comment.field_spam',
-            'field.storage.comment.field_spam',
-            'views.view.comment_spam',
-          ];
+    $configNames = [
+        'comment_spam.settings',
+        'field.field.comment.comment.field_spam',
+        'field.storage.comment.field_spam',
+        'views.view.comment_spam',
+    ];
 
-      foreach ($configNames as $configName) {
-            try {
-                  $configFactory->getEditable($configName)->delete();
-                }
-    catch (\Exception $e) {
-               }
-  }
+    foreach ($configNames as $configName) {
+        try {
+            $configFactory->getEditable($configName)->delete();
+        }
+        catch (\Exception $e) {
+        }
+    }
 }
 function comment_spam_cron(){
     $time = time();

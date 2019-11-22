@@ -68,6 +68,7 @@ class SpamComments extends LocalTaskDefault implements ContainerFactoryPluginInt
         $ids = $this->commentStorage->getQuery()
             ->exists('field_spam')
             ->condition('field_spam', TRUE)
+            ->condition('status',0)
             ->execute();
         return count($ids);
     }

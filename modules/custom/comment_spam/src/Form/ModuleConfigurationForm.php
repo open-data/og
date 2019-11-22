@@ -92,10 +92,10 @@ class ModuleConfigurationForm extends ConfigFormBase {
             ),
         );
 
-            $style="border: red solid; border-radius: 5px; padding:10px;";
+*/          $style="border: red solid; border-radius: 5px; padding:10px;";
             $form['text_warning']['#markup'] =
                 t('<div style="'.$style.'"><h3 style="color: red">WARNING!</h3><br> Blocking sequence may produce unexpected results!<br>
-           For example, banning \'ass\' will also block comments with the word \'classic\'. Be careful with what you ban!</div><br> ');*/
+           For example, banning \'ass\' will also block comments with the word \'classic\'. Be careful with what you ban!</div><br> ');
             $form['text_info']['#markup'] = t('<p>Not case sensitive</p>');
 
         $form['addWords'] = [

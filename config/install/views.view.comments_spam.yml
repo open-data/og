@@ -137,6 +137,7 @@ display:
           include_exclude: include
           selected_actions:
             - comment_delete_action
+            - comment_publish_action
           entity_type: comment
           plugin_id: comment_bulk_form
         subject:

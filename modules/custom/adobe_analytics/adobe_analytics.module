@@ -1,7 +1,11 @@
 <?php
+
 /**
  * Implements hook_page_attachments().
+ * This function loads all metatags and js calls needed for Adobe Analytics to track the pages
+ * Only public page sessions (not when a user is logged in) are tracked
  */
+
 function adobe_analytics_page_attachments(array &$page) {
     if (!\Drupal::currentUser()->isAuthenticated()) {
       $request = \Drupal::request();
@@ -10,7 +14,7 @@ function adobe_analytics_page_attachments(array &$page) {
       $host = \Drupal::request()->getHost();
 
       $title = \Drupal::service('title_resolver')->getTitle($request, $route);
-      $metatitle = [
+      $metaTitle = [
         '#tag' => 'meta',
         '#attributes' => [
           'property' => 'dcterms:title',
@@ -27,7 +31,7 @@ function adobe_analytics_page_attachments(array &$page) {
         $creator = 'Secrétariat du Conseil du Trésor du Canada';
       }
 
-      $metalanguage = [
+      $metaLanguage = [
         '#tag' => 'meta',
         '#attributes' => [
           'property' => 'dcterms:language',
@@ -35,7 +39,7 @@ function adobe_analytics_page_attachments(array &$page) {
         ],
       ];
 
-      $metacreator = [
+      $metaCreator = [
         '#tag' => 'meta',
         '#attributes' => [
           'property' => 'dcterms:creator',
@@ -43,7 +47,7 @@ function adobe_analytics_page_attachments(array &$page) {
         ],
       ];
 
-      $metaservices = [
+      $metaServices = [
         '#tag' => 'meta',
         '#attributes' => [
           'property' => 'dcterms:services',
@@ -51,8 +55,11 @@ function adobe_analytics_page_attachments(array &$page) {
         ],
       ];
 
-      // 'accessRights' should equal '1' if the page requires a user login, and '2' otherwise
-      $metaaccessrights = [
+      /**
+       *'accessRights' should equal '1' if the page requires a user login, and '2' otherwise. In this case the function
+       * only runs on public pages, which means we always set it to '2'
+       */
+      $metaAccessRights = [
         '#tag' => 'meta',
         '#attributes' => [
           'property' => 'dcterms:accessRights',
@@ -61,11 +68,11 @@ function adobe_analytics_page_attachments(array &$page) {
       ];
 
 
-      $page['#attached']['html_head'][] = [$metatitle, 'dcterms:title'];
-      $page['#attached']['html_head'][] = [$metalanguage, 'dcterms:language'];
-      $page['#attached']['html_head'][] = [$metacreator, 'dcterms:creator'];
-      $page['#attached']['html_head'][] = [$metaservices, 'dcterms:services'];
-      $page['#attached']['html_head'][] = [$metaaccessrights, 'dcterms:accessRights'];
+      $page['#attached']['html_head'][] = [$metaTitle, 'dcterms:title'];
+      $page['#attached']['html_head'][] = [$metaLanguage, 'dcterms:language'];
+      $page['#attached']['html_head'][] = [$metaCreator, 'dcterms:creator'];
+      $page['#attached']['html_head'][] = [$metaServices, 'dcterms:services'];
+      $page['#attached']['html_head'][] = [$metaAccessRights, 'dcterms:accessRights'];
       $page['#attached']['library'][] = 'adobe_analytics/analytics-footer';
       if ($host == 'staging.open.canada.ca' || $host == 'stadification.ouvert.canada.ca') {
         $page['#attached']['library'][] = 'adobe_analytics/analytics-staging';
@@ -74,6 +81,14 @@ function adobe_analytics_page_attachments(array &$page) {
       }
 
     }
-
 }
 
+function adobe_analytics_page_bottom(array &$page_bottom) {
+    if (!\Drupal::currentUser()->isAuthenticated()) {
+        $page_bottom['adobe_analytics'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'script',
+            '#value' => '_satellite.pageBottom()',
+        ];
+    }
+}

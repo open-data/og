@@ -1,14 +1,9 @@
 analytics-prod:
   header: true
   js:
-    https://assets.adobedtm.com/cAdobeAnalyticscec67651710193d2331efef325107c23a0145/satelliteLib-92fcbbc24eeebb654a3dfbe688ed2dfe10a53e24.js: { type: external }
+    https://assets.adobedtm.com/cAdobeAnalyticscec67651710193d2331efef325107c23a0145/satelliteLib-92fcbbc24eeebb654a3dfbe688ed2dfe10a53e24.js: { type: external, preprocess: false, minified: false }
 
 analytics-staging:
   header: true
   js:
-    https://assets.adobedtm.com/cAdobeAnalyticscec67651710193d2331efef325107c23a0145/satelliteLib-92fcbbc24eeebb654a3dfbe688ed2dfe10a53e24-staging.js: { type: external }
-
-analytics-footer:
-  js:
-    js/analytics-footer.js: {}
-
+    https://assets.adobedtm.com/cAdobeAnalyticscec67651710193d2331efef325107c23a0145/satelliteLib-92fcbbc24eeebb654a3dfbe688ed2dfe10a53e24-staging.js: { type: external, preprocess: false, minified: false }

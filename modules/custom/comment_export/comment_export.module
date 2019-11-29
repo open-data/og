@@ -1,0 +1,18 @@
+<?php
+function comment_export_uninstall() {
+
+    /** @var \Drupal\Core\Config\ConfigFactoryInterface $configFactory */
+    $configFactory = \Drupal::configFactory();
+
+    $configNames = [
+        'views.view.comment_export',
+    ];
+
+    foreach ($configNames as $configName) {
+        try {
+            $configFactory->getEditable($configName)->delete();
+        }
+        catch (\Exception $e) {
+        }
+    }
+}

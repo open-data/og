@@ -1,0 +1,9 @@
+name: Comment Export
+description: Exports comments to csv.
+package: Open Government
+configure: comment_export.admin_settings
+dependencies:
+  -drupal:views
+  -drupal:comment
+type: module
+core: 8.x

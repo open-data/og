@@ -81,6 +81,7 @@ function comment_spam_preprocess_links__comment(&$variables) {
         $commentid = $routeParameters['comment'];
 
         $comment = Comment::load($commentid);
+
         if ($comment === NULL || !$comment->hasField('field_spam') || $comment->get('field_spam')->value) {
             return;
         }
@@ -126,6 +127,11 @@ function comment_spam_menu_local_tasks_alter(&$data, $route_name, &$cacheability
             ]);
     }
 }
+function comment_spam_comment_presave(Drupal\Core\Entity\EntityInterface $comment) {
+    if($comment->get('field_spam')->value==1 && $comment->get('status')->value==1){
+        $comment->set('field_spam',0);
+    }
+}
 function get_actual_unapproved_comments() {
     $query = \Drupal::entityQuery('comment');
     $query->condition('status', 0);
@@ -145,7 +151,8 @@ function comment_spam_uninstall() {
         'comment_spam.settings',
         'field.field.comment.comment.field_spam',
         'field.storage.comment.field_spam',
-        'views.view.comment_spam',
+        'views.view.comments_spam',
+        'system.action.comment_spam_publish_action',
     ];
 
     foreach ($configNames as $configName) {

@@ -4,3 +4,17 @@
  * @file
  * Contains od_ext_webform.module.
  */
+
+/**
+ * Implements preprocess_views_view()
+ * This function removes the webform and privacy statement block from the page in the case of an ATI record
+ * displaying 'no records'.
+ */
+function og_ext_webform_preprocess_views_view(&$variables) {
+  if ($variables['id'] == 'pd_core_ati_details') {
+    if ($variables['view']->result[0]->{'solr_document/number_of_pages'}[0] == "0") {
+      unset($variables['footer']['entity_webform'], $variables['footer']['entity_block_content']);
+    }
+  }
+}
+

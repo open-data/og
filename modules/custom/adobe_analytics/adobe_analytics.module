@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * Implements hook_page_attachments().
+ * This function loads all metatags and js calls needed for Adobe Analytics to track the pages
+ * Only public page sessions (not when a user is logged in) are tracked
+ */
+function adobe_analytics_page_attachments(array &$page) {
+  if (!\Drupal::currentUser()->isAuthenticated()) {
+    $request = \Drupal::request();
+    $route = \Drupal::routeMatch()->getRouteObject();
+    $current_path = \Drupal::service('path.current')->getPath();
+    $host = \Drupal::request()->getHost();
+
+    $title = \Drupal::service('title_resolver')->getTitle($request, $route);
+    $metaTitle = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'property' => 'dcterms:title',
+        'content' => $title,
+      ],
+    ];
+
+    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    if ($language == 'en') {
+      $langcode = 'eng';
+      $creator = 'Treasury Board of Canada Secretariat';
+    } elseif ($language == 'fr') {
+      $langcode = 'fra';
+      $creator = 'Secrétariat du Conseil du Trésor du Canada';
+    }
+
+    $metaLanguage = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'property' => 'dcterms:language',
+        'content' => $langcode,
+      ],
+    ];
+
+    $metaCreator = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'property' => 'dcterms:creator',
+        'content' => $creator,
+      ],
+    ];
+
+    $metaServices = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'property' => 'dcterms:services',
+        'content' => 'OG-GO',
+      ],
+    ];
+
+    /*
+    *'accessRights' should equal '1' if the page requires a user login, and '2' otherwise. In this case the function
+    * only runs on public pages, which means we always set it to '2'
+    */
+    $metaAccessRights = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'property' => 'dcterms:accessRights',
+        'content' => '2',
+      ],
+    ];
+
+
+    $page['#attached']['html_head'][] = [$metaTitle, 'dcterms:title'];
+    $page['#attached']['html_head'][] = [$metaLanguage, 'dcterms:language'];
+    $page['#attached']['html_head'][] = [$metaCreator, 'dcterms:creator'];
+    $page['#attached']['html_head'][] = [$metaServices, 'dcterms:services'];
+    $page['#attached']['html_head'][] = [$metaAccessRights, 'dcterms:accessRights'];
+    if ($host == 'staging.open.canada.ca' || $host == 'stadification.ouvert.canada.ca') {
+      $page['#attached']['library'][] = 'adobe_analytics/analytics-staging';
+    } elseif ($host == 'open.canada.ca' || $host == 'ouvert.canada.ca') {
+      $page['#attached']['library'][] = 'adobe_analytics/analytics-prod';
+    }
+  }
+}
+
+/**
+ * Implements hook_page_bottom().
+ * This function loads the js snippet at the bottom of the page, needed for Adobe Analytics to track the pages.
+ * Only public page sessions (not when a user is logged in) are tracked.
+ */
+function adobe_analytics_page_bottom(array &$page_bottom) {
+  if (!\Drupal::currentUser()->isAuthenticated()) {
+    $page_bottom['adobe_analytics'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'script',
+        '#value' => '_satellite.pageBottom()',
+    ];
+  }
+}

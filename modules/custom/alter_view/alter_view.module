@@ -135,14 +135,18 @@ function alter_view_cron() {
 }
 
 /**
- * Implements preprocess_views_view().
+ * Implements template_preprocess_views_view().
  * This function removes the webform and privacy statement block from the page in the case of an ATI record
  * displaying 'no records'.
  */
-function og_ext_webform_preprocess_views_view(&$variables) {
-  if ($variables['id'] == 'pd_core_ati_details') {
-    if ($variables['view']->result[0]->{'solr_document/number_of_pages'}[0] == "0") {
-      unset($variables['footer']['entity_webform'], $variables['footer']['entity_block_content']);
+function alter_view_preprocess_views_view(&$variables) {
+  $view = $variables['view'];
+  if ($view->id() === 'pd_core_ati_details') {
+    if ($view->result &&
+      $view->result[0]->_item->getField('number_of_pages') &&
+      $view->result[0]->_item->getField('number_of_pages')->getValues() &&
+      $view->result[0]->_item->getField('number_of_pages')->getValues()[0] == "0") {
+        unset($variables['footer']['entity_webform'], $variables['footer']['entity_block_content']);
     }
   }
 }

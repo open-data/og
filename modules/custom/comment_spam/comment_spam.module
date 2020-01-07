@@ -29,14 +29,32 @@ function comment_spam_help($route_name, RouteMatchInterface $route_match) {
     }
 }
 
-function comment_spam_form_comment_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-
-    $form['#validate'][] = '_comment_spam_user_form_validate';
+function comment_spam_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+    drupal_set_message($form_id);
+    //If form is comment
+    if(strpos($form_id, 'comment_comment_form') !== false){
+        $form['#validate'][] = '_comment_spam_comment_validate';
+    }
+    //form is webform
+    elseif(strpos($form_id, 'webform_submission') !== false){
+        $config = \Drupal::config('comment_spam.settings');
+        $webform_list = $config->get('webform_list');
+        $webform_list = array_diff($webform_list,array('0'));
+        foreach($webform_list as $webform){
+            if(strpos($form_id,$webform) !== false){
+                drupal_set_message($webform);
+                $form['#validate'][] = '_comment_spam_webform_validate';
+            }
+        }
+    }
 }
 
+/**
+ * @param $form
+ * @param $form_state
+ * Function for validation of comments
+ */
 function _comment_spam_user_form_validate(&$form, &$form_state) {
-    $lang=\Drupal::languageManager()->getCurrentLanguage()->getId();
-
     //get comment subject and body
     $comment_subject=$form_state->getValue('subject');
     $comment_subject=strtoupper($comment_subject[0]['value']);
@@ -45,17 +63,10 @@ function _comment_spam_user_form_validate(&$form, &$form_state) {
 
     $config = \Drupal::config('comment_spam.settings');
     $myWords = $config->get('custom_list');
-
+    //For each word that is banned, compare to all words of comment
     foreach ($myWords as $word){
         $upperWord=strtoupper($word);
-        /*        //USE THIS to only filter independent words
-
-               $patt = "/(?:^|[^a-zA-Z])" . preg_quote($upperWord, '/') . "(?:$|[^a-zA-Z])/i";
-               if(preg_match($patt, $comment_subject)|| preg_match($patt, $comment_body)){
-                    $form_state->setValue('field_spam',1);
-               }*/
-
-        //USE THIS to filter any sequence of letters that match a banned word in string
+        //If Subject line or body line contain banned word, mark as spam
         if(strpos($comment_subject,$upperWord) !==false){
             $form_state->setValue('field_spam',1);
         }if(strpos($comment_body,$upperWord)!==false) {
@@ -64,6 +75,35 @@ function _comment_spam_user_form_validate(&$form, &$form_state) {
 
     }
 }
+
+/**
+ * @param $form
+ * @param $form_state
+ * Function for validation for webforms
+ */
+function _comment_spam_webform_validate(&$form, &$form_state) {
+    $spam_flag=false;
+    $config = \Drupal::config('comment_spam.settings');
+    $myWords = $config->get('custom_list');
+    //For each field before the 'submit' button
+    foreach ($form_state->getValues() as $key => $val){
+        if($key=='submit')
+            break;
+        else{
+            foreach ($myWords as $word){
+                $upperWord=strtoupper($word);
+                if(strpos(strtoupper($val),$upperWord) !==false){
+                    $spam_flag=true;
+                }
+            }
+        }
+        if($spam_flag==true && $form_state->hasValue('spam_flag')){
+            $form_state->setValue('spam_flag','1');
+        }
+
+    }
+}
+
 function comment_spam_preprocess_links__comment(&$variables) {
     // No links are available without permission or in pre-view mode.
     if (!isset($variables['links']['comment-edit'])) {
@@ -99,6 +139,7 @@ function comment_spam_preprocess_links__comment(&$variables) {
 }
 
 function comment_spam_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+    //Remove Spam comments from views
     if ($view->id() == 'comment' || $view->id() == 'comments_recent') {
         $definition = [
             'type' => 'LEFT OUTER',
@@ -115,7 +156,47 @@ function comment_spam_views_query_alter(ViewExecutable $view, QueryPluginBase $q
             ->condition('comment__field_spam.field_spam_value', NULL, 'IS NULL')
         );
     }
+    //Add webform spam to webform_spam view
+    if($view->id() == 'webform_spam'){
+        $definition = [
+            'type' => 'LEFT OUTER',
+            'table' => 'webform_submission_data',
+            'field' => 'sid',
+            'left_table' => 'webform_submission',
+            'left_field' => 'sid',
+        ];
+        $join = Drupal::service('plugin.manager.views.join')->createInstance('standard', $definition);
+        $query->addRelationship('webform_submission_data', $join, 'webform_submission_data');
+
+        $query->addWhere('1', (new Condition('AND'))
+            ->condition('webform_submission_data.name', 'spam_flag', '=')
+            ->condition('webform_submission_data.value', TRUE, '=')
+        );
+    }
+    //Remove spam from webform view
+    if($view->id() == 'webform_submissions'){
+        $definition = [
+            'type' => 'LEFT OUTER',
+            'table' => 'webform_submission_data',
+            'field' => 'sid',
+            'left_table' => 'webform_submission',
+            'left_field' => 'sid',
+        ];
+        $join = Drupal::service('plugin.manager.views.join')->createInstance('standard', $definition);
+        $query->addRelationship('webform_submission_data', $join, 'webform_submission_data');
+        $query->addWhere('1', (new Condition('AND'))
+            ->condition('webform_submission_data.name', 'spam_flag', '=')
+            ->condition('webform_submission_data.value', FALSE, '=')
+        );
+    }
 }
+
+/**
+ * @param $data
+ * @param $route_name
+ * @param $cacheability
+ * Function for counting the number of non-spam unapproved comments
+ */
 function comment_spam_menu_local_tasks_alter(&$data, $route_name, &$cacheability) {
     if ($route_name == 'comment.admin' ||
         $route_name == 'comment.admin_approval' ||
@@ -127,6 +208,11 @@ function comment_spam_menu_local_tasks_alter(&$data, $route_name, &$cacheability
             ]);
     }
 }
+
+/**
+ * @param \Drupal\Core\Entity\EntityInterface $comment
+ * Function to unmark comment as spam when it is approved by moderator
+ */
 function comment_spam_comment_presave(Drupal\Core\Entity\EntityInterface $comment) {
     if($comment->get('field_spam')->value==1 && $comment->get('status')->value==1){
         $comment->set('field_spam',0);
@@ -142,18 +228,51 @@ function get_actual_unapproved_comments() {
     $ids = $query->execute();
     return count($ids);
 }
+
+
+function comment_spam_install(){
+    //On Modue install, add spam view to all webform views
+    $config = \Drupal::service('config.factory')->getEditable('webform.settings');
+    $setData = [
+        'settings'=>[
+            'default_submission_views' => [
+                'validated'=> [
+                    'view'=>'webform_submissions:embed_default',
+                    'title'=>'Validated Submissions',
+                    'global_routes'=>['entity.webform_submission.collection','entity.webform_submission.user'],
+                    'webform_routes'=>['entity.webform.results_submissions','entity.webform.user.submissions'],
+                ],
+                'spam' => [
+                    'view'=>'webform_spam:embed_1',
+                    'title'=>'Spam Submissions',
+                    'global_routes'=>['entity.webform_submission.collection','entity.webform_submission.user'],
+                    'webform_routes'=>['entity.webform.results_submissions','entity.webform.user.submissions'],
+                ],
+            ],
+            'default_submission_views_replace'=>[
+                'global_routes'=>['entity.webform_submission.collection','entity.webform_submission.user'],
+                'webform_routes'=>['entity.webform.results_submissions','entity.webform.user.submissions','entity.webform.user.drafts'],
+            ],
+        ],
+    ];
+    $config->setData($setData)->save();
+}
 function comment_spam_uninstall() {
 
     /** @var \Drupal\Core\Config\ConfigFactoryInterface $configFactory */
     $configFactory = \Drupal::configFactory();
-
+    //Remove Config Files
     $configNames = [
         'comment_spam.settings',
         'field.field.comment.comment.field_spam',
         'field.storage.comment.field_spam',
         'views.view.comments_spam',
+        'views.view.webform_spam',
         'system.action.comment_spam_publish_action',
     ];
+
+    //For each webform with filter
+    $spam_webforms_list = $configFactory->getEditable('comment_spam.settings')->get('webform_list');
 
     foreach ($configNames as $configName) {
         try {
@@ -162,9 +281,35 @@ function comment_spam_uninstall() {
         catch (\Exception $e) {
         }
     }
+
+    //Remove webform spam view
+    $configFactory->getEditable('webform.settings')->set('settings.default_submission_views_replace.global_routes',[]);
+    $configFactory->getEditable('webform.settings')->set('settings.default_submission_views_replace.webform_routes',[]);
+    $configFactory->getEditable('webform.settings')->set('settings.default_submission_views',[])->save();
+
+    //For each webform with spam_filter, remove spam_flag and handler
+    $hidden_field = "\nspam_flag:\n  '#type': checkbox\n  '#title': spam_flag\n  '#disabled': true\n  '#wrapper_attributes':\n    class:\n      - hidden";
+    foreach($spam_webforms_list as $webform){
+        if($webform==0)
+            continue;
+        $wf_conf = $configFactory->getEditable('webform.webform.'.$webform);
+        $elements = $wf_conf->get('elements');
+        $elements=str_replace($hidden_field,"",$elements);
+        $wf_conf->set('elements',$elements);
+        $check_handler = $wf_conf->get('handlers.email_notification');
+        if($check_handler!=null){
+            $wf_conf->set('handlers.email_notification.conditions',[]);
+        }
+        $wf_conf->save();
+    }
 }
+
+/**
+ * Delete spam comments and webforms older than 1 week
+ */
 function comment_spam_cron(){
     $time = time();
+    //delete comments
     $query = \Drupal::entityQuery('comment');
     $query->condition('status', 0);
     $query->condition('field_spam', TRUE, '=');
@@ -179,7 +324,28 @@ function comment_spam_cron(){
             $comment->delete();
         }
     }
+
+    //delete webforms
+    $query = \Drupal::database()->select('webform_submission_data', 'w');
+    $query->addField('w', 'sid');
+    $query->condition('w.name', 'spam_flag');
+    $query->condition('w.value', '1');
+    $results = $query->execute()->fetchAllAssoc('sid');
+    foreach($results as $key => $value){
+        $webform_submission = \Drupal\webform\Entity\WebformSubmission::load($key);
+        $created=$webform_submission->get('created')->value;
+        $date_diff = ($time-$created)/604800;
+        if($date_diff>=1){
+            $webform_submission->delete();
+        }
+    }
+
+
+
 }
+
+
+
 
 
 

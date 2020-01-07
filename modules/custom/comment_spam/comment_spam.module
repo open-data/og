@@ -30,7 +30,6 @@ function comment_spam_help($route_name, RouteMatchInterface $route_match) {
 }
 
 function comment_spam_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-    drupal_set_message($form_id);
     //If form is comment
     if(strpos($form_id, 'comment_comment_form') !== false){
         $form['#validate'][] = '_comment_spam_comment_validate';
@@ -42,7 +41,6 @@ function comment_spam_form_alter(&$form, FormStateInterface $form_state, $form_i
         $webform_list = array_diff($webform_list,array('0'));
         foreach($webform_list as $webform){
             if(strpos($form_id,$webform) !== false){
-                drupal_set_message($webform);
                 $form['#validate'][] = '_comment_spam_webform_validate';
             }
         }

@@ -1,0 +1,6 @@
+comment_spam.admin:
+  title: 'Comment Spam module settings'
+  description: 'Admin link for comment spam module'
+  parent: system.admin_config_ui
+  route_name: comment_spam.admin_settings
+  weight: 100

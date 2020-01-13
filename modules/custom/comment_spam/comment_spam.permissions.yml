@@ -1,0 +1,4 @@
+comment_spam set spam:
+  title: Set comment as spam.
+  description: Adds comment to the filter as spam and unpublishes the comment (when not already unpublished).
+  restrict access: true

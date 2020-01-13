@@ -7,7 +7,7 @@ use \Drupal\views\ViewExecutable;
 
 /**
  * @file
- * Contains alter_view.module.
+ * Contains alter_field.module.
  */
 
 /**
@@ -130,6 +130,23 @@ function alter_view_cron() {
       $tags = $view->getCacheTags();
       Cache::invalidateTags($tags);
       \Drupal::logger('cron')->notice('Cache cleared for ' . $view->getTitle());
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_views_view().
+ * This function removes the webform and privacy statement block from the page in the case of an ATI record
+ * displaying 'no records'.
+ */
+function alter_view_preprocess_views_view(&$variables) {
+  $view = $variables['view'];
+  if ($view->id() === 'pd_core_ati_details') {
+    if ($view->result &&
+      $view->result[0]->_item->getField('number_of_pages') &&
+      $view->result[0]->_item->getField('number_of_pages')->getValues() &&
+      $view->result[0]->_item->getField('number_of_pages')->getValues()[0] == "0") {
+        unset($variables['footer']['entity_webform'], $variables['footer']['entity_block_content']);
     }
   }
 }

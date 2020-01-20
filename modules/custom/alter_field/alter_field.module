@@ -12,7 +12,14 @@ use Drupal\field\Entity\FieldStorageConfig;
  * Set dynamic allowed values for organization field
  * The options will be same as CKAN
  */
-function fetch_orgs_from_ckan(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+function fetch_orgs_from_ckan() {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  // Load cached options, if exist
+  if ($cache = \Drupal::cache()->get('ckan_orgs_' . $langcode)) {
+    $options = $cache->data;
+    return $options;
+  }
+
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $filename = 'sites/default/files/od-do-orgs.jsonl';
   $contents = file($filename);
@@ -26,13 +33,68 @@ function fetch_orgs_from_ckan(FieldStorageConfig $definition, ContentEntityInter
   }
 
   ksort($options);
+
+  // Cache options
+  \Drupal::cache()->set('ckan_orgs_' . $langcode, $options);
+
+  return $options;
+}
+
+/**
+ * Set dynamic allowed values for dataset format field
+ * The options will be same as CKAN
+ */
+function fetch_dataset_format_from_ckan() {
+  // Load cached options, if exist
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if ($cache = \Drupal::cache()->get('ckan_dataset_format_' . $langcode)) {
+    $options = $cache->data;
+    return $options;
+  }
+
+  $options = [];
+  $url = 'https://open.canada.ca/data/api/action/scheming_dataset_schema_show?type=dataset';
+  $url = filter_var($url, FILTER_SANITIZE_URL);
+  if (filter_var($url, FILTER_VALIDATE_URL) !== FALSE) {
+    $client = \Drupal::httpClient();
+    try {
+      $request = $client->get($url);
+      if ($request->getStatusCode() == '200') {
+        $response = $request->getBody()->getContents();
+        $data = json_decode($response, TRUE);
+
+        foreach ($data['result']['resource_fields'] as $rsc) {
+          if ($rsc['field_name'] == 'format') {
+            foreach ($rsc['choices'] as $choice) {
+              if (array_key_exists('label', $choice)) {
+                $value = is_array($choice['label']) ?  $choice['label'][$langcode] : $choice['label'];
+                $options[$value] = $value;
+              }
+              else {
+                $options[$choice['value']] = $choice['value'];
+              }
+            }
+            break;
+          }
+        }
+
+        // Cache options
+        \Drupal::cache()->set('ckan_dataset_format_' . $langcode, $options);
+      }
+    }
+    catch (Exception $e) {
+      \Drupal::logger('fetch from api')->error('Unable to fetch from api for ' . $url
+        . ' Exception: ' . $e->getMessage());
+    }
+  }
+
   return $options;
 }
 
 /**
  * Provide dynamic allowed values for the status field of Suggested Dataset
  */
-function get_suggested_dataset_status(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+function get_suggested_dataset_status() {
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
   if ($langcode == 'fr') {
     $options = [
@@ -54,6 +116,20 @@ function get_suggested_dataset_status(FieldStorageConfig $definition, ContentEnt
   }
 
   return $options;
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function alter_field_webform_options_organization_alter(array &$options, array &$element) {
+  $options = fetch_orgs_from_ckan();
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function alter_field_webform_options_dataset_format_alter(array &$options, array &$element) {
+  $options = fetch_dataset_format_from_ckan();
 }
 
 /**

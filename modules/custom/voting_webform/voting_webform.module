@@ -142,55 +142,68 @@ function voting_webform_cron() {
                           WHERE type = :type
                           ORDER BY vote_average DESC", [':type' => 'dataset',]);
 
-    if ($result) {
-      // fetch dataset titles from ckan
-      $datasets = array();
-      $url = 'http://open.canada.ca/static/od-do-canada.jl.gz';
-      $url = filter_var($url, FILTER_SANITIZE_URL);
-      if (filter_var($url, FILTER_VALIDATE_URL) !== FALSE) {
-        $client = \Drupal::httpClient();
-        $request = $client->get($url);
-        if ($request->getStatusCode() == '200') {
-          $handle = gzopen($url, 'r');
-          while (!gzeof($handle)) {
-            $line = gzgets($handle);
-            $data = json_decode($line, TRUE);
-            $datasets[$data['id']] = ['en' => $data['title_translated']['en'], 'fr' => $data['title_translated']['fr']];
-          }
-          gzclose($handle);
-        }
+    if (!$result) {
+      throw new Exception('Failed to return results from database.');
+    }
+
+    // fetch dataset titles from ckan
+    $datasets = array();
+    $url = 'http://open.canada.ca/static/od-do-canada.jl.gz';
+    $url = filter_var($url, FILTER_SANITIZE_URL);
+    if (filter_var($url, FILTER_VALIDATE_URL) !== FALSE) {
+      $client = \Drupal::httpClient();
+      $request = $client->get($url);
+      
+      if (!$request || $request->getStatusCode() != '200') {
+        throw new Exception('Failed to retrieve Portal Catalogue dataset.');
       }
 
-      if (sizeof($datasets)) {
-        // create output csv
-        if ($output = fopen('sites/default/files/dataset_ratings.csv', 'w')) {
-          // add BOM to fix UTF-8 in Excel
-          fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
-          // add csv header columns
-          $header = ['Dataset Title (English)',
-            'Dateset Title (French)',
-            'Dataset UUID',
-            'Rating Score',
-            'Number of times dataset is rated',
-            'Link to Dataset (English)',
-            'Link to Dataset (French)',
-          ];
-          fputcsv($output, $header, "\t");
+      $handle = gzopen($url, 'r');
+      while (!gzeof($handle)) {
+        $line = gzgets($handle);
+        $data = json_decode($line, TRUE);
+        $datasets[$data['id']] = ['en' => $data['title_translated']['en'], 'fr' => $data['title_translated']['fr']];
+      }
+      gzclose($handle);
+    }
 
-          // write to csv
-          while ($row = $result->fetchAssoc()) {
-            if (array_key_exists($row['uuid'], $datasets)) {
-              $row['en'] = $datasets[$row['uuid']]['en'];
-              $row['fr'] = $datasets[$row['uuid']]['fr'];
-              fputcsv($output, $row, "\t");
-            }
-          }
-          \Drupal::logger('export')->notice('Dataset ratings exported');
-          fclose($output);
-        }
+    if (!sizeof($datasets)) {
+      throw new Exception('Failed to read content from Portal Catalogue dataset.');
+    }
+
+    // create output csv
+    $output = fopen('sites/default/files/dataset_ratings.csv', 'w');
+    if (!$output) {
+      throw new Exception('Failed to create export file.');
+    }
+
+    // add BOM to fix UTF-8 in Excel
+    fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+    // add csv header columns
+    $header = ['Dataset Title (English)',
+      'Dateset Title (French)',
+      'Dataset UUID',
+      'Rating Score',
+      'Number of times dataset is rated',
+      'Link to Dataset (English)',
+      'Link to Dataset (French)',
+    ];
+    fputcsv($output, $header, "\t");
+
+    // write to csv
+    while ($row = $result->fetchAssoc()) {
+      if (array_key_exists($row['uuid'], $datasets)) {
+        $row['en'] = $datasets[$row['uuid']]['en'];
+        $row['fr'] = $datasets[$row['uuid']]['fr'];
+        fputcsv($output, $row, "\t");
       }
     }
-  } catch (Exception $e) {
+
+    \Drupal::logger('export')->notice('Dataset ratings exported');
+    fclose($output);
+  }
+
+  catch (Exception $e) {
     \Drupal::logger('export')->error('Unable to export dataset ratings ' . $e->getMessage());
   }
 }

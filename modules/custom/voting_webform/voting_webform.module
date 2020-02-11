@@ -159,6 +159,10 @@ function voting_webform_cron() {
       }
 
       $handle = gzopen($url, 'r');
+      if (!$handle) {
+        throw new Exception('Failed to open Portal Catalogue dataset.');
+      }
+
       while (!gzeof($handle)) {
         $line = gzgets($handle);
         $data = json_decode($line, TRUE);

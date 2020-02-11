@@ -92,6 +92,9 @@ function voting_webform_webform_submission_prepare_form(WebformSubmissionInterfa
   }
 }
 
+/**
+ * Return average vote and vote count for a dataset uuid
+ */
 function getAverageVoteAndCount($uuid, $webform_id)
 {
   if (empty($uuid)) {
@@ -124,3 +127,70 @@ function getAverageVoteAndCount($uuid, $webform_id)
   }
 }
 
+/**
+ * Implements hook_cron().
+ * Export dataset ratings as CSV
+ */
+function voting_webform_cron() {
+  try {
+    // fetch ratings from database
+    $database = \Drupal::database();
+    $result = $database->query("SELECT uuid, vote_average, vote_count, 
+                            CONCAT('https://open.canada.ca/data/en/dataset/', uuid) as url_en,
+                            CONCAT('https://ouvert.canada.ca/data/fr/dataset/', uuid) as url_fr 
+                          FROM {external_rating} 
+                          WHERE type = :type
+                          ORDER BY vote_average DESC", [':type' => 'dataset',]);
+
+    if ($result) {
+      // fetch dataset titles from ckan
+      $datasets = array();
+      $url = 'http://open.canada.ca/static/od-do-canada.jl.gz';
+      $url = filter_var($url, FILTER_SANITIZE_URL);
+      if (filter_var($url, FILTER_VALIDATE_URL) !== FALSE) {
+        $client = \Drupal::httpClient();
+        $request = $client->get($url);
+        if ($request->getStatusCode() == '200') {
+          $handle = gzopen($url, 'r');
+          while (!gzeof($handle)) {
+            $line = gzgets($handle);
+            $data = json_decode($line, TRUE);
+            $datasets[$data['id']] = ['en' => $data['title_translated']['en'], 'fr' => $data['title_translated']['fr']];
+          }
+          gzclose($handle);
+        }
+      }
+
+      if (sizeof($datasets)) {
+        // create output csv
+        if ($output = fopen('sites/default/files/dataset_ratings.csv', 'w')) {
+          // add BOM to fix UTF-8 in Excel
+          fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+          // add csv header columns
+          $header = ['Dataset Title (English)',
+            'Dateset Title (French)',
+            'Dataset UUID',
+            'Rating Score',
+            'Number of times dataset is rated',
+            'Link to Dataset (English)',
+            'Link to Dataset (French)',
+          ];
+          fputcsv($output, $header, "\t");
+
+          // write to csv
+          while ($row = $result->fetchAssoc()) {
+            if (array_key_exists($row['uuid'], $datasets)) {
+              $row['en'] = $datasets[$row['uuid']]['en'];
+              $row['fr'] = $datasets[$row['uuid']]['fr'];
+              fputcsv($output, $row, "\t");
+            }
+          }
+          \Drupal::logger('export')->notice('Dataset ratings exported');
+          fclose($output);
+        }
+      }
+    }
+  } catch (Exception $e) {
+    \Drupal::logger('export')->error('Unable to export dataset ratings ' . $e->getMessage());
+  }
+}

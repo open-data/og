@@ -148,28 +148,18 @@ function voting_webform_cron() {
 
     // fetch dataset titles from ckan
     $datasets = array();
-    $url = 'http://open.canada.ca/static/od-do-canada.jl.gz';
-    $url = filter_var($url, FILTER_SANITIZE_URL);
-    if (filter_var($url, FILTER_VALIDATE_URL) !== FALSE) {
-      $client = \Drupal::httpClient();
-      $request = $client->get($url);
-      
-      if (!$request || $request->getStatusCode() != '200') {
-        throw new Exception('Failed to retrieve Portal Catalogue dataset.');
-      }
-
-      $handle = gzopen($url, 'r');
-      if (!$handle) {
-        throw new Exception('Failed to open Portal Catalogue dataset.');
-      }
-
-      while (!gzeof($handle)) {
-        $line = gzgets($handle);
-        $data = json_decode($line, TRUE);
-        $datasets[$data['id']] = ['en' => $data['title_translated']['en'], 'fr' => $data['title_translated']['fr']];
-      }
-      gzclose($handle);
+    $filename = 'sites/default/files/od-do-canada.jl.gz';
+    $handle = gzopen($filename, 'r');
+    if (!$handle) {
+      throw new Exception('Failed to open Portal Catalogue dataset.');
     }
+
+    while (!gzeof($handle)) {
+      $line = gzgets($handle);
+      $data = json_decode($line, TRUE);
+      $datasets[$data['id']] = ['en' => $data['title_translated']['en'], 'fr' => $data['title_translated']['fr']];
+    }
+    gzclose($handle);
 
     if (!sizeof($datasets)) {
       throw new Exception('Failed to read content from Portal Catalogue dataset.');

@@ -140,14 +140,14 @@ function voting_webform_cron() {
                             CONCAT('https://ouvert.canada.ca/data/fr/dataset/', uuid) as url_fr 
                           FROM {external_rating} 
                           WHERE type = :type
-                          ORDER BY vote_average DESC", [':type' => 'dataset',]);
+                          ORDER BY vote_average DESC, vote_count DESC", [':type' => 'dataset',]);
 
     if (!$result) {
       throw new Exception('Failed to return results from database.');
     }
 
     // fetch dataset titles from ckan
-    $datasets = array();
+    $datasets = [];
     $filename = 'sites/default/files/od-do-canada.jl.gz';
     $handle = gzopen($filename, 'r');
     if (!$handle) {
@@ -182,14 +182,14 @@ function voting_webform_cron() {
       'Link to Dataset (English)',
       'Link to Dataset (French)',
     ];
-    fputcsv($output, $header, "\t");
+    fputcsv($output, $header, ',', '"');
 
     // write to csv
     while ($row = $result->fetchAssoc()) {
       if (array_key_exists($row['uuid'], $datasets)) {
-        $row['en'] = $datasets[$row['uuid']]['en'];
-        $row['fr'] = $datasets[$row['uuid']]['fr'];
-        fputcsv($output, $row, "\t");
+        $row = [ 'fr' => $datasets[$row['uuid']]['fr'] ] + $row;
+        $row = [ 'en' => $datasets[$row['uuid']]['en'] ] + $row;
+        fputcsv($output, $row, ',', '"');
       }
     }
 

@@ -177,21 +177,19 @@ function export_cumulative_dataset_ratings() {
     $output_data = [];
     while ($row = $result->fetchAssoc()) {
       if (array_key_exists($row['uuid'], $datasets)) {
-        $row['url_en'] = '=HYPERLINK("' . $row['url_en'] . '")';
-        $row['url_fr'] = '=HYPERLINK("' . $row['url_fr'] . '")';
         $row = [ 'fr' => $datasets[$row['uuid']]['fr'] ] + $row;
         $row = [ 'en' => $datasets[$row['uuid']]['en'] ] + $row;
         $output_data[] = $row;
       }
     }
 
-    $header = ['Dataset Title (English)',
-      'Dateset Title (French)',
-      'Dataset UUID',
-      'Average User Rating',
-      'Number of ratings',
-      'Link to Dataset (English)',
-      'Link to Dataset (French)',
+    $header = ['title_en / titre_en',
+      'title_fr / titre_fr',
+      'uuid',
+      'avg_user_rating / coter_moyen',
+      'rating_count / nombre_coter',
+      'url_en',
+      'url_fr',
     ];
 
     // export as csv
@@ -217,8 +215,6 @@ function export_dataset_ratings_submissions() {
     $data = [];
     foreach ($webform_submission as $submission) {
       $row = $submission->getData();
-      $row['referred_url'] = '=HYPERLINK("' . $row['referred_url'] . '")';
-
       $data[] = ['sid' => $submission->id()] + $row + ['completed' => $submission->completed->getValue()[0]['value']];
     }
 

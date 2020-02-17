@@ -92,8 +92,10 @@ function voting_webform_webform_submission_prepare_form(WebformSubmissionInterfa
   }
 }
 
-function getAverageVoteAndCount($uuid, $webform_id)
-{
+/**
+ * Return average vote and vote count for a dataset uuid
+ */
+function getAverageVoteAndCount($uuid, $webform_id) {
   if (empty($uuid)) {
     return NULL;
   }
@@ -124,3 +126,143 @@ function getAverageVoteAndCount($uuid, $webform_id)
   }
 }
 
+/**
+ * Implements hook_cron().
+ * 1. Export dataset ratings as CSV with cumulative ratings and vote count
+ * 2. Export individual user rating submissions for datasets
+ */
+function voting_webform_cron() {
+  export_cumulative_dataset_ratings();
+  export_dataset_ratings_submissions();
+}
+
+/**
+ * Export dataset ratings as CSV with cumulative ratings and vote count
+ */
+function export_cumulative_dataset_ratings() {
+  try {
+    // fetch ratings from database
+    $database = \Drupal::database();
+    $result = $database->query("SELECT uuid, vote_average, vote_count, 
+                            CONCAT('https://open.canada.ca/data/en/dataset/', uuid) as url_en,
+                            CONCAT('https://ouvert.canada.ca/data/fr/dataset/', uuid) as url_fr 
+                          FROM {external_rating} 
+                          WHERE type = :type
+                          ORDER BY vote_average DESC, vote_count DESC", [':type' => 'dataset',]);
+
+    if (!$result) {
+      throw new Exception('Failed to return results from database.');
+    }
+
+    // fetch dataset titles from ckan
+    $datasets = [];
+    $filename = 'sites/default/files/od-do-canada.jl.gz';
+    $handle = gzopen($filename, 'r');
+    if (!$handle) {
+      throw new Exception('Failed to open Portal Catalogue dataset.');
+    }
+
+    while (!gzeof($handle)) {
+      $line = gzgets($handle);
+      $data = json_decode($line, TRUE);
+      $datasets[$data['id']] = ['en' => $data['title_translated']['en'], 'fr' => $data['title_translated']['fr']];
+    }
+    gzclose($handle);
+
+    if (!sizeof($datasets)) {
+      throw new Exception('Failed to read content from Portal Catalogue dataset.');
+    }
+
+    // generate output data stream
+    $output_data = [];
+    while ($row = $result->fetchAssoc()) {
+      if (array_key_exists($row['uuid'], $datasets)) {
+        $row = [ 'fr' => $datasets[$row['uuid']]['fr'] ] + $row;
+        $row = [ 'en' => $datasets[$row['uuid']]['en'] ] + $row;
+        $output_data[] = $row;
+      }
+    }
+
+    $header = ['title_en / titre_en',
+      'title_fr / titre_fr',
+      'uuid',
+      'avg_user_rating / coter_moyen',
+      'rating_count / nombre_coter',
+      'url_en',
+      'url_fr',
+    ];
+
+    // export as csv
+    write_to_csv('dataset-ratings.csv', $output_data, $header);
+
+    // log results
+    \Drupal::logger('export')->notice('Dataset ratings exported');
+  }
+
+  catch (Exception $e) {
+    \Drupal::logger('export')->error('Unable to export dataset ratings ' . $e->getMessage());
+  }
+}
+
+/**
+ * Export user ratings webform submissions for datasets
+ */
+function export_dataset_ratings_submissions() {
+  try {
+    // fetch all submissions for dataset ratings
+    $storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
+    $webform_submission = $storage->loadByProperties([ 'webform_id' => 'vote', ]);
+    $data = [];
+    foreach ($webform_submission as $submission) {
+      $row = $submission->getData();
+      $data[] = ['sid' => $submission->id()] + $row + ['completed' => $submission->completed->getValue()[0]['value']];
+    }
+
+    $header = [ 'Submission ID',
+      'Dataset UUID',
+      'User Rating',
+      'Link to Dataset',
+      'Time Created'
+    ];
+
+    // export as csv
+    write_to_csv('user-dataset-rating-submissions.csv', $data, $header);
+
+    // log results
+    \Drupal::logger('export')->notice('User submissions for dataset ratings exported');
+  }
+
+  catch (Exception $e) {
+    \Drupal::logger('export')->error('Unable to export user submissions for dataset ratings ' . $e->getMessage());
+  }
+}
+
+/**
+ * Generate output file for given data and headers
+ */
+function write_to_csv($filename, $data_to_write, $csv_header) {
+  try {
+    // create output csv
+    $public_path = \Drupal::service('file_system')->realpath(file_default_scheme() . "://");
+    $output = fopen($public_path . '/' . $filename, 'w');
+    if (!$output) {
+      throw new Exception('Failed to create export file.');
+    }
+
+    // add BOM to fix UTF-8 in Excel
+    fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+    // add csv header columns
+    fputcsv($output, $csv_header, ',', '"');
+
+    // write to csv
+    foreach($data_to_write as $row) {
+      fputcsv($output, $row, ',', '"');
+    }
+
+    fclose($output);
+  }
+
+  catch (Exception $e) {
+    \Drupal::logger('export')->error('Unable to create ' . $filename . ' ' . $e->getMessage());
+  }
+}

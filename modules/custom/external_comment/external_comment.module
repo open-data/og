@@ -27,7 +27,10 @@ function external_comment_query_comment_filter_alter(AlterableInterface $query) 
 }
 
 
-
+/**
+ * Implements hook_cron().
+ * Export all published comments into a csv file
+ */
 function external_comment_cron() {
   // fetch comments
   $comment_ids = \Drupal::entityQuery('comment')
@@ -36,13 +39,12 @@ function external_comment_cron() {
     ->execute();
 
   $comments_data = [];
-  $comments_entities = [];
+
   // if comments exist
   if ($comment_ids) {
     $comments = \Drupal::entityTypeManager()
       ->getStorage('comment')
       ->loadMultiple($comment_ids);
-//    dump($comments);
 
     foreach($comments as $comment) {
       $node = $comment->getCommentedEntity();
@@ -76,18 +78,10 @@ function external_comment_cron() {
   ];
 
   // export as csv
-  write_to_csv('comments.csv', $comments_data, $header);
-}
-
-
-/**
- * Generate output file for given data and headers
- */
-function write_to_csv($filename, $data_to_write, $csv_header) {
   try {
     // create output csv
     $public_path = \Drupal::service('file_system')->realpath(file_default_scheme() . "://");
-    $output = fopen($public_path . '/' . $filename, 'w');
+    $output = fopen($public_path . '/export_comments.csv', 'w');
     if (!$output) {
       throw new Exception('Failed to create export file.');
     }
@@ -95,17 +89,14 @@ function write_to_csv($filename, $data_to_write, $csv_header) {
     // add BOM to fix UTF-8 in Excel
     fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
     // add csv header columns
-    fputcsv($output, $csv_header, ',', '"');
+    fputcsv($output, $header, ',', '"');
 
     // write to csv
-    foreach($data_to_write as $row) {
+    foreach($comments_data as $row) {
       fputcsv($output, $row, ',', '"');
     }
-
     fclose($output);
-  }
-
-  catch (Exception $e) {
-    \Drupal::logger('export')->error('Unable to create ' . $filename . ' ' . $e->getMessage());
+  } catch (Exception $e) {
+    \Drupal::logger('export')->error('Unable to create export_comments.csv ' . $e->getMessage());
   }
 }

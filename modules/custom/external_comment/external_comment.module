@@ -36,18 +36,26 @@ function external_comment_cron() {
     ->execute();
 
   $comments_data = [];
+  $comments_entities = [];
   // if comments exist
   if ($comment_ids) {
     $comments = \Drupal::entityTypeManager()
       ->getStorage('comment')
       ->loadMultiple($comment_ids);
+//    dump($comments);
 
     foreach($comments as $comment) {
+      $node = $comment->getCommentedEntity();
+
       // Loop over and get fields for published comments
-      if ($comment->getStatus() == 1) {
+      if ($comment->getStatus() == 1 && $node->isPublished()) {
+        $host = \Drupal::request()->getSchemeAndHttpHost();
+        $url_en = ($node->hasTranslation('en') ? $host . $node->getTranslation('en')->url() : '');
+        $url_fr = ($node->hasTranslation('fr') ? $host . $node->getTranslation('fr')->url() : '');
         $comments_data[] = [
           'comment_id' => $comment->id(),
-          'uuid' => $comment->uuid(),
+          'page_en' => $url_en,
+          'page_fr' => $url_fr,
           'subject' => $comment->getSubject(),
           'comment_body' => $comment->get('comment_body')->getValue()[0]['value'],
           'comment_posted_by' => $comment->getAuthorName(),
@@ -59,7 +67,8 @@ function external_comment_cron() {
 
   $header = [
     'Comment id',
-    'Page uuid',
+    'English page',
+    'French page',
     'Subject',
     'Body',
     'Posted by',

@@ -51,9 +51,8 @@ function external_comment_cron() {
 
       // Loop over and get fields for published comments
       if ($comment->getStatus() == 1 && $node->isPublished()) {
-        $host = \Drupal::request()->getSchemeAndHttpHost();
-        $url_en = ($node->hasTranslation('en') ? $host . $node->getTranslation('en')->url() : '');
-        $url_fr = ($node->hasTranslation('fr') ? $host . $node->getTranslation('fr')->url() : '');
+        $url_en = ($node->hasTranslation('en') ? 'https://open.canada.ca' . $node->getTranslation('en')->url() : '');
+        $url_fr = ($node->hasTranslation('fr') ? 'https://ouvert.canada.ca' . $node->getTranslation('fr')->url() : '');
         $comments_data[] = [
           'comment_id' => $comment->id(),
           'page_en' => $url_en,
@@ -96,6 +95,7 @@ function external_comment_cron() {
       fputcsv($output, $row, ',', '"');
     }
     fclose($output);
+    \Drupal::logger('export')->notice('Comments export to csv file completed');
   } catch (Exception $e) {
     \Drupal::logger('export')->error('Unable to create export_comments.csv ' . $e->getMessage());
   }

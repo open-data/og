@@ -156,7 +156,7 @@ function export_cumulative_dataset_ratings() {
 
     // fetch dataset titles from ckan
     $datasets = [];
-    $filename = 'sites/default/files/od-do-canada.jl.gz';
+    $filename = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/od-do-canada.jl.gz';
     $handle = gzopen($filename, 'r');
     if (!$handle) {
       throw new Exception('Failed to open Portal Catalogue dataset.');

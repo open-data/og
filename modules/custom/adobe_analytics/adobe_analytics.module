@@ -49,7 +49,7 @@ function adobe_analytics_page_attachments(array &$page) {
     $metaServices = [
       '#tag' => 'meta',
       '#attributes' => [
-        'property' => 'dcterms:services',
+        'property' => 'dcterms:service',
         'content' => 'OG-GO',
       ],
     ];
@@ -70,7 +70,7 @@ function adobe_analytics_page_attachments(array &$page) {
     $page['#attached']['html_head'][] = [$metaTitle, 'dcterms:title'];
     $page['#attached']['html_head'][] = [$metaLanguage, 'dcterms:language'];
     $page['#attached']['html_head'][] = [$metaCreator, 'dcterms:creator'];
-    $page['#attached']['html_head'][] = [$metaServices, 'dcterms:services'];
+    $page['#attached']['html_head'][] = [$metaServices, 'dcterms:service'];
     $page['#attached']['html_head'][] = [$metaAccessRights, 'dcterms:accessRights'];
     if ($host == 'staging.open.canada.ca' || $host == 'stadification.ouvert.canada.ca') {
       $page['#attached']['library'][] = 'adobe_analytics/analytics-staging';

@@ -25,3 +25,78 @@ function external_comment_query_comment_filter_alter(AlterableInterface $query) 
     }
   }
 }
+
+
+/**
+ * Implements hook_cron().
+ * Export all published comments into a csv file
+ */
+function external_comment_cron() {
+  // fetch comments
+  $comment_ids = \Drupal::entityQuery('comment')
+    ->condition('entity_type', 'node')
+    ->condition('status', 1)
+    ->execute();
+
+  $comments_data = [];
+
+  // if comments exist
+  if ($comment_ids) {
+    $comments = \Drupal::entityTypeManager()
+      ->getStorage('comment')
+      ->loadMultiple($comment_ids);
+
+    foreach($comments as $comment) {
+      $node = $comment->getCommentedEntity();
+
+      // Loop over and get fields for published comments
+      if ($comment->getStatus() == 1 && $node->isPublished()) {
+        $host = \Drupal::request()->getSchemeAndHttpHost();
+        $url_en = ($node->hasTranslation('en') ? $host . $node->getTranslation('en')->url() : '');
+        $url_fr = ($node->hasTranslation('fr') ? $host . $node->getTranslation('fr')->url() : '');
+        $comments_data[] = [
+          'comment_id' => $comment->id(),
+          'page_en' => $url_en,
+          'page_fr' => $url_fr,
+          'subject' => $comment->getSubject(),
+          'comment_body' => $comment->get('comment_body')->getValue()[0]['value'],
+          'comment_posted_by' => $comment->getAuthorName(),
+          'date_posted' => \Drupal::service('date.formatter')->format($comment->getCreatedTime(), 'html_date')
+        ];
+      }
+    }
+  }
+
+  $header = [
+    'Comment id',
+    'English page',
+    'French page',
+    'Subject',
+    'Body',
+    'Posted by',
+    'Date posted'
+  ];
+
+  // export as csv
+  try {
+    // create output csv
+    $public_path = \Drupal::service('file_system')->realpath(file_default_scheme() . "://");
+    $output = fopen($public_path . '/export_comments.csv', 'w');
+    if (!$output) {
+      throw new Exception('Failed to create export file.');
+    }
+
+    // add BOM to fix UTF-8 in Excel
+    fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+    // add csv header columns
+    fputcsv($output, $header, ',', '"');
+
+    // write to csv
+    foreach($comments_data as $row) {
+      fputcsv($output, $row, ',', '"');
+    }
+    fclose($output);
+  } catch (Exception $e) {
+    \Drupal::logger('export')->error('Unable to create export_comments.csv ' . $e->getMessage());
+  }
+}

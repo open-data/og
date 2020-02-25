@@ -41,57 +41,6 @@ function fetch_orgs_from_ckan() {
 }
 
 /**
- * Set dynamic allowed values for dataset format field
- * The options will be same as CKAN
- */
-function fetch_dataset_format_from_ckan() {
-  // Load cached options, if exist
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  if ($cache = \Drupal::cache()->get('ckan_dataset_format_' . $langcode)) {
-    $options = $cache->data;
-    return $options;
-  }
-
-  $options = [];
-  $url = 'https://open.canada.ca/data/api/action/scheming_dataset_schema_show?type=dataset';
-  $url = filter_var($url, FILTER_SANITIZE_URL);
-  if (filter_var($url, FILTER_VALIDATE_URL) !== FALSE) {
-    $client = \Drupal::httpClient();
-    try {
-      $request = $client->get($url);
-      if ($request->getStatusCode() == '200') {
-        $response = $request->getBody()->getContents();
-        $data = json_decode($response, TRUE);
-
-        foreach ($data['result']['resource_fields'] as $rsc) {
-          if ($rsc['field_name'] == 'format') {
-            foreach ($rsc['choices'] as $choice) {
-              if (array_key_exists('label', $choice)) {
-                $value = is_array($choice['label']) ?  $choice['label'][$langcode] : $choice['label'];
-                $options[$value] = $value;
-              }
-              else {
-                $options[$choice['value']] = $choice['value'];
-              }
-            }
-            break;
-          }
-        }
-
-        // Cache options
-        \Drupal::cache()->set('ckan_dataset_format_' . $langcode, $options);
-      }
-    }
-    catch (Exception $e) {
-      \Drupal::logger('fetch from api')->error('Unable to fetch from api for ' . $url
-        . ' Exception: ' . $e->getMessage());
-    }
-  }
-
-  return $options;
-}
-
-/**
  * Provide dynamic allowed values for the status field of Suggested Dataset
  */
 function get_suggested_dataset_status() {
@@ -129,7 +78,42 @@ function alter_field_webform_options_organization_alter(array &$options, array &
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
  */
 function alter_field_webform_options_dataset_format_alter(array &$options, array &$element) {
-  $options = fetch_dataset_format_from_ckan();
+  $options = fetch_from_ckan('format', 'resource_fields');
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function alter_field_webform_options_maintenance_update_frequency_alter(array &$options, array &$element) {
+  $options = fetch_from_ckan('frequency', 'dataset_fields');
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function alter_field_webform_options_dataset_language_alter(array &$options, array &$element) {
+  $options = fetch_from_ckan('language', 'resource_fields');
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function alter_field_webform_options_resource_type_alter(array &$options, array &$element) {
+  $options = fetch_from_ckan('resource_type', 'resource_fields');
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function alter_field_webform_options_character_set_alter(array &$options, array &$element) {
+  $options = fetch_from_ckan('character_set', 'resource_fields');
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function alter_field_webform_options_dataset_audience_alter(array &$options, array &$element) {
+  $options = fetch_from_ckan('audience', 'dataset_fields');
 }
 
 /**
@@ -245,4 +229,55 @@ function alter_field_update_8001() {
 
     fclose($csv);
   }
+}
+
+/**
+ * Set dynamic allowed values for given field
+ * The options will be same as CKAN
+ */
+function fetch_from_ckan($field_name, $field_type) {
+  // Load cached options, if exist
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if ($cache = \Drupal::cache()->get('ckan_' . $field_name . '_' . $langcode)) {
+    $options = $cache->data;
+    return $options;
+  }
+
+  $options = [];
+  $url = 'https://open.canada.ca/data/api/action/scheming_dataset_schema_show?type=dataset';
+  $url = filter_var($url, FILTER_SANITIZE_URL);
+  if (filter_var($url, FILTER_VALIDATE_URL) !== FALSE) {
+    $client = \Drupal::httpClient();
+    try {
+      $request = $client->get($url);
+      if ($request->getStatusCode() == '200') {
+        $response = $request->getBody()->getContents();
+        $data = json_decode($response, TRUE);
+
+        foreach ($data['result'][$field_type] as $rsc) {
+          if ($rsc['field_name'] == $field_name) {
+            foreach ($rsc['choices'] as $choice) {
+              if (array_key_exists('label', $choice)) {
+                $value = is_array($choice['label']) ?  $choice['label'][$langcode] : $choice['label'];
+                $options[$value] = $value;
+              }
+              else {
+                $options[$choice['value']] = $choice['value'];
+              }
+            }
+            break;
+          }
+        }
+
+        // Cache options
+        \Drupal::cache()->set('ckan_' . $field_name . '_' . $langcode, $options);
+      }
+    }
+    catch (Exception $e) {
+      \Drupal::logger('fetch from api')->error('Unable to fetch from api for ' . $url
+        . ' Exception: ' . $e->getMessage());
+    }
+  }
+
+  return $options;
 }

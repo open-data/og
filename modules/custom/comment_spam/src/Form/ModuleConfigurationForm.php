@@ -35,26 +35,12 @@ class ModuleConfigurationForm extends ConfigFormBase {
         //Get settings for module
         $config = $this->config('comment_spam.settings');
 
-        //Get list of all webforms
-        $entities = \Drupal::entityTypeManager()->getStorage('webform')->loadMultiple(NULL);
-        $webforms = array();
-        foreach( $entities as $entity_id => $entity ) {
-            $webforms[$entity_id] = $entity_id;
-        }
 
         //Display current webforms with Spam Filter
         $def_web = $config->get('webform_list');
         $webform_list = array_diff($def_web,array('0'));
-        $form['webforms00']['#markup'] = t('<p>Webforms included: '.join(", ",$webform_list).'</p>');
 
-        //List to select webforms to add spam filter
-        $form['webforms01']['#markup'] = t('<details><summary>Add webforms</summary>');
-        $form['entities']=array(
-            '#type'=>'checkboxes',
-            '#options' => $webforms,
-            '#default_value' => $def_web,
-        );
-        $form['webforms02']['#markup'] = t('</details>');
+        $form['webforms00']['#markup'] = t('<p>Webforms included: '.join(", ",$webform_list).'</p>');
 
         //Get default list and full current list of words to filter by
         $defaultWords = $config->get('default_list');
@@ -230,49 +216,10 @@ class ModuleConfigurationForm extends ConfigFormBase {
         $config->set('custom_list',$result)->save();
         $config->set('include_default_list',$default_list_include)->save();
 
-        //Get list of current webforms
-        $current_webforms = $config->get('webform_list');
-        //Webforms that are selected to be added to list
-        $new_webforms = array_diff($webform_add,$current_webforms);
-        //Webforms that are deselected to be removed from list
-        $remove_webforms = array_diff($current_webforms,$webform_add);
-        //Save to config
-        $config->set('webform_list',$webform_add)->save();
-
         //The spam_flag field to be added to webforms
         $hidden_field = "\nspam_flag:\n  '#type': checkbox\n  '#title': spam_flag\n  '#disabled': true\n  '#wrapper_attributes':\n    class:\n      - hidden";
-        //For each webform to be added
-        if($new_webforms!=0){
-            foreach($new_webforms as $webform){
-                $wf_conf = \Drupal::configFactory()->getEditable('webform.webform.'.$webform);
-                //Add spam_flag field to element
-                $elements = $wf_conf->get('elements');
-                $elements.=$hidden_field;
-                $wf_conf->set('elements',$elements);
-                //If webform has email_notification handler, add condition to not send email if spam
-                $check_handler = $wf_conf->get('handlers.email_notification');
-                if($check_handler!=null){
-                    $wf_conf->set('handlers.email_notification.conditions.disabled.:input[name="spam_flag"].checked',true);
-                }
-                $wf_conf->save();
-            }
-        }
-        //For each webform to be removed
-        if($remove_webforms!=0){
-            foreach($remove_webforms as $webform){
-                $wf_conf = \Drupal::configFactory()->getEditable('webform.webform.'.$webform);
-                //Remove spam_flag field from elements
-                $elements = $wf_conf->get('elements');
-                $elements=str_replace($hidden_field,"",$elements);
-                $wf_conf->set('elements',$elements);
-                //Remove email_notification handler
-                $check_handler = $wf_conf->get('handlers.email_notification');
-                if($check_handler!=null){
-                    $wf_conf->set('handlers.email_notification.conditions',[]);
-                }
-                $wf_conf->save();
-            }
-        }
+
     }
+
 
 }

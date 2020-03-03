@@ -1,12 +1,12 @@
 <?php
 
-use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\field\Entity\FieldStorageConfig;
+use \Drupal\node\Entity\Node;
+use Symfony\Component\Yaml\Parser;
 
 /**
- * @file
- * Contains alter_field.module.
- */
+* @file
+* Contains alter_field.module.
+*/
 
 /**
  * Set dynamic allowed values for organization field
@@ -14,28 +14,87 @@ use Drupal\field\Entity\FieldStorageConfig;
  */
 function fetch_orgs_from_ckan() {
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
   // Load cached options, if exist
   if ($cache = \Drupal::cache()->get('ckan_orgs_' . $langcode)) {
     $options = $cache->data;
     return $options;
   }
 
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $filename = 'sites/default/files/od-do-orgs.jsonl';
-  $contents = file($filename);
   $options = [];
-  $idx = $langcode == 'en' ? 0 : 1;
-  foreach ($contents as $line)
-  {
-    $data = json_decode($line);
-    $title = explode('|', $data->title);
-    if (array_key_exists($idx, $title)) { $options[trim($title[$idx])] = trim($title[$idx]); }
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $filename = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/od-do-orgs.jsonl';
+  if (file_exists($filename) && $contents = file($filename)) {
+    $idx = $langcode == 'en' ? 0 : 1;
+    foreach ($contents as $line) {
+      $data = json_decode($line);
+      $title = explode('|', $data->title);
+      if (array_key_exists($idx, $title)) {
+        $options[trim($data->name)] = trim($title[$idx]);
+      }
+    }
+    asort($options);
+
+    // Cache options
+    \Drupal::cache()->set('ckan_orgs_' . $langcode, $options);
+  }
+  else {
+    \Drupal::logger('fetch from api')->error('Unable to read file ' . $filename);
   }
 
-  ksort($options);
+  return $options;
+}
 
-  // Cache options
-  \Drupal::cache()->set('ckan_orgs_' . $langcode, $options);
+/**
+ * Set dynamic allowed values for given field
+ * The options will be same as CKAN
+ */
+function fetch_from_ckan($field_name, $field_type) {
+  // Load cached options, if exist
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if ($cache = \Drupal::cache()->get('ckan_' . $field_name . '_' . $langcode)) {
+    $options = $cache->data;
+    return $options;
+  }
+
+  $options = [];
+  $filename = \Drupal\Core\Site\Settings::get('ckan_schema_path') . '/presets.yaml';
+  $yaml = new Parser();
+  try {
+    if (file_exists($filename) && $contents = file_get_contents($filename)) {
+      $data = $yaml->parse($contents);
+      foreach ($data as $presets) {
+        if (is_array($presets)) {
+          foreach ($presets as $preset) {
+            if ($preset['values']['field_name'] == $field_name) {
+              foreach ($preset['values']['choices'] as $choice) {
+                if (array_key_exists('label', $choice)) {
+                  $value = is_array($choice['label']) ? $choice['label'][$langcode] : $choice['label'];
+                  $options[$choice['value']] = $value;
+                } else {
+                  $options[$choice['value']] = $choice['value'];
+                }
+              }
+              break;
+            }
+          }
+          break;
+        }
+      }
+    }
+
+    if (empty($options)) {
+      throw new Exception('Field not found in ' . $field_type);
+    }
+
+    asort($options);
+    // Cache options
+    \Drupal::cache()->set('ckan_' . $field_name . '_' . $langcode, $options);
+
+  } catch (Exception $e) {
+      \Drupal::logger('fetch from api')->error('Unable to fetch field "' . $field_name . '" from CKAN '
+        . ' Exception: ' . $e->getMessage());
+  }
 
   return $options;
 }
@@ -68,52 +127,10 @@ function get_suggested_dataset_status() {
 }
 
 /**
- * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ * Provide dynamic allowed values for the subject field of Suggested Dataset
  */
-function alter_field_webform_options_organization_alter(array &$options, array &$element) {
-  $options = fetch_orgs_from_ckan();
-}
-
-/**
- * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
- */
-function alter_field_webform_options_dataset_format_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('format', 'resource_fields');
-}
-
-/**
- * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
- */
-function alter_field_webform_options_maintenance_update_frequency_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('frequency', 'dataset_fields');
-}
-
-/**
- * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
- */
-function alter_field_webform_options_dataset_language_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('language', 'resource_fields');
-}
-
-/**
- * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
- */
-function alter_field_webform_options_resource_type_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('resource_type', 'resource_fields');
-}
-
-/**
- * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
- */
-function alter_field_webform_options_character_set_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('character_set', 'resource_fields');
-}
-
-/**
- * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
- */
-function alter_field_webform_options_dataset_audience_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('audience', 'dataset_fields');
+function get_dataset_subject() {
+  return fetch_from_ckan('subject', 'dataset_fields');
 }
 
 /**
@@ -232,52 +249,39 @@ function alter_field_update_8001() {
 }
 
 /**
- * Set dynamic allowed values for given field
- * The options will be same as CKAN
+ * Update field_organization for content type Suggested Dataset
+ * change field value to field code
+ * for example changes Treasury Board to tbs_sct
  */
-function fetch_from_ckan($field_name, $field_type) {
-  // Load cached options, if exist
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  if ($cache = \Drupal::cache()->get('ckan_' . $field_name . '_' . $langcode)) {
-    $options = $cache->data;
-    return $options;
-  }
+function alter_field_update_8002()
+{
+  // find allowed values and default values for field_organization
+  $entityManager = \Drupal::service('entity_field.manager');
+  $fields = $entityManager->getFieldDefinitions('node', 'suggested_dataset');
+  $field_org = $fields['field_organization']->getFieldStorageDefinition();
+  $options = options_allowed_values($field_org);
+  $default = $fields['field_organization']->getDefaultValueLiteral()[0]['value'];
 
-  $options = [];
-  $url = 'https://open.canada.ca/data/api/action/scheming_dataset_schema_show?type=dataset';
-  $url = filter_var($url, FILTER_SANITIZE_URL);
-  if (filter_var($url, FILTER_VALIDATE_URL) !== FALSE) {
-    $client = \Drupal::httpClient();
-    try {
-      $request = $client->get($url);
-      if ($request->getStatusCode() == '200') {
-        $response = $request->getBody()->getContents();
-        $data = json_decode($response, TRUE);
+  // replace existing values with allowed values
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'suggested_dataset')
+    ->execute();
 
-        foreach ($data['result'][$field_type] as $rsc) {
-          if ($rsc['field_name'] == $field_name) {
-            foreach ($rsc['choices'] as $choice) {
-              if (array_key_exists('label', $choice)) {
-                $value = is_array($choice['label']) ?  $choice['label'][$langcode] : $choice['label'];
-                $options[$value] = $value;
-              }
-              else {
-                $options[$choice['value']] = $choice['value'];
-              }
-            }
-            break;
-          }
-        }
+  // if dataset suggestions exist
+  if ($nids) {
+    $nodes = Node::loadMultiple($nids);
 
-        // Cache options
-        \Drupal::cache()->set('ckan_' . $field_name . '_' . $langcode, $options);
+    foreach ($nodes as $node) {
+      $existing_value = $node->get('field_organization')->getValue()[0]['value'];
+      $key = array_search($existing_value, $options);
+      $new_value = $key ? $key : $default;
+      $node->set('field_organization', $new_value);
+      if ($node->hasTranslation('fr')) {
+        $node_fr = $node->getTranslation('fr');
+        $node_fr->set('field_organization', $new_value);
+        $node_fr->save();
       }
-    }
-    catch (Exception $e) {
-      \Drupal::logger('fetch from api')->error('Unable to fetch from api for ' . $url
-        . ' Exception: ' . $e->getMessage());
+      $node->save();
     }
   }
-
-  return $options;
 }

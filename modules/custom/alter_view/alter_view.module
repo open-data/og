@@ -2,6 +2,7 @@
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Render\Markup;
+use \Drupal\node\Entity\Node;
 use Drupal\views\Views;
 use \Drupal\views\ViewExecutable;
 
@@ -53,6 +54,16 @@ function alter_view_views_pre_render(ViewExecutable $view) {
           unset($view->exposed_widgets['sort_by']['#options'][$key]);
         }
       }
+    }
+  }
+  elseif ($view->id() === 'suggested_dataset_moderation' && $view->current_display === 'untranslated') {
+    $position = 0;
+    foreach ($view->result as $row) {
+      $node = Node::load($row->nid);
+      if ($node->hasTranslation('en') && $node->hasTranslation('fr')) {
+        unset($view->result[$position]);
+      }
+      $position++;
     }
   }
 }

@@ -93,25 +93,6 @@ function og_ext_webform_cron() {
       if ($node->hasTranslation('fr')) {
         $node_fr = $node->getTranslation('fr');
 
-        $subjects = '';
-        if ($node->get('field_dataset_subject')->getValue()) {
-          foreach ($node->get('field_dataset_subject')->getValue() as $subject) {
-            $subjects .= ',' . $subject['value'];
-          }
-        }
-        $keywords_en = '';
-        if ($node->get('field_dataset_keywords')->getValue()) {
-          foreach ($node->get('field_dataset_keywords')->getValue() as $keyword) {
-            $keywords_en .= ',' . $keyword['value'];
-          }
-        }
-        $keywords_fr = '';
-        if ($node_fr->get('field_dataset_keywords')->getValue()) {
-          foreach ($node_fr->get('field_dataset_keywords')->getValue() as $keyword_fr) {
-            $keywords_fr .= ',' . $keyword_fr['value'];
-          }
-        }
-
         $data = [
           'suggestion_id' => $node->id(),
           'date_created' => date('Y-m-d', $node->getCreatedTime()),
@@ -124,9 +105,9 @@ function og_ext_webform_cron() {
           'dataset_suggestion_status_link' => $node->get('field_status_link')->getValue()[0]['value'],
           'Dataset released date' => $node->get('field_date_published')->getValue()[0]['value'],
           'votes' => $node->get('field_vote_up_down')->getValue()[0]['value'],
-          'subject' => $subjects,
-          'keywords_en' => $keywords_en,
-          'keywords_fr' => $keywords_fr,
+          'subject' => implodeAllValues($node->get('field_dataset_subject')->getValue()),
+          'keywords_en' => implodeAllValues($node->get('field_dataset_keywords')->getValue()),
+          'keywords_fr' => implodeAllValues($node_fr->get('field_dataset_keywords')->getValue()),
         ];
 
         // get webform submission for suggested datasets
@@ -177,4 +158,27 @@ function og_ext_webform_cron() {
 
   // log results
   \Drupal::logger('export')->notice('Suggested datasets exported');
+}
+
+/**
+ * Helper function to combine all values in a nested array in a string
+ * @param $parentArray
+ * @return string
+ */
+function implodeAllValues($parentArray) {
+  $values = '';
+  $size = sizeof($parentArray);
+  $i=0;
+
+  if ($parentArray) {
+    foreach ($parentArray as $childArray) {
+      $i++;
+      $values .= $childArray['value'];
+      if ($i < $size) {
+        $values .=  ',';
+      }
+    }
+  }
+
+  return $values;
 }

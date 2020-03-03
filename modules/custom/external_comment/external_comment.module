@@ -77,26 +77,8 @@ function external_comment_cron() {
   ];
 
   // export as csv
-  try {
-    // create output csv
-    $public_path = \Drupal::service('file_system')->realpath(file_default_scheme() . "://");
-    $output = fopen($public_path . '/export_comments.csv', 'w');
-    if (!$output) {
-      throw new Exception('Failed to create export file.');
-    }
+  write_to_csv('export_comments.csv', $comments_data, $header);
 
-    // add BOM to fix UTF-8 in Excel
-    fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
-    // add csv header columns
-    fputcsv($output, $header, ',', '"');
-
-    // write to csv
-    foreach($comments_data as $row) {
-      fputcsv($output, $row, ',', '"');
-    }
-    fclose($output);
-    \Drupal::logger('export')->notice('Comments export to csv file completed');
-  } catch (Exception $e) {
-    \Drupal::logger('export')->error('Unable to create export_comments.csv ' . $e->getMessage());
-  }
+  // log results
+  \Drupal::logger('export')->notice('Comments export to csv file completed');
 }

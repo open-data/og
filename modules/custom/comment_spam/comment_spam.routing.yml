@@ -4,7 +4,7 @@ comment_spam.admin_settings:
     _form: '\Drupal\comment_spam\Form\ModuleConfigurationForm'
     _title: 'comment_spam configuration screen'
   requirements:
-    _permission: 'administer site configuration'
+    _permission: 'comment_spam admin_settings'
 comment_spam.admin_comment_spam:
   path: /admin/content/comment/spam
   defaults:
@@ -18,4 +18,4 @@ comment_spam.set.spam:
     _form: '\Drupal\comment_spam\Form\ConfirmSpamForm'
     _title: 'Spam'
   requirements:
-    _permission: 'comment_spam set spam'
+    _permission: 'comment_spam set spam comments'

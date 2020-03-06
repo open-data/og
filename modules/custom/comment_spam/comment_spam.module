@@ -234,6 +234,12 @@ function get_actual_unapproved_comments() {
 
 
 function comment_spam_install(){
+    $configFactory = \Drupal::configFactory();
+    try {
+        $configFactory->getEditable('webform.webform.0')->delete();
+    }
+    catch (\Exception $e) {
+    }
     //Add fields to webforms
     $hidden_field = "\nspam_flag:\n  '#type': checkbox\n  '#title': spam_flag\n  '#disabled': true\n  '#wrapper_attributes':\n    class:\n      - hidden";
     $webforms_to_add = ['contact'];
@@ -254,11 +260,14 @@ function comment_spam_install(){
         $wf_conf->set('settings.submission_views.default.title',"Default View");
         $wf_conf->set('settings.submission_views.default.webform_routes',['entity.webform.results_submissions','entity.webform.user.drafts',
             'entity.webform.user.submissions']);
-        
+        $wf_conf->save();
+
         $wf_conf->set('settings.submission_views.validated.view',"webform_validated:embed_1");
         $wf_conf->set('settings.submission_views.validated.title',"Verified Submissions");
         $wf_conf->set('settings.submission_views.validated.webform_routes',['entity.webform.results_submissions','entity.webform.user.drafts',
             'entity.webform.user.submissions']);
+        $wf_conf->save();
+
 
         $wf_conf->set('settings.submission_views.spam.view',"webform_spam:embed_1");
         $wf_conf->set('settings.submission_views.spam.title',"Spam Submissions");
@@ -280,6 +289,7 @@ function comment_spam_uninstall() {
         'views.view.webform_spam',
         'views.view.webform_validated',
         'system.action.comment_spam_publish_action',
+        'webform.webform.0',
     ];
 
     //For each webform with filter
@@ -355,8 +365,6 @@ function comment_spam_cron(){
             $webform_submission->delete();
         }
     }
-
-
 
 }
 

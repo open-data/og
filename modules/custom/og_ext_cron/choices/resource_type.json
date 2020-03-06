@@ -1,0 +1,406 @@
+{
+    "abstract": {
+        "en": "Abstract",
+        "fr": "Sommaire"
+    },
+    "agreement": {
+        "en": "Agreement",
+        "fr": "Entente"
+    },
+    "contractual_material": {
+        "en": "Agreement - Contractual Material",
+        "fr": "Entente - contenu contractuel"
+    },
+    "intergovernmental_agreement": {
+        "en": "Agreement - Intergovernmental Agreement",
+        "fr": "Entente - entente intergouvernementale"
+    },
+    "lease": {
+        "en": "Agreement - Lease",
+        "fr": "Entente - bail"
+    },
+    "memorandum_of_understanding": {
+        "en": "Agreement - Memorandum of Understanding",
+        "fr": "Entente - protocole d\u2019entente"
+    },
+    "nondisclosure_agreement": {
+        "en": "Agreement - Nondisclosure Agreement",
+        "fr": "Entente - accord de non divulgation"
+    },
+    "servicelevel_agreement": {
+        "en": "Agreement - Service-Level Agreement",
+        "fr": "Entente - entente de niveau de service"
+    },
+    "affidavit": {
+        "en": "Affidavit",
+        "fr": "Affidavit"
+    },
+    "application": {
+        "en": "Application",
+        "fr": "Application"
+    },
+    "api": {
+        "en": "API",
+        "fr": "API"
+    },
+    "architectural_or_technical_design": {
+        "en": "Architectural or Technical Design",
+        "fr": "Conception architecturale ou technique"
+    },
+    "article": {
+        "en": "Article",
+        "fr": "Article"
+    },
+    "assessment": {
+        "en": "Assessment",
+        "fr": "\u00c9valuation"
+    },
+    "audit": {
+        "en": "Assessment - Audit",
+        "fr": "\u00c9valuation - audit"
+    },
+    "environmental_assessment": {
+        "en": "Assessment - Environmental Assessment",
+        "fr": "\u00c9valuation - \u00e9valuation environnementale"
+    },
+    "examination": {
+        "en": "Assessment - Examination",
+        "fr": "\u00c9valuation - examen"
+    },
+    "gap_assessment": {
+        "en": "Assessment - Gap Assessment",
+        "fr": "\u00c9valuation - \u00e9valuation des \u00e9carts"
+    },
+    "lessons_learned": {
+        "en": "Assessment - Lessons Learned",
+        "fr": "\u00c9valuation - le\u00e7ons apprises"
+    },
+    "performance_indicator": {
+        "en": "Assessment - Performance indicator",
+        "fr": "\u00c9valuation - indicateur de rendement"
+    },
+    "risk_assessment": {
+        "en": "Assessment - Risk Assessment",
+        "fr": "\u00c9valuation - \u00e9valuation des risques"
+    },
+    "biography": {
+        "en": "Biography",
+        "fr": "Biographie"
+    },
+    "briefing_material": {
+        "en": "Briefing Material",
+        "fr": "Mat\u00e9riel de breffage"
+    },
+    "backgrounder": {
+        "en": "Briefing Material - Backgrounder",
+        "fr": "Mat\u00e9riel de breffage - pr\u00e9cis d\u2019information"
+    },
+    "business_case": {
+        "en": "Business Case",
+        "fr": "Analyse de rentabilisation"
+    },
+    "claim": {
+        "en": "Claim",
+        "fr": "R\u00e9clamation"
+    },
+    "comments": {
+        "en": "Comments",
+        "fr": "Commentaires"
+    },
+    "conference_proceedings": {
+        "en": "Conference Proceedings",
+        "fr": "Actes de la conf\u00e9rence"
+    },
+    "consultation": {
+        "en": "Consultation",
+        "fr": "Consultation"
+    },
+    "contact_information": {
+        "en": "Contact Information",
+        "fr": "Coordonn\u00e9es"
+    },
+    "correspondence": {
+        "en": "Correspondence",
+        "fr": "Correspondance"
+    },
+    "ministerial_correspondence": {
+        "en": "Correspondence - Ministerial Correspondence",
+        "fr": "Correspondance - correspondance minist\u00e9rielle"
+    },
+    "memorandum": {
+        "en": "Correspondence - Memorandum",
+        "fr": "Correspondance - note de service"
+    },
+    "dataset": {
+        "en": "Dataset",
+        "fr": "Jeu de donn\u00e9es"
+    },
+    "delegation_of_authority": {
+        "en": "Delegation of Authority",
+        "fr": "D\u00e9l\u00e9gation des pouvoirs"
+    },
+    "educational_material": {
+        "en": "Educational Material",
+        "fr": "Mat\u00e9riel p\u00e9dagogique"
+    },
+    "employment_opportunity": {
+        "en": "Employment Opportunity",
+        "fr": "Possibilit\u00e9 d\u2019emploi"
+    },
+    "event": {
+        "en": "Event",
+        "fr": "\u00c9v\u00e9nement"
+    },
+    "fact_sheet": {
+        "en": "Fact Sheet",
+        "fr": "Feuille de renseignements"
+    },
+    "financial_material": {
+        "en": "Financial Material",
+        "fr": "Document financier"
+    },
+    "budget": {
+        "en": "Financial Material - Budget",
+        "fr": "Document financier - budget"
+    },
+    "funding_proposal": {
+        "en": "Financial Material - Funding Proposal",
+        "fr": "Document financier - proposition de financement"
+    },
+    "invoice": {
+        "en": "Financial Material - Invoice",
+        "fr": "Document financier - facture"
+    },
+    "financial_statement": {
+        "en": "Financial Material - Financial Statement",
+        "fr": "Document financier - \u00e9tats financiers"
+    },
+    "form": {
+        "en": "Form",
+        "fr": "Formulaire"
+    },
+    "framework": {
+        "en": "Framework",
+        "fr": "Cadre"
+    },
+    "geospatial_material": {
+        "en": "Geospatial Material",
+        "fr": "Mat\u00e9riel g\u00e9ospatial"
+    },
+    "guide": {
+        "en": "Guide",
+        "fr": "Guide"
+    },
+    "best_practices": {
+        "en": "Guide - Best Practices",
+        "fr": "Guide - pratiques exemplaires"
+    },
+    "intellectual_property_statement": {
+        "en": "Intellectual Property Statement",
+        "fr": "\u00c9nonc\u00e9 sur la propri\u00e9t\u00e9 intellectuelle"
+    },
+    "legal_complaint": {
+        "en": "Legal Complaint",
+        "fr": "Plainte l\u00e9gale"
+    },
+    "legal_opinion": {
+        "en": "Legal Opinion",
+        "fr": "Avis juridique"
+    },
+    "legislation_and_regulations": {
+        "en": "Legislation and Regulations",
+        "fr": "Lois et r\u00e8glements"
+    },
+    "licenses_and_permits": {
+        "en": "Licenses and Permits",
+        "fr": "Licences et permis"
+    },
+    "literary_material": {
+        "en": "Literary Material",
+        "fr": "Ouvrages litt\u00e9raires"
+    },
+    "statement": {
+        "en": "Media Release - Statement",
+        "fr": "Communiqu\u00e9 de presse - \u00e9nonc\u00e9"
+    },
+    "media_release": {
+        "en": "Media Release",
+        "fr": "Communiqu\u00e9 de presse"
+    },
+    "meeting_material": {
+        "en": "Meeting Material",
+        "fr": "Documentation de la r\u00e9union"
+    },
+    "agenda": {
+        "en": "Meeting Material - Agenda",
+        "fr": "Documentation de la r\u00e9union - programme"
+    },
+    "minutes": {
+        "en": "Meeting Material - Minutes",
+        "fr": "Documentation de la r\u00e9union - proc\u00e8s-verbaux"
+    },
+    "memorandum_to_cabinet": {
+        "en": "Memorandum to Cabinet",
+        "fr": "M\u00e9moire au Cabinet"
+    },
+    "multimedia_resource": {
+        "en": "Multimedia Resource",
+        "fr": "Ressource multim\u00e9dia"
+    },
+    "notice": {
+        "en": "Notice",
+        "fr": "Avis"
+    },
+    "organizational_description": {
+        "en": "Organizational Description",
+        "fr": "Description organisationnelle"
+    },
+    "plan": {
+        "en": "Plan",
+        "fr": "Plan"
+    },
+    "business_plan": {
+        "en": "Plan - Business Plan",
+        "fr": "Plan - plan d\u2019activit\u00e9s"
+    },
+    "strategic_plan": {
+        "en": "Plan - Strategic Plan",
+        "fr": "Plan - plan strat\u00e9gique"
+    },
+    "policy": {
+        "en": "Policy",
+        "fr": "Politique"
+    },
+    "white_paper": {
+        "en": "Policy - White Paper",
+        "fr": "Politique - livre blanc"
+    },
+    "presentation": {
+        "en": "Presentation",
+        "fr": "Pr\u00e9sentation"
+    },
+    "procedure": {
+        "en": "Procedure",
+        "fr": "Proc\u00e9dure"
+    },
+    "profile": {
+        "en": "Profile",
+        "fr": "Profil"
+    },
+    "project_material": {
+        "en": "Project Material",
+        "fr": "Documents du Projet"
+    },
+    "project_charter": {
+        "en": "Project Material - Project Charter",
+        "fr": "Documents du projet - charte de projet"
+    },
+    "project_plan": {
+        "en": "Project Material - Project Plan",
+        "fr": "Documents du projet - plan du projet"
+    },
+    "project_proposal": {
+        "en": "Project Material - Project Proposal",
+        "fr": "Documents du projet - proposition de projet"
+    },
+    "promotional_material": {
+        "en": "Promotional Material",
+        "fr": "Documents promotionnels"
+    },
+    "publication": {
+        "en": "Publication",
+        "fr": "Publication"
+    },
+    "faq": {
+        "en": "Q & A - FAQ",
+        "fr": "Q et R - foire aux questions"
+    },
+    "record_of_decision": {
+        "en": "Record of Decision",
+        "fr": "Compte Rendu des D\u00e9cisions"
+    },
+    "report": {
+        "en": "Report",
+        "fr": "Rapport"
+    },
+    "annual_report": {
+        "en": "Report - Annual Report",
+        "fr": "Rapport - rapport annuel"
+    },
+    "interim_report": {
+        "en": "Report - Interim Report",
+        "fr": "Rapport - rapport d\u2019\u00e9tape"
+    },
+    "research_proposal": {
+        "en": "Research Proposal",
+        "fr": "Projet de recherche"
+    },
+    "resource_list": {
+        "en": "Resource List",
+        "fr": "Liste de r\u00e9f\u00e9rence"
+    },
+    "routing_slip": {
+        "en": "Routing Slip",
+        "fr": "Bordereau d\u2019acheminement"
+    },
+    "blog_entry": {
+        "en": "Social Media Resource - Blog Entry",
+        "fr": "Ressources des m\u00e9dias sociaux - entr\u00e9e de blogue"
+    },
+    "sound_recording": {
+        "en": "Sound Recording",
+        "fr": "Enregistrement sonore"
+    },
+    "specification": {
+        "en": "Specification",
+        "fr": "Sp\u00e9cification"
+    },
+    "statistics": {
+        "en": "Statistics",
+        "fr": "Statistiques"
+    },
+    "still_image": {
+        "en": "Still Image",
+        "fr": "Image fixe"
+    },
+    "submission": {
+        "en": "Submission",
+        "fr": "Pr\u00e9sentation"
+    },
+    "survey": {
+        "en": "Survey",
+        "fr": "Sondage"
+    },
+    "terminology": {
+        "en": "Terminology",
+        "fr": "Terminologie"
+    },
+    "terms_of_reference": {
+        "en": "Terms of Reference",
+        "fr": "Mandat"
+    },
+    "tool": {
+        "en": "Tool",
+        "fr": "Outil"
+    },
+    "training_material": {
+        "en": "Training Material",
+        "fr": "Mat\u00e9riel didactique"
+    },
+    "transcript": {
+        "en": "Transcript",
+        "fr": "Transcription"
+    },
+    "website": {
+        "en": "Website",
+        "fr": "Site Web"
+    },
+    "web_service": {
+        "en": "Web Service",
+        "fr": "Service Web"
+    },
+    "workflow": {
+        "en": "Workflow",
+        "fr": "Flux des travaux"
+    }
+}

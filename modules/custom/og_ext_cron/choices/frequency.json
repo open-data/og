@@ -1,0 +1,82 @@
+{
+    "as_needed": {
+        "en": "As Needed",
+        "fr": "Au besoin"
+    },
+    "continual": {
+        "en": "Continual",
+        "fr": "Continue"
+    },
+    "P1D": {
+        "en": "Daily",
+        "fr": "Quotidien"
+    },
+    "P0.33W": {
+        "en": "Three times per week",
+        "fr": "Trois fois par semaine"
+    },
+    "P0.5W": {
+        "en": "Two times per week",
+        "fr": "Deux fois par semaine"
+    },
+    "P1W": {
+        "en": "Weekly",
+        "fr": "Hebdomadaire"
+    },
+    "P2W": {
+        "en": "Every two weeks",
+        "fr": "Quinzomadaire"
+    },
+    "P0.5M": {
+        "en": "Twice monthly",
+        "fr": "Bimensuel"
+    },
+    "P1M": {
+        "en": "Monthly",
+        "fr": "Mensuel"
+    },
+    "P2M": {
+        "en": "Every two months",
+        "fr": "Bimestriel"
+    },
+    "P3M": {
+        "en": "Quarterly",
+        "fr": "Trimestriel"
+    },
+    "P4M": {
+        "en": "Every four months",
+        "fr": "Trois fois par ann\u00e9e"
+    },
+    "P6M": {
+        "en": "Biannually",
+        "fr": "Semestriel"
+    },
+    "P1Y": {
+        "en": "Annually",
+        "fr": "Annuel"
+    },
+    "P2Y": {
+        "en": "Every two years",
+        "fr": "Biennal"
+    },
+    "P3Y": {
+        "en": "Every three years",
+        "fr": "Triennal"
+    },
+    "P4Y": {
+        "en": "Every five years",
+        "fr": "Quinquennal"
+    },
+    "irregular": {
+        "en": "Irregular",
+        "fr": "Irr\u00e9gulier"
+    },
+    "not_planned": {
+        "en": "Not Planned",
+        "fr": "Non planifi\u00e9"
+    },
+    "unknown": {
+        "en": "Unknown",
+        "fr": "Inconnu"
+    }
+}

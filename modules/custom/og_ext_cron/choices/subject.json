@@ -1,0 +1,78 @@
+{
+    "arts_music_literature": {
+        "en": "Arts, Music, Literature",
+        "fr": "Arts, musique, litt\u00e9rature"
+    },
+    "agriculture": {
+        "en": "Agriculture",
+        "fr": "Agriculture"
+    },
+    "economics_and_industry": {
+        "en": "Economics and Industry",
+        "fr": "\u00c9conomie et industrie"
+    },
+    "education_and_training": {
+        "en": "Education and Training",
+        "fr": "\u00c9ducation et formation"
+    },
+    "form_descriptors": {
+        "en": "Form Descriptors",
+        "fr": "Format"
+    },
+    "government_and_politics": {
+        "en": "Government and Politics",
+        "fr": "Gouvernement et vie politique"
+    },
+    "health_and_safety": {
+        "en": "Health and Safety",
+        "fr": "Sant\u00e9 et s\u00e9curit\u00e9"
+    },
+    "history_and_archaeology": {
+        "en": "History and Archaeology",
+        "fr": "Histoire et arch\u00e9ologie"
+    },
+    "information_and_communications": {
+        "en": "Information and Communications",
+        "fr": "Information et communication"
+    },
+    "labour": {
+        "en": "Labour",
+        "fr": "Travail et emploi"
+    },
+    "language_and_linguistics": {
+        "en": "Language and Linguistics",
+        "fr": "Langue et linguistique"
+    },
+    "law": {
+        "en": "Law",
+        "fr": "Droit"
+    },
+    "military": {
+        "en": "Military",
+        "fr": "Histoire et science militaire"
+    },
+    "nature_and_environment": {
+        "en": "Nature and Environment",
+        "fr": "Nature et environnement"
+    },
+    "persons": {
+        "en": "Persons",
+        "fr": "Personnes"
+    },
+    "processes": {
+        "en": "Processes",
+        "fr": "Liens et fonctions"
+    },
+    "society_and_culture": {
+        "en": "Society and Culture",
+        "fr": "Soci\u00e9t\u00e9 et culture"
+    },
+    "science_and_technology": {
+        "en": "Science and Technology",
+        "fr": "Sciences et technologie"
+    },
+    "transport": {
+        "en": "Transport",
+        "fr": "Transport"
+    }
+}

@@ -1,0 +1,338 @@
+{
+    "en": {
+        "en": "English",
+        "fr": "anglais"
+    },
+    "fr": {
+        "en": "French",
+        "fr": "fran\u00e7ais"
+    },
+    "sq": {
+        "en": "Albanian",
+        "fr": "albanais"
+    },
+    "alg": {
+        "en": "Algonquian languages",
+        "fr": "algonquines, langues"
+    },
+    "am": {
+        "en": "Amharic",
+        "fr": "amharique"
+    },
+    "apa": {
+        "en": "Apache languages",
+        "fr": "apache"
+    },
+    "ar": {
+        "en": "Arabic",
+        "fr": "arabe"
+    },
+    "hy": {
+        "en": "Armenian",
+        "fr": "arm\u00e9nien"
+    },
+    "art": {
+        "en": "Artificial (Other)",
+        "fr": "artificielles, autres langues"
+    },
+    "bat": {
+        "en": "Baltic (Other)",
+        "fr": "baltiques, autres langues"
+    },
+    "be": {
+        "en": "Belarusian",
+        "fr": "bi\u00e9lorusse"
+    },
+    "bn": {
+        "en": "Bengali",
+        "fr": "bengali"
+    },
+    "bs": {
+        "en": "Bosnian",
+        "fr": "bosniaque"
+    },
+    "bg": {
+        "en": "Bulgarian",
+        "fr": "bulgare"
+    },
+    "ca": {
+        "en": "Catalan",
+        "fr": "catalan"
+    },
+    "chr": {
+        "en": "Cherokee",
+        "fr": "cherokee"
+    },
+    "chy": {
+        "en": "Cheyenne",
+        "fr": "cheyenne"
+    },
+    "zh-cn": {
+        "en": "Chinese (Simplified)",
+        "fr": "chinois (simplifi\u00e9)"
+    },
+    "zh-hk": {
+        "en": "Chinese (Traditional)",
+        "fr": "chinois (traditionnel)"
+    },
+    "chp": {
+        "en": "Chipewyan",
+        "fr": "chipewyan"
+    },
+    "cr": {
+        "en": "Cree",
+        "fr": "cree"
+    },
+    "crp": {
+        "en": "Creoles and pidgins",
+        "fr": "cr\u00e9oles et pidgins"
+    },
+    "hr": {
+        "en": "Croatian",
+        "fr": "croate"
+    },
+    "cs": {
+        "en": "Czech",
+        "fr": "tch\u00e8que"
+    },
+    "da": {
+        "en": "Danish",
+        "fr": "danois"
+    },
+    "dgr": {
+        "en": "Dogrib",
+        "fr": "dogrib"
+    },
+    "nl": {
+        "en": "Dutch",
+        "fr": "n\u00e9erlandais"
+    },
+    "fi": {
+        "en": "Finnish",
+        "fr": "finnois"
+    },
+    "gl": {
+        "en": "Galician",
+        "fr": "galicien"
+    },
+    "de": {
+        "en": "German",
+        "fr": "allemand"
+    },
+    "el": {
+        "en": "Greek, Modern (1453-)",
+        "fr": "grec moderne (apr\u00e8s 1453)"
+    },
+    "gu": {
+        "en": "Gujarati",
+        "fr": "goudjrati"
+    },
+    "he": {
+        "en": "Hebrew",
+        "fr": "h\u00e9breu"
+    },
+    "hi": {
+        "en": "Hindi",
+        "fr": "hindi"
+    },
+    "hu": {
+        "en": "Hungarian",
+        "fr": "hongrois"
+    },
+    "id": {
+        "en": "Indonesian",
+        "fr": "indon\u00e9sien"
+    },
+    "inuinnaqtun": {
+        "en": "Inuinnaqtun",
+        "fr": "innuinaqtun"
+    },
+    "iu": {
+        "en": "Inuktitut",
+        "fr": "inuktitut"
+    },
+    "inuvialuqtun": {
+        "en": "Inuvialuqtun",
+        "fr": "inuvialuqtun"
+    },
+    "iro": {
+        "en": "Iroquoian languages",
+        "fr": "iroquoises, langues (famille)"
+    },
+    "it": {
+        "en": "Italian",
+        "fr": "italien"
+    },
+    "ja": {
+        "en": "Japanese",
+        "fr": "japonais"
+    },
+    "ko": {
+        "en": "Korean",
+        "fr": "cor\u00e9en"
+    },
+    "ku": {
+        "en": "Kurdish",
+        "fr": "kurde"
+    },
+    "la": {
+        "en": "Latin",
+        "fr": "latin"
+    },
+    "mic": {
+        "en": "Micmac",
+        "fr": "micmac"
+    },
+    "mis": {
+        "en": "Miscellaneous languages",
+        "fr": "diverses, langues"
+    },
+    "moh": {
+        "en": "Mohawk",
+        "fr": "mohawk"
+    },
+    "mul": {
+        "en": "Multiple languages",
+        "fr": "multilingue"
+    },
+    "nv": {
+        "en": "Navajo",
+        "fr": "navaho"
+    },
+    "wak": {
+        "en": "Nootkan",
+        "fr": "nootkan"
+    },
+    "nai": {
+        "en": "North American Indian",
+        "fr": "indiennes d'Am\u00e9rique du Nord"
+    },
+    "no": {
+        "en": "Norwegian",
+        "fr": "norv\u00e9gien"
+    },
+    "nunatsiavummiutut": {
+        "en": "Nunatsiavummiutut",
+        "fr": "nunatsiavummiutut"
+    },
+    "oj": {
+        "en": "Ojibwa",
+        "fr": "ojibwa"
+    },
+    "fa": {
+        "en": "Persian",
+        "fr": "persan"
+    },
+    "phi": {
+        "en": "Philippine (Other)",
+        "fr": "philippines, autres langues"
+    },
+    "crk": {
+        "en": "Plains Cree",
+        "fr": "cris des plaines"
+    },
+    "pl": {
+        "en": "Polish",
+        "fr": "polonais"
+    },
+    "pt": {
+        "en": "Portuguese",
+        "fr": "portugais"
+    },
+    "pa": {
+        "en": "Punjabi",
+        "fr": "pendjabi"
+    },
+    "ro": {
+        "en": "Romanian",
+        "fr": "roumain"
+    },
+    "ru": {
+        "en": "Russian",
+        "fr": "russe"
+    },
+    "sal": {
+        "en": "Salishan",
+        "fr": "salishan"
+    },
+    "sr": {
+        "en": "Serbian",
+        "fr": "serbe"
+    },
+    "sgn": {
+        "en": "Sign Languages",
+        "fr": "langage gestuel"
+    },
+    "sio": {
+        "en": "Siouan languages",
+        "fr": "sioux, langues"
+    },
+    "sk": {
+        "en": "Slovak",
+        "fr": "slovaque"
+    },
+    "so": {
+        "en": "Somali",
+        "fr": "somali"
+    },
+    "es": {
+        "en": "Spanish; Castilian",
+        "fr": "espagnol; castillan"
+    },
+    "ss": {
+        "en": "Swahili",
+        "fr": "swahili"
+    },
+    "sv": {
+        "en": "Swedish",
+        "fr": "su\u00e9dois"
+    },
+    "tl": {
+        "en": "Tagalog",
+        "fr": "tagalog"
+    },
+    "ta": {
+        "en": "Tamil",
+        "fr": "tamoul"
+    },
+    "th": {
+        "en": "Thai",
+        "fr": "tha\u00ef"
+    },
+    "ti": {
+        "en": "Tigrinya",
+        "fr": "tigrigna"
+    },
+    "tr": {
+        "en": "Turkish",
+        "fr": "turc"
+    },
+    "uk": {
+        "en": "Ukrainian",
+        "fr": "ukrainien"
+    },
+    "und": {
+        "en": "Undetermined",
+        "fr": "ind\u00e9termin\u00e9e"
+    },
+    "ur": {
+        "en": "Urdu",
+        "fr": "ourdou"
+    },
+    "vi": {
+        "en": "Vietnamese",
+        "fr": "vietnamien"
+    },
+    "cy": {
+        "en": "Welsh",
+        "fr": "gallois"
+    },
+    "yi": {
+        "en": "Yiddish",
+        "fr": "yiddish"
+    },
+    "zxx": {
+        "en": "No linguistic content; Not applicable",
+        "fr": "pas de contenu linguistique; non applicable"
+    }
+}

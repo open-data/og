@@ -1,0 +1,47 @@
+<?php
+
+use Drupal\og_ext_cron\Utils\CronFunctions;
+
+/**
+* @file
+* Contains og_ext_cron.module.
+*/
+
+/**
+ * Implements hook_cron().
+ * clear cache of views generated using Solr
+ */
+function og_ext_cron_cron() {
+  $cron_tasks = new CronFunctions;
+
+  // clear proactive disclosure view caches
+  $cron_tasks->clear_view_caches();
+
+  // fetch organizations list from CKAN
+  $cron_tasks->fetch_orgs_from_ckan();
+
+  // fetch field lists from CKAN
+  $fields = [
+    'character_set' => 'resource_fields',
+    'audience' => 'dataset_fields',
+    'format' => 'resource_fields',
+    'language' => 'resource_fields',
+    'reason' => 'dataset_fields',
+    'subject' => 'dataset_fields',
+    'frequency' => 'dataset_fields',
+    'resource_type' => 'resource_fields',
+  ];
+
+  foreach ($fields as $field => $type) {
+    $cron_tasks->fetch_from_ckan($field, $type);
+  }
+
+  // export dataset comments
+  $cron_tasks->export_external_comments();
+
+  // export dataset ratings
+  $cron_tasks->export_cumulative_dataset_ratings();
+
+  // export suggested datasets
+  $cron_tasks->export_suggested_datasets();
+}

@@ -29,6 +29,7 @@ class SuggestedDatasetFormHandler extends WebformHandlerBase {
       'body' => $webform_submission->getElementData('description_dataset'),
       'field_dataset_subject' => $webform_submission->getElementData('dataset_subject'),
       'field_dataset_keywords' => $webform_submission->getElementData('dataset_keywords'),
+      'field_feedback' => $webform_submission->getElementData('additional_comments_and_feedback'),
       'field_webform_submission_id'=> $webform_submission->id(),
       'langcode' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
       'status' => 0,

@@ -1,0 +1,150 @@
+{
+    "AAC": "AAC",
+    "AIFF": "AIFF",
+    "ASCII Grid": "ASCII Grid",
+    "APK": {
+        "en": "Android Application",
+        "fr": "Android Application"
+    },
+    "AVI": "AVI",
+    "BAG": "BAG",
+    "BMP": "BMP",
+    "BWF": "BWF",
+    "CCT": "CCT",
+    "CDED ASCII": "CDED ASCII",
+    "CDF": "CDF",
+    "CDR": "CDR",
+    "COD": {
+        "en": "Blackberry Application",
+        "fr": "Blackberry Application"
+    },
+    "CSV": "CSV",
+    "DBD": "DBD",
+    "DBF": "DBF",
+    "DICOM": "DICOM",
+    "DNG": "DNG",
+    "DOC": "DOC",
+    "DOCX": "DOCX",
+    "DXF": "DXF",
+    "E00": "E00",
+    "ECW": "ECW",
+    "EDI": "EDI",
+    "EMF": "EMF",
+    "EPUB3": "EPUB3",
+    "EPUB2": "EPUB2",
+    "EPS": "EPS",
+    "ESRI REST": "ESRI REST",
+    "EXE": "EXE",
+    "FGDB\/GDB": "FGDB\/GDB",
+    "Flat raster binary": "Flat raster binary",
+    "GDB": {
+        "en": "GeoSoftDatabases",
+        "fr": "GeoSoftDatabases"
+    },
+    "GeoPDF": "GeoPDF",
+    "GeoRSS": "GeoRSS",
+    "GeoTIF": "GeoTIF",
+    "GEOJSON": "GEOJSON",
+    "GPKG": {
+        "en": "GeoPackage",
+        "fr": "GeoPackage"
+    },
+    "GIF": "GIF",
+    "GML": "GML",
+    "GRD": {
+        "en": "GeoSoftGrids",
+        "fr": "GeoSoftGrids"
+    },
+    "GRIB1": "GRIB1",
+    "GRIB2": "GRIB2",
+    "HDF": "HDF",
+    "HTML": "HTML",
+    "IATI": "IATI",
+    "IPA": {
+        "en": "IOS Application",
+        "fr": "IOS Application"
+    },
+    "JAR": "JAR",
+    "JFIF": "JFIF",
+    "JP2": "JP2",
+    "JPG": "JPG",
+    "JSON": "JSON",
+    "JSONLD": {
+        "en": "JSON-LD",
+        "fr": "JSON-LD"
+    },
+    "JSONL": "JSONL",
+    "KML": "KML",
+    "KMZ": "KMZ",
+    "LAS": "LAS",
+    "LYR": "LYR",
+    "TAB": {
+        "en": "MapInfo",
+        "fr": "MapInfo"
+    },
+    "MFX": "MFX",
+    "MOV": "MOV",
+    "MPEG": "MPEG",
+    "MPEG-1": "MPEG-1",
+    "MP3": "MP3",
+    "MXD": "MXD",
+    "NetCDF": "NetCDF",
+    "ODP": "ODP",
+    "ODS": "ODS",
+    "ODT": "ODT",
+    "PDF": "PDF",
+    "PDF\/A-1": "PDF\/A-1",
+    "PDF\/A-2": "PDF\/A-2",
+    "PDF\/UA": "PDF\/UA",
+    "PNG": "PNG",
+    "PPT": "PPT",
+    "PPTX": "PPTX",
+    "RDF": "RDF",
+    "TTL": {
+        "en": "RDF Turtle",
+        "fr": "RDF Turtle"
+    },
+    "NT": {
+        "en": "RDF n-triples",
+        "fr": "RDF n-triples"
+    },
+    "RDFa": "RDFa",
+    "RSS": "RSS",
+    "RTF": "RTF",
+    "SAR": "SAR",
+    "SAV": "SAV",
+    "SEGY": "SEGY",
+    "SHP": "SHP",
+    "SQL": "SQL",
+    "SQLITE3": {
+        "en": "SQL Lite3",
+        "fr": "SQL Lite3"
+    },
+    "SQLITE": {
+        "en": "SQL Lite",
+        "fr": "SQL Lite"
+    },
+    "SVG": "SVG",
+    "TIFF": "TIFF",
+    "TRIG": "TRIG",
+    "TRIX": "TRIX",
+    "TFW": "TFW",
+    "TXT": "TXT",
+    "VPF": "VPF",
+    "WAV": "WAV",
+    "WCS": "WCS",
+    "WFS": "WFS",
+    "WMS": "WMS",
+    "WMTS": "WMTS",
+    "WMV": "WMV",
+    "WPS": "WPS",
+    "XML": "XML",
+    "XLS": "XLS",
+    "XLSM": "XLSM",
+    "XLSX": "XLSX",
+    "ZIP": "ZIP",
+    "other": {
+        "en": "Other",
+        "fr": "Autre"
+    }
+}

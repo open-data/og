@@ -1,7 +1,7 @@
 <?php
 
 use \Drupal\node\Entity\Node;
-use Symfony\Component\Yaml\Parser;
+use \Drupal\Component\Serialization\Json;
 
 /**
 * @file
@@ -9,91 +9,39 @@ use Symfony\Component\Yaml\Parser;
 */
 
 /**
- * Set dynamic allowed values for organization field
- * The options will be same as CKAN
+ * Read from organizations json file
  */
-function fetch_orgs_from_ckan() {
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-
-  // Load cached options, if exist
-  if ($cache = \Drupal::cache()->get('ckan_orgs_' . $langcode)) {
-    $options = $cache->data;
-    return $options;
-  }
-
+function read_options_from_json($field_name) {
   $options = [];
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $filename = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/od-do-orgs.jsonl';
-  if (file_exists($filename) && $contents = file($filename)) {
-    $idx = $langcode == 'en' ? 0 : 1;
-    foreach ($contents as $line) {
-      $data = json_decode($line);
-      $title = explode('|', $data->title);
-      if (array_key_exists($idx, $title)) {
-        $options[trim($data->name)] = trim($title[$idx]);
-      }
+  try{
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    if (is_object($field_name) && ($field_name->getName() == 'field_organization'))
+      $field_name = 'organizations';
+
+    // Load cached options, if exist
+    if ($cache = \Drupal::cache()->get('ckan_' . $field_name . '_' . $langcode)) {
+      $options = $cache->data;
+      return $options;
     }
-    asort($options);
 
-    // Cache options
-    \Drupal::cache()->set('ckan_orgs_' . $langcode, $options);
-  }
-  else {
-    \Drupal::logger('fetch from api')->error('Unable to read file ' . $filename);
-  }
+    $module_handler = \Drupal::service('module_handler');
+    $module_path = $module_handler->getModule('og_ext_cron')->getPath();
+    $filename = $module_path . '/choices/' . $field_name . '.json';
 
-  return $options;
-}
-
-/**
- * Set dynamic allowed values for given field
- * The options will be same as CKAN
- */
-function fetch_from_ckan($field_name, $field_type) {
-  // Load cached options, if exist
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  if ($cache = \Drupal::cache()->get('ckan_' . $field_name . '_' . $langcode)) {
-    $options = $cache->data;
-    return $options;
-  }
-
-  $options = [];
-  $filename = \Drupal\Core\Site\Settings::get('ckan_schema_path') . '/presets.yaml';
-  $yaml = new Parser();
-  try {
     if (file_exists($filename) && $contents = file_get_contents($filename)) {
-      $data = $yaml->parse($contents);
-      foreach ($data as $presets) {
-        if (is_array($presets)) {
-          foreach ($presets as $preset) {
-            if ($preset['values']['field_name'] == $field_name) {
-              foreach ($preset['values']['choices'] as $choice) {
-                if (array_key_exists('label', $choice)) {
-                  $value = is_array($choice['label']) ? $choice['label'][$langcode] : $choice['label'];
-                  $options[$choice['value']] = $value;
-                } else {
-                  $options[$choice['value']] = $choice['value'];
-                }
-              }
-              break;
-            }
-          }
-          break;
-        }
+      $data = Json::decode($contents);
+      foreach ($data as $key => $row) {
+        $options[$key] = is_array($row)? $row[$langcode] : $row;
       }
-    }
+      asort($options);
 
-    if (empty($options)) {
-      throw new Exception('Field not found in ' . $field_type);
-    }
+      // Cache options
+      \Drupal::cache()->set('ckan_' . $field_name . '_' . $langcode, $options);
+    } else
+      \Drupal::logger('read from json')->error('Unable to read ' . $field_name . ' from json choices file ');
 
-    asort($options);
-    // Cache options
-    \Drupal::cache()->set('ckan_' . $field_name . '_' . $langcode, $options);
-
-  } catch (Exception $e) {
-      \Drupal::logger('fetch from api')->error('Unable to fetch field "' . $field_name . '" from CKAN '
-        . ' Exception: ' . $e->getMessage());
+    } catch (Exception $e) {
+    \Drupal::logger('read from json')->error('Unable to read ' . $field_name . ' from json choices file ' . ' ' . $e->getMessage());
   }
 
   return $options;
@@ -130,7 +78,7 @@ function get_suggested_dataset_status() {
  * Provide dynamic allowed values for the subject field of Suggested Dataset
  */
 function get_dataset_subject() {
-  return fetch_from_ckan('subject', 'dataset_fields');
+  return read_options_from_json('subject');
 }
 
 /**

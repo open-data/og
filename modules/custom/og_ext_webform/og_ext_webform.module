@@ -1,7 +1,6 @@
 <?php
 
 use \Drupal\node\Entity\Node;
-use \Drupal\webform\Entity\WebformSubmission;
 
 /**
  * @file
@@ -12,173 +11,61 @@ use \Drupal\webform\Entity\WebformSubmission;
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
  */
 function og_ext_webform_webform_options_character_set_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('character_set', 'resource_fields');
+  $options = read_options_from_json('character_set');
 }
 
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
  */
 function og_ext_webform_webform_options_dataset_audience_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('audience', 'dataset_fields');
+  $options = read_options_from_json('audience');
 }
 
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
  */
 function og_ext_webform_webform_options_dataset_format_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('format', 'resource_fields');
+  $options = read_options_from_json('format');
 }
 
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
  */
 function og_ext_webform_webform_options_dataset_language_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('language', 'resource_fields');
+  $options = read_options_from_json('language');
 }
 
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
  */
 function og_ext_webform_webform_options_dataset_reason_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('reason', 'dataset_fields');
+  $options = read_options_from_json('reason');
 }
 
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
  */
 function og_ext_webform_webform_options_dataset_subject_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('subject', 'dataset_fields');
+  $options = read_options_from_json('subject');
 }
 
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
  */
 function og_ext_webform_webform_options_maintenance_update_frequency_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('frequency', 'dataset_fields');
+  $options = read_options_from_json('frequency');
 }
 
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
  */
 function og_ext_webform_webform_options_organization_alter(array &$options, array &$element) {
-  $options = fetch_orgs_from_ckan();
+  $options = read_options_from_json('organizations');
 }
 
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
  */
 function og_ext_webform_webform_options_resource_type_alter(array &$options, array &$element) {
-  $options = fetch_from_ckan('resource_type', 'resource_fields');
-}
-
-/**
- * Implements hook_cron().
- * Export all published comments into a csv file
- */
-function og_ext_webform_cron() {
-  // fetch suggested dataset nodes
-  $nids = \Drupal::entityQuery('node')
-    ->condition('status', 1)
-    ->condition('type', 'suggested_dataset')
-    ->execute();
-
-  $export_data = [];
-
-  // if dataset suggestions exist
-  if ($nids) {
-    $nodes = Node::loadMultiple($nids);
-
-    foreach($nodes as $node) {
-      // get translation of node
-      if ($node->hasTranslation('fr')) {
-        $node_fr = $node->getTranslation('fr');
-
-        $data = [
-          'suggestion_id' => $node->id(),
-          'date_created' => date('Y-m-d', $node->getCreatedTime()),
-          'title_en' => $node->getTitle(),
-          'title_fr' => $node_fr->getTitle(),
-          'organization' => $node->get('field_organization')->getValue()[0]['value'],
-          'description_en' => strip_tags($node->get('body')->getValue()[0]['value']),
-          'description_fr' => strip_tags($node_fr->get('body')->getValue()[0]['value']),
-          'dataset_suggestion_status' => $node->get('field_sd_status')->getValue()[0]['value'],
-          'dataset_suggestion_status_link' => $node->get('field_status_link')->getValue()[0]['value'],
-          'Dataset released date' => $node->get('field_date_published')->getValue()[0]['value'],
-          'votes' => $node->get('field_vote_up_down')->getValue()[0]['value'],
-          'subject' => implodeAllValues($node->get('field_dataset_subject')->getValue()),
-          'keywords_en' => implodeAllValues($node->get('field_dataset_keywords')->getValue()),
-          'keywords_fr' => implodeAllValues($node_fr->get('field_dataset_keywords')->getValue()),
-        ];
-
-        // get webform submission for suggested datasets
-        if ($wid = $node->get('field_webform_submission_id')->getValue()[0]['value']) {
-          $webform_submission = WebformSubmission::load($wid);
-          $reason_allowed_values = fetch_from_ckan('reason', 'dataset_fields');
-          $reason = (array_key_exists($webform_submission->getElementData('reason'), $reason_allowed_values))
-            ? $webform_submission->getElementData('reason')
-            : 'other';
-          $reason_other = $reason == 'other' ? $webform_submission->getElementData('reason') : '';
-
-          $webform_data = [
-            'webform_submission_id' => $wid,
-            'additional_comments_and_feedback' => $webform_submission->getElementData('additional_comments_and_feedback'),
-            'reason' => $reason,
-            'reason_other' => $reason_other,
-          ];
-          $data = array_merge($data, $webform_data);
-        }
-        $export_data[] = $data;
-      }
-    }
-  }
-
-  $header = [
-    'suggestion_id',
-    'date_created',
-    'title_en',
-    'title_fr',
-    'organization',
-    'description_en',
-    'description_fr',
-    'dataset_suggestion_status',
-    'dataset_suggestion_status_link',
-    'Dataset released date',
-    'votes',
-    'subject',
-    'keywords_en',
-    'keywords_fr',
-    'webform_submission_id',
-    'additional_comments_and_feedback',
-    'reason',
-    'reason_other',
-  ];
-
-  // export as csv
-  write_to_csv('suggested-dataset.csv', $export_data, $header);
-
-  // log results
-  \Drupal::logger('export')->notice('Suggested datasets exported');
-}
-
-/**
- * Helper function to combine all values in a nested array in a string
- * @param $parentArray
- * @return string
- */
-function implodeAllValues($parentArray) {
-  $values = '';
-  $size = sizeof($parentArray);
-  $i=0;
-
-  if ($parentArray) {
-    foreach ($parentArray as $childArray) {
-      $i++;
-      $values .= $childArray['value'];
-      if ($i < $size) {
-        $values .=  ',';
-      }
-    }
-  }
-
-  return $values;
+  $options = read_options_from_json('resource_type');
 }

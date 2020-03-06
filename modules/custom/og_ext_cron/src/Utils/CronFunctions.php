@@ -164,9 +164,9 @@ class CronFunctions {
       'subject',
       'keywords_en',
       'keywords_fr',
-      'webform_submission_id',
       'additional_comments_and_feedback_en',
       'additional_comments_and_feedback_fr',
+      'webform_submission_id',
       'reason',
     ];
 

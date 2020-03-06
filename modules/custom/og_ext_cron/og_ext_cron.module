@@ -16,7 +16,7 @@ function og_ext_cron_cron() {
 
   // clear proactive disclosure view caches
   $cron_tasks->clear_view_caches();
-
+/*
   // fetch organizations list from CKAN
   $cron_tasks->fetch_orgs_from_ckan();
 
@@ -35,7 +35,7 @@ function og_ext_cron_cron() {
   foreach ($fields as $field => $type) {
     $cron_tasks->fetch_from_ckan($field, $type);
   }
-
+*/
   // export dataset comments
   $cron_tasks->export_external_comments();
 

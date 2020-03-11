@@ -1,0 +1,21 @@
+comment_spam.admin_settings:
+  path: '/admin/config/comment_spam'
+  defaults:
+    _form: '\Drupal\comment_spam\Form\ModuleConfigurationForm'
+    _title: 'comment_spam configuration screen'
+  requirements:
+    _permission: 'comment_spam admin_settings'
+comment_spam.admin_comment_spam:
+  path: /admin/content/comment/spam
+  defaults:
+    _title: 'Comment spam'
+    _view: page_comment_spam
+  requirements:
+    _permission: 'administer comments'
+comment_spam.set.spam:
+  path: '/comment/{comment}/spam'
+  defaults:
+    _form: '\Drupal\comment_spam\Form\ConfirmSpamForm'
+    _title: 'Spam'
+  requirements:
+    _permission: 'comment_spam set spam comments'

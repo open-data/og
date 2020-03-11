@@ -75,7 +75,7 @@
         "drupal/csv_serialization": "1.4.0",
         "drupal/facets": "1.4.0",
         "drupal/fontawesome": "2.15.0",
-        "drupal/google_analytics": "3.0.0",
+        "drupal/google_analytics": "2.4.0",
         "drupal/honeypot": "1.30.0",
         "drupal/memcache": "2.0.0",
         "drupal/menu_breadcrumb": "1.12.0",

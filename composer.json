@@ -71,7 +71,7 @@
         "drupal/bootstrap_layouts": "5.1.0",
         "drupal/ckeditor_codemirror": "2.2.0",
         "drupal/console": "1.9.4",
-        "drupal/core": "8.7.11",
+        "drupal/core": "8.8.3",
         "drupal/csv_serialization": "1.4.0",
         "drupal/facets": "1.4.0",
         "drupal/fontawesome": "2.15.0",
@@ -118,9 +118,8 @@
             },
             "drupal/core": {
                 "Submitting a comment in the non default language redirects you to the default language": "https://www.drupal.org/files/issues/2019-05-08/2751269-redirect_to_current_node_language_after_post_comment-24.patch",
-                "Comments created in translation are displayed only for admin role": "https://www.drupal.org/files/issues/2018-04-13/drupal-comment_translation_displayed_only_admin-2958935-9-D8.patch",
+                "Comments created in translation are displayed only for admin role": "https://www.drupal.org/files/issues/2019-05-15/comment-translation-display-2958935-20.patch",
                 "Allow exposed form for non-ajax block displays": "https://www.drupal.org/files/issues/2692297-8.patch",
-                "Undefined index: identifier in view's DisplayPluginBase->isIdentifierUnique()": "https://www.drupal.org/files/issues/2882031-10_0.patch",
                 "Error: Call to a member function getLabel() after enable layout_builder": "https://www.drupal.org/files/issues/2018-07-16/2985882-entityfield-2.patch",
                 "Terrible performance when rendering multi-value fields in views": "https://www.drupal.org/files/issues/2018-04-03/views-multivalue_field_rendering_performance-2846485-23.patch",
                 "Views exposed sort filters does not sort with facets": "https://www.drupal.org/files/issues/2018-10-30/views-exposed-sort-filters-2992672-10.patch"

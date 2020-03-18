@@ -1,0 +1,9 @@
+name: Comment Spam
+description: Helps manage comments suspected of being spam.
+package: Open Government
+configure: comment_spam.admin_settings
+dependencies:
+  -drupal:views
+  -drupal:comment
+type: module
+core: 8.x

@@ -1,0 +1,9 @@
+comment_spam set spam:
+  title: Set comment as spam.
+  description: Adds comment to the filter as spam and unpublishes the comment (when not already unpublished).
+  restrict access: true
+comment_spam admin_settings:
+  title: Comment Spam Configuration Page.
+  description: Access Comment Spam configuration form to add/remove banned words.
+  restrict access: true
+

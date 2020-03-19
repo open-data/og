@@ -1,0 +1,18 @@
+{
+    "academic": {
+        "en": "Academic",
+        "fr": "Pédagogique"
+    },
+    "scientific": {
+        "en": "Scientific",
+        "fr": "Scientifique"
+    },
+    "personal_interest": {
+        "en": "Personal Interest",
+        "fr": "Personnelle"
+    },
+    "business": {
+        "en": "Business",
+        "fr": "Opérationnelle"
+    }
+}

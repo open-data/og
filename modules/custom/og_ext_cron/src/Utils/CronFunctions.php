@@ -115,6 +115,7 @@ class CronFunctions {
           $node_fr = $node->getTranslation('fr');
 
           $data = [
+            'uuid' => $node->uuid(),
             'suggestion_id' => $node->id(),
             'date_created' => date('Y-m-d', $node->getCreatedTime()),
             'title_en' => $node->getTitle(),
@@ -124,7 +125,7 @@ class CronFunctions {
             'description_fr' => strip_tags($node_fr->get('body')->getValue()[0]['value']),
             'dataset_suggestion_status' => $node->get('field_sd_status')->getValue()[0]['value'],
             'dataset_suggestion_status_link' => $node->get('field_status_link')->getValue()[0]['value'],
-            'Dataset released date' => $node->get('field_date_published')->getValue()[0]['value'],
+            'dataset_released_date' => $node->get('field_date_published')->getValue()[0]['value'],
             'votes' => $node->get('field_vote_up_down')->getValue()[0]['value'],
             'subject' => $this->implodeAllValues($node->get('field_dataset_subject')->getValue()),
             'keywords_en' => $this->implodeAllValues($node->get('field_dataset_keywords')->getValue()),
@@ -136,11 +137,11 @@ class CronFunctions {
           // get webform submission for suggested datasets
           if ($wid = $node->get('field_webform_submission_id')->getValue()[0]['value']) {
             $webform_submission = WebformSubmission::load($wid);
-            $reason = $webform_submission->getElementData('reason');
 
             $webform_data = [
               'webform_submission_id' => $wid,
-              'reason' => $reason,
+              'reason' => $webform_submission->getElementData('reason'),
+              'email' => $webform_submission->getElementData('e_mail_address'),
             ];
             $data = array_merge($data, $webform_data);
           }
@@ -150,6 +151,7 @@ class CronFunctions {
     }
 
     $header = [
+      'uuid',
       'suggestion_id',
       'date_created',
       'title_en',
@@ -159,7 +161,7 @@ class CronFunctions {
       'description_fr',
       'dataset_suggestion_status',
       'dataset_suggestion_status_link',
-      'Dataset released date',
+      'dataset_released_date',
       'votes',
       'subject',
       'keywords_en',
@@ -168,10 +170,11 @@ class CronFunctions {
       'additional_comments_and_feedback_fr',
       'webform_submission_id',
       'reason',
+      'email',
     ];
 
     // export as csv
-    $this->write_to_csv('suggested-dataset.csv', $export_data, $header);
+    $this->write_to_csv('suggested-dataset.csv', $export_data, $header, FALSE);
 
     // log results
     \Drupal::logger('export')->notice('Suggested datasets exported');
@@ -355,11 +358,13 @@ class CronFunctions {
   /**
    * Generate output file for given data and headers
    */
-  private function write_to_csv($filename, $data_to_write, $csv_header) {
+  private function write_to_csv($filename, $data_to_write, $csv_header, $public = TRUE) {
     try {
       // create output csv
-      $public_path = \Drupal::service('file_system')->realpath(file_default_scheme() . "://");
-      $output = fopen($public_path . '/' . $filename, 'w');
+      $path = $public
+        ? \Drupal::service('file_system')->realpath(file_default_scheme() . "://")
+        : \Drupal\Core\Site\Settings::get('file_private_path');
+      $output = fopen($path . '/' . $filename, 'w');
       if (!$output) {
         throw new Exception('Failed to create export file.');
       }

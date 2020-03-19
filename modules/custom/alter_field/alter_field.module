@@ -40,7 +40,7 @@ function read_options_from_json($field_name) {
     } else
       \Drupal::logger('read from json')->error('Unable to read ' . $field_name . ' from json choices file ');
 
-    } catch (Exception $e) {
+  } catch (\Exception $e) {
     \Drupal::logger('read from json')->error('Unable to read ' . $field_name . ' from json choices file ' . ' ' . $e->getMessage());
   }
 
@@ -54,20 +54,20 @@ function get_suggested_dataset_status() {
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
   if ($langcode == 'fr') {
     $options = [
-      'department_contacted' => 'Ministère contacté',
-      'under_review' => 'Sous examen',
-      'in_progress' => 'En cours',
-      'released' => 'Publié',
-      'not_collected' => 'Non recueillies par le gouvernement du Canada',
+      'department_contacted' => 'Envoyée au détenteur des données – En attente d’une réponse',
+      'under_review' => 'Réponse reçue – Le détenteur des données enquête',
+      'in_progress' => 'Le détenteur des données s’affaire à la publication du jeu de données',
+      'released' => 'Jeu de données publié',
+      'not_collected' => 'Jeu de données non détenu',
     ];
   }
   else {
     $options = [
-      'department_contacted' => 'Department Contacted',
-      'under_review' => 'Under Review',
-      'in_progress' => 'In-progress',
-      'released' => 'Released',
-      'not_collected' => 'Not Collected by the Government of Canada',
+      'department_contacted' => 'Referred to data-holder - Awaiting Response',
+      'under_review' => 'Response received – data-holder investigating',
+      'in_progress' => 'Data-holder working on releasing dataset',
+      'released' => 'Dataset Published',
+      'not_collected' => 'Dataset not held',
     ];
   }
 
@@ -186,7 +186,7 @@ function alter_field_update_8001() {
             // node not found
             \Drupal::logger('migration')->error($row[$key_langcode] . $row[$key_nid] . ' node not found');
           }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
           \Drupal::logger('migration')->error($e->getMessage());
         }
       }

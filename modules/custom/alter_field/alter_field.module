@@ -31,9 +31,24 @@ function read_options_from_json($field_name) {
     if (file_exists($filename) && $contents = file_get_contents($filename)) {
       $data = Json::decode($contents);
       foreach ($data as $key => $row) {
-        $options[$key] = is_array($row)? $row[$langcode] : $row;
+        $options[$key] = is_array($row)? trim($row[$langcode]) : trim($row);
       }
       asort($options);
+
+      // custom sorting for organizations
+      // remove the numbered organizations from the top and place at bottom
+      if ($field_name == 'organizations') {
+        $orgs = [];
+        foreach ($options as $key => $value) {
+          if (is_numeric($value[0])) {
+            $orgs[$key] = $value;
+            unset($options[$key]);
+          }
+          else
+            break;
+        }
+        $options += $orgs;
+      }
 
       // Cache options
       \Drupal::cache()->set('ckan_' . $field_name . '_' . $langcode, $options);
@@ -199,30 +214,41 @@ function alter_field_update_8001() {
 /**
  * Update field_organization for content type Suggested Dataset
  * change field value to field code
- * for example changes Treasury Board to tbs_sct
+ * for example changes Treasury Board to tbs-sct
  */
 function alter_field_update_8002()
 {
-  // find allowed values and default values for field_organization
+  // find allowed values for field_organization
   $entityManager = \Drupal::service('entity_field.manager');
   $fields = $entityManager->getFieldDefinitions('node', 'suggested_dataset');
   $field_org = $fields['field_organization']->getFieldStorageDefinition();
   $options = options_allowed_values($field_org);
-  $default = $fields['field_organization']->getDefaultValueLiteral()[0]['value'];
+  $options = array_map('trim', $options);
 
-  // replace existing values with allowed values
   $nids = \Drupal::entityQuery('node')
     ->condition('type', 'suggested_dataset')
     ->execute();
 
-  // if dataset suggestions exist
   if ($nids) {
     $nodes = Node::loadMultiple($nids);
 
     foreach ($nodes as $node) {
+      // replace existing value with matching allowed value
+      if (!$node->get('field_organization')->getValue()) {
+        \Drupal::logger('migration')->error('No organization found for node ' . $node->id());
+        break;
+      }
+
       $existing_value = $node->get('field_organization')->getValue()[0]['value'];
-      $key = array_search($existing_value, $options);
-      $new_value = $key ? $key : $default;
+      if (array_key_exists($existing_value, $options))
+        break;
+
+      $new_value = array_search($existing_value, $options);
+      if (!$new_value) {
+        \Drupal::logger('migration')->error('Invalid organization "' . $existing_value . '" found for node ' . $node->id());
+        break;
+      }
+
       $node->set('field_organization', $new_value);
       if ($node->hasTranslation('fr')) {
         $node_fr = $node->getTranslation('fr');
@@ -230,6 +256,92 @@ function alter_field_update_8002()
         $node_fr->save();
       }
       $node->save();
+    }
+  }
+}
+
+/**
+ * Add field_dataset_subject for content type Suggested Dataset
+ * add subject for existing suggested dataset nodes
+ */
+function alter_field_update_8003()
+{
+  // find allowed values for field_dataset_subject
+  $entityManager = \Drupal::service('entity_field.manager');
+  $fields = $entityManager->getFieldDefinitions('node', 'suggested_dataset');
+  $field_subject = $fields['field_dataset_subject']->getFieldStorageDefinition();
+  $options = options_allowed_values($field_subject);
+  $options = array_map('trim', $options);
+
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = $module_handler->getModule(basename(__FILE__, '.module'))->getPath();
+  $files = file_scan_directory($module_path, '/.csv$/');
+
+  foreach ($files as $file) {
+    $csv = fopen($file->uri, 'r');
+    $fields = fgetcsv($csv);
+    $key_nid = array_search('ID', $fields);
+    $key_subject = array_search('Subject', $fields);
+    $key_langcode = array_search('Language', $fields);
+
+    while (($row = fgetcsv($csv, 1024, ",")) !== FALSE) {
+      $row = array_map("utf8_encode", $row);
+      if ($row[$key_nid] && $row[$key_langcode] == 'English') {
+        $node = \Drupal::entityTypeManager()->getStorage('node')->load($row[$key_nid]);
+        if ($node && $node->bundle() == 'suggested_dataset') {
+          $subject = $row[$key_subject];
+          if (array_key_exists($subject, $options)) {
+            $node->set('field_dataset_subject', $subject);
+            $node->save();
+          } else
+            \Drupal::logger('migration')->error('Invalid subject ' . $subject . ' for node ' . $node->id());
+        }
+      }
+    }
+
+    fclose($csv);
+  }
+}
+
+/**
+ * Set default values for Suggested Dataset fields
+ * set default status for any missing status for field_sd_status
+ * set default keywords for any missing keywords for field_dataset_keywords
+ */
+function alter_field_update_8004()
+{
+  // find default value for fields
+  $entityManager = \Drupal::service('entity_field.manager');
+  $fields = $entityManager->getFieldDefinitions('node', 'suggested_dataset');
+  $default_status = $fields['field_sd_status']->getDefaultValueLiteral()[0]['value'];
+  $default_keywords_en = $fields['field_dataset_keywords']->getDefaultValueLiteral()[0]['value'];
+  $default_keywords_fr = 'Jeu de données';
+
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'suggested_dataset')
+    ->execute();
+
+  if ($nids) {
+    $nodes = Node::loadMultiple($nids);
+    foreach ($nodes as $node) {
+      // set default if no value exists for field_sd_status
+      if (!$node->get('field_sd_status')->getValue())
+        $node->set('field_sd_status', $default_status);
+
+      // set default if no value exists for field_dataset_keywords
+      if (!$node->get('field_dataset_keywords')->getValue())
+        $node->set('field_dataset_keywords', $default_keywords_en);
+
+      $node->save();
+
+      // set default if no value exists for field_dataset_keywords for node translation
+      if ($node->hasTranslation('fr')) {
+        $node_fr = $node->getTranslation('fr');
+        if (!$node_fr->get('field_dataset_keywords')->getValue()) {
+          $node_fr->set('field_dataset_keywords', $default_keywords_fr);
+          $node_fr->save();
+        }
+      }
     }
   }
 }

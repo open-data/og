@@ -90,7 +90,7 @@ class CronFunctions {
     $this->write_to_csv('export_comments.csv', $comments_data, $header);
 
     // log results
-    \Drupal::logger('export')->notice('Comments export to csv file completed');
+    \Drupal::logger('cron')->notice('Comments export to csv file completed');
   }
 
   /**
@@ -114,6 +114,20 @@ class CronFunctions {
         if ($node->hasTranslation('fr')) {
           $node_fr = $node->getTranslation('fr');
 
+          // set default values
+          $subject = $node->get('field_dataset_subject')->getValue()
+            ? $this->implodeAllValues($node->get('field_dataset_subject')->getValue())
+            : 'information_and_communications';
+          $keywords_en = $node->get('field_dataset_keywords')->getValue()
+            ? $this->implodeAllValues($node->get('field_dataset_keywords')->getValue())
+            : 'dataset';
+          $keywords_fr = $node_fr->get('field_dataset_keywords')->getValue()
+            ? $this->implodeAllValues($node_fr->get('field_dataset_keywords')->getValue())
+            : 'Jeu de données';
+          $status = $node->get('field_sd_status')->getValue()
+            ? $node->get('field_sd_status')->getValue()[0]['value']
+            : 'department_contacted';
+
           $data = [
             'uuid' => $node->uuid(),
             'suggestion_id' => $node->id(),
@@ -123,13 +137,13 @@ class CronFunctions {
             'organization' => $node->get('field_organization')->getValue()[0]['value'],
             'description_en' => strip_tags($node->get('body')->getValue()[0]['value']),
             'description_fr' => strip_tags($node_fr->get('body')->getValue()[0]['value']),
-            'dataset_suggestion_status' => $node->get('field_sd_status')->getValue()[0]['value'],
+            'dataset_suggestion_status' => $status,
             'dataset_suggestion_status_link' => $node->get('field_status_link')->getValue()[0]['value'],
             'dataset_released_date' => $node->get('field_date_published')->getValue()[0]['value'],
             'votes' => $node->get('field_vote_up_down')->getValue()[0]['value'],
-            'subject' => $this->implodeAllValues($node->get('field_dataset_subject')->getValue()),
-            'keywords_en' => $this->implodeAllValues($node->get('field_dataset_keywords')->getValue()),
-            'keywords_fr' => $this->implodeAllValues($node_fr->get('field_dataset_keywords')->getValue()),
+            'subject' => $subject,
+            'keywords_en' => $keywords_en,
+            'keywords_fr' => $keywords_fr,
             'additional_comments_and_feedback_en' =>  $node->get('field_feedback')->getValue()[0]['value'],
             'additional_comments_and_feedback_fr' =>  $node_fr->get('field_feedback')->getValue()[0]['value'],
           ];
@@ -177,7 +191,7 @@ class CronFunctions {
     $this->write_to_csv('suggested-dataset.csv', $export_data, $header, FALSE);
 
     // log results
-    \Drupal::logger('export')->notice('Suggested datasets exported');
+    \Drupal::logger('cron')->notice('Suggested datasets exported');
   }
 
   /**
@@ -240,11 +254,11 @@ class CronFunctions {
       $this->write_to_csv('dataset-ratings.csv', $output_data, $header);
 
       // log results
-      \Drupal::logger('export')->notice('Dataset ratings exported');
+      \Drupal::logger('cron')->notice('Dataset ratings exported');
     }
 
     catch (Exception $e) {
-      \Drupal::logger('export')->error('Unable to export dataset ratings ' . $e->getMessage());
+      \Drupal::logger('cron')->error('Unable to export dataset ratings ' . $e->getMessage());
     }
   }
 
@@ -262,19 +276,24 @@ class CronFunctions {
         $options[trim($data->name)] = [ 'en' => $title[0], 'fr' => $title[1]];
       }
 
+      // remove external-externe organization
+      if (array_key_exists('external-externe', $options)) {
+        unset($options['external-externe']);
+      }
+
       if (!empty($options)) {
         // Write to choices folder
         $module_handler = \Drupal::service('module_handler');
         $module_path = $module_handler->getModule('og_ext_cron')->getPath();
         $filename = $module_path . '/choices/organizations.json';
         if (file_put_contents($filename, json_encode($options, JSON_PRETTY_PRINT)))
-          \Drupal::logger('fetch from api')->notice('Organizations list updated from CKAN');
+          \Drupal::logger('cron')->notice('Organizations list updated from CKAN');
         else
-          \Drupal::logger('fetch from api')->error('Unable to write organizations list from file ' . $filename);
+          \Drupal::logger('cron')->error('Unable to write organizations list from file ' . $filename);
       }
     }
     else
-      \Drupal::logger('fetch from api')->error('Unable to read file ' . $filename);
+      \Drupal::logger('cron')->error('Unable to read file ' . $filename);
   }
 
   /**
@@ -315,16 +334,16 @@ class CronFunctions {
             $module_handler = \Drupal::service('module_handler');
             $module_path = $module_handler->getModule('og_ext_cron')->getPath();
             if (file_put_contents($module_path . '/choices/' . $field_name . '.json', json_encode($options, JSON_PRETTY_PRINT)))
-              \Drupal::logger('fetch from api')->notice($field_name . ' list updated from CKAN');
+              \Drupal::logger('cron')->notice($field_name . ' list updated from CKAN');
             else
-              \Drupal::logger('fetch from api')->error('Unable to write ' . $field_name . '.json');
+              \Drupal::logger('cron')->error('Unable to write ' . $field_name . '.json');
           }
           else
-            \Drupal::logger('fetch from api')->error('Unable to fetch ' . $field_name . ' from CKAN');
+            \Drupal::logger('cron')->error('Unable to fetch ' . $field_name . ' from CKAN');
         }
       }
       catch (Exception $e) {
-        \Drupal::logger('fetch from api')->error('Unable to fetch from api for ' . $url
+        \Drupal::logger('cron')->error('Unable to fetch from api for ' . $url
           . ' Exception: ' . $e->getMessage());
       }
     }
@@ -383,7 +402,7 @@ class CronFunctions {
     }
 
     catch (Exception $e) {
-      \Drupal::logger('export')->error('Unable to create ' . $filename . ' ' . $e->getMessage());
+      \Drupal::logger('cron')->error('Unable to create ' . $filename . ' ' . $e->getMessage());
     }
   }
 

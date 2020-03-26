@@ -20,11 +20,13 @@ class ExternalCommentController extends CommentController {
   private $types = [
     "dataset" => "Dataset",
     "inventory" => "Open Data Inventory",
+    "suggest-dataset" => "Suggest a dataset",
     ];
 
   private $types_fr = [
     "dataset" => "Jeu de données",
     "inventory" => "Répertoire de données ouvertes",
+    "suggest-dataset" => "Proposer un jeu de données",
   ];
 
   /**
@@ -45,43 +47,33 @@ class ExternalCommentController extends CommentController {
 
     // only display the form if validated
     if ($this->validate($request, $ext_type, $uuid)) {
-      // check if comments exist for this uuid
-      $query = \Drupal::entityQuery('node')
-        ->condition('type', 'external')
-        ->condition('status', 1)
-        ->condition('field_type', $ext_type)
-        ->condition('field_uuid', $uuid);
-      $results = $query->execute();
-
-      // if comments do not exist for this uuid then load the default node
-      if (!$results) {
+      if ($ext_type == 'suggest-dataset') {
+        // load comments for the node
+        $node = \Drupal::service('entity.repository')->loadEntityByUuid('node', $uuid);
+        $renderHTML = $this->getNodeComments($node, $request, $ext_type);
+      }
+      else {
+        // check if comments exist for this uuid
         $query = \Drupal::entityQuery('node')
           ->condition('type', 'external')
           ->condition('status', 1)
-          ->condition('field_uuid', 'default');
+          ->condition('field_type', $ext_type)
+          ->condition('field_uuid', $uuid);
         $results = $query->execute();
-      }
 
-      if ($results) {
-        $node_id = $results[array_keys($results)[0]];
-        $node = \Drupal::entityTypeManager()->getStorage('node')->load($node_id);
+        // if comments do not exist for this uuid then load the default node
+        if (!$results) {
+          $query = \Drupal::entityQuery('node')
+            ->condition('type', 'external')
+            ->condition('status', 1)
+            ->condition('field_uuid', 'default');
+          $results = $query->execute();
+        }
 
-        // if node exist then load the node with comments
-        if ($node) {
-          $css = '<link rel="stylesheet" type="text/css" href="/profiles/og/modules/custom/external_comment/css/style.css" />';
-          $commentsHTML = comment_node_update_index($node);
-          $renderHTML .= ($commentsHTML) ? $css . '<h2>' . t('Comments') . '</h2>' . $commentsHTML : '';
-
-          // Load comment form
-          $commentForm = $this->getReplyForm($request, $node, 'comment');
-          $commentForm['comment_form']['#action'] = ($node->get('title')->value === 'default')
-            ? str_replace('/comment/', '/external_comment/', $commentForm['comment_form']['#action'])
-            : $commentForm['comment_form']['#action'];
-          $commentFormHTML = \Drupal::service('renderer')->render($commentForm);
-          $ProcessedCommentFormHTML = explode('</h2>', $commentFormHTML);
-
-          // concatenate HTML to generate final HTML
-          $renderHTML .= '<h2>' . t('Add new comment') . '</h2>' . $ProcessedCommentFormHTML[1] . '<br/>';
+        if ($results) {
+          $node_id = $results[array_keys($results)[0]];
+          $node = \Drupal::entityTypeManager()->getStorage('node')->load($node_id);
+          $renderHTML = $this->getNodeComments($node, $request, $ext_type);
         }
       }
    }
@@ -147,6 +139,41 @@ class ExternalCommentController extends CommentController {
       }
     }
     return parent::getReplyForm($request, $entity, $field_name, $pid);
+  }
+
+  /**
+   * Get render HTML for the comments attached to an entity
+   * @param $entity
+   * @param $req
+   * @param $type
+   * @return string
+   */
+  private function getNodeComments($entity, $req, $type) {
+    $renderHTML = '';
+    // If node exists then load comments
+    if ($entity) {
+      $module_handler = \Drupal::service('module_handler');
+      $module_path = $module_handler->getModule('external_comment')->getPath();
+      $css = '<link rel="stylesheet" type="text/css" href="/' . $module_path . '/css/style.css" />';
+      // Load existing comments
+      $commentsHTML = comment_node_update_index($entity);
+      $renderHTML .= ($commentsHTML) ? $css . '<h2>' . t('Comments') . '</h2>' . $commentsHTML : '';
+
+      // Load comments form
+      $commentForm = $this->getReplyForm($req, $entity, 'comment')['comment_form'];
+
+      // Replace action for external comments
+      if ($type != 'suggest-dataset' && $entity->get('title')->value === 'default') {
+        $commentForm['#action'] = str_replace('/comment/', '/external_comment/', $commentForm['#action']);
+      }
+
+      // Get HTML from render array
+      $commentFormHTML = \Drupal::service('renderer')->render($commentForm);
+
+      // Concatenate HTML to generate final HTML
+      $renderHTML .= '<h2>' . t('Add new comment') . '</h2>' . $commentFormHTML . '<br/>';
+    }
+    return $renderHTML;
   }
 
   /**
@@ -275,5 +302,4 @@ class ExternalCommentController extends CommentController {
     // return response as JSON
     return new JsonResponse($comments_json);
   }
-
 }

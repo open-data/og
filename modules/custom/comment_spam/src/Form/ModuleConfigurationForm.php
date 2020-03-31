@@ -40,7 +40,7 @@ class ModuleConfigurationForm extends ConfigFormBase {
         $def_web = $config->get('webform_list');
         $webform_list = array_diff($def_web,array('0'));
 
-        $form['webforms00']['#markup'] = t('<p>Webforms included: '.join(", ",$webform_list).'</p>');
+        $form['webforms00']['#markup'] = t('<p>Webforms included: contact</p>');
 
         //Get default list and full current list of words to filter by
         $defaultWords = $config->get('default_list');
@@ -74,11 +74,15 @@ class ModuleConfigurationForm extends ConfigFormBase {
         $current_rows[]=array();
 
         $count=1;
-        foreach($myWords as $badWord){
-            $options[$badWord]= ['words' => $badWord,];
-            $count++;
-            //$current_rows[] = array($badWord);
+        $options=[];
+        if(!empty($myWords)){
+            foreach($myWords as $badWord){
+                $options[$badWord]= ['words' => $badWord,];
+                $count++;
+                //$current_rows[] = array($badWord);
+            }
         }
+
         $header = [
             'words' => $this
                 ->t('Bad word'),
@@ -117,7 +121,7 @@ class ModuleConfigurationForm extends ConfigFormBase {
         $form['text_warning']['#markup'] =
                 t('<br><br><div style="'.$style.'"><h3 style="color: red">WARNING!</h3><br> Blocking sequence may produce unexpected results!<br>
            For example, banning \'ass\' will also block comments with the word \'classic\'. Be careful with what you ban!</div><br> ');
-            $form['text_info']['#markup'] = t('<p>Not case sensitive</p>');
+            $form['text_info']['#markup'] = t('<p>Not case sensitive. Whitespace is removed.</p>');
 
             //Text area to add custom words to ban list
             $form['addWords'] = [
@@ -125,9 +129,9 @@ class ModuleConfigurationForm extends ConfigFormBase {
             '#title' => $this->t('Add a word or words separated by line'),
             ];
 
-        $form['actions']['submit']['#value'] = [
+        $form['actions']['submit'] = [
             '#type' => 'submit',
-            '#value' => $this->t('words to list'),
+            '#value' => $this->t('Add words to list'),
         ];
 
         return $form;
@@ -174,7 +178,8 @@ class ModuleConfigurationForm extends ConfigFormBase {
         $webform_add = $form_state->getValue('entities');
 
         //Obtain values in config before submitting form
-        $config = $this->config('comment_spam.settings');
+        //$config = $this->config('comment_spam.settings');
+        $config = \Drupal::configFactory()->getEditable('comment_spam.settings');
         $defaultWords = $config->get('default_list');
         $result=$config->get('custom_list');
 
@@ -188,7 +193,11 @@ class ModuleConfigurationForm extends ConfigFormBase {
             }
             //Add words from textarea
             if(!empty($wordsToAdd)) {
-                $wordsToAdd = explode("\n", $wordsToAdd);
+                //Remove \r and \n, remove whitespace, html tags, remove empty words
+                $wordsToAdd = preg_split('/\R/', $wordsToAdd);
+                $wordsToAdd = array_map('trim', $wordsToAdd);
+                $wordsToAdd = array_map('strip_tags', $wordsToAdd);
+                $wordsToAdd = array_filter($wordsToAdd, function($value){ return !is_null($value) && $value !== '';});
                 $result = array_merge($result, $wordsToAdd);
             }
         }
@@ -199,7 +208,11 @@ class ModuleConfigurationForm extends ConfigFormBase {
             }
 
             if(!empty($wordsToAdd)){
-                $wordsToAdd =explode("\n", $wordsToAdd);
+                //Remove \r and \n, remove whitespace, html tags, remove empty words
+                $wordsToAdd = preg_split('/\R/', $wordsToAdd);
+                $wordsToAdd = array_map('trim', $wordsToAdd);
+                $wordsToAdd = array_map('strip_tags', $wordsToAdd);
+                $wordsToAdd = array_filter($wordsToAdd, function($value){ return !is_null($value) && $value !== '';});
                 $result=$wordsToAdd;
             }
         }
@@ -212,13 +225,14 @@ class ModuleConfigurationForm extends ConfigFormBase {
             }
         }
 
-        //save results in config
-        $config->set('custom_list',$result)->save();
-        $config->set('include_default_list',$default_list_include)->save();
-
-        //The spam_flag field to be added to webforms
-        $hidden_field = "\nspam_flag:\n  '#type': checkbox\n  '#title': spam_flag\n  '#disabled': true\n  '#wrapper_attributes':\n    class:\n      - hidden";
-
+        if(!empty($result)){
+            $result = array_unique($result);
+            $result = array_values($result);
+            //save results in config
+            $config->set('custom_list',$result);
+            $config->set('include_default_list',$default_list_include);
+            $config->save();
+        }
     }
 
 

@@ -44,6 +44,7 @@ class ExternalCommentController extends CommentController {
     // remove any characters after uuid in the request string
     $uuid = explode('?' , $uuid);
     $uuid = $uuid[0];
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
     // only display the form if validated
     if ($this->validate($request, $ext_type, $uuid)) {
@@ -51,6 +52,15 @@ class ExternalCommentController extends CommentController {
         // load comments for the node
         $node = \Drupal::service('entity.repository')->loadEntityByUuid('node', $uuid);
         $renderHTML = $this->getNodeComments($node, $request, $ext_type);
+        // change relative urls to absolute urls
+        $renderHTML = str_replace('href="', 'href="' . $request->getScheme() . '://' . $request->getHttpHost(), $renderHTML);
+        $renderHTML = str_replace('about="', 'about="' . $request->getScheme() . '://' . $request->getHttpHost(), $renderHTML);
+        $renderHTML = str_replace('action="', 'action="' . $request->getScheme() . '://' . $request->getHttpHost(), $renderHTML);
+        // remove class icon from button
+        $renderHTML = str_replace(
+          '<span class="icon glyphicon glyphicon-ok" aria-hidden="true"></span>',
+          '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>',
+          $renderHTML);
       }
       else {
         // check if comments exist for this uuid
@@ -78,8 +88,17 @@ class ExternalCommentController extends CommentController {
       }
    }
 
-    // return response with HTML
-    return new Response($renderHTML);
+    $response = new Response();
+    $response->setContent($renderHTML);
+    $response->setStatusCode(Response::HTTP_OK);
+    $response->headers->set('Content-Type', 'text/html');
+    if ($ext_type == 'suggest-dataset') {
+      $search_domain = $request->getScheme() . '://' . \Drupal\Core\Site\Settings::get('search_domain')[$langcode];
+      $response->headers->set('Access-Control-Allow-Origin', $search_domain);
+    }
+
+    // return response
+    return $response;
   }
 
   /**
@@ -150,11 +169,13 @@ class ExternalCommentController extends CommentController {
    */
   private function getNodeComments($entity, $req, $type) {
     $renderHTML = '';
+
     // If node exists then load comments
     if ($entity) {
       $module_handler = \Drupal::service('module_handler');
       $module_path = $module_handler->getModule('external_comment')->getPath();
       $css = '<link rel="stylesheet" type="text/css" href="/' . $module_path . '/css/style.css" />';
+
       // Load existing comments
       $commentsHTML = comment_node_update_index($entity);
       $renderHTML .= ($commentsHTML) ? $css . '<h2>' . t('Comments') . '</h2>' . $commentsHTML : '';
@@ -173,6 +194,7 @@ class ExternalCommentController extends CommentController {
       // Concatenate HTML to generate final HTML
       $renderHTML .= '<h2>' . t('Add new comment') . '</h2>' . $commentFormHTML . '<br/>';
     }
+
     return $renderHTML;
   }
 
@@ -184,8 +206,8 @@ class ExternalCommentController extends CommentController {
    * @return bool
    */
   private function validate(Request $request, $ext_type, $uuid) {
-
     // get url, type, uuid and domain of request object
+    $host_domain = $request->getHttpHost();
     $referer_url = $request->headers->get('referer');
     $url_explode = explode("/",$referer_url);
     $referer_uuid = end($url_explode);
@@ -193,14 +215,23 @@ class ExternalCommentController extends CommentController {
     $referer_uuid = $referer_uuid[0];
     $referer_type = prev($url_explode);
 
+    // map suggested dataset type
+    if ($ext_type == 'suggest-dataset' && $url_explode[count($url_explode)-3] == 'sd') {
+      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      $domain = \Drupal\Core\Site\Settings::get('search_domain');
+      $search_domain = $domain[$langcode];
+      $referer_type = 'suggest-dataset';
+    } else
+      $search_domain = '';
+
     if ($referer_url) {
-      $host_domain = $request->getHttpHost();
       $url_components = parse_url($referer_url);
       $referer_domain = $url_components['host'];
       if (array_key_exists('port', $url_components)) {
         $referer_domain .= ':' . $url_components['port'];
       }
-    }
+    } else
+      $referer_domain = '';
 
     // condition 1 - no url for referrer
     if ((empty($referer_url))) {
@@ -209,7 +240,7 @@ class ExternalCommentController extends CommentController {
     }
 
     // condition 2 - domain name of both request and referrer are different
-    elseif ($host_domain != $referer_domain) {
+    elseif (!in_array($referer_domain, [$host_domain, $search_domain])) {
       \Drupal::logger('external comment')->warning('Host domain name and referrer domain name do not match');
       return false;
     }

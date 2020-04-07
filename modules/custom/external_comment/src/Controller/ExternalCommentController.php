@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-
 /**
  * Class ExternalCommentController.
  * A wrapper class of the Drupal Core CommentController to handle comments from entities outside Drupal
@@ -51,11 +50,13 @@ class ExternalCommentController extends CommentController {
       if ($ext_type == 'suggest-dataset') {
         // load comments for the node
         $node = \Drupal::service('entity.repository')->loadEntityByUuid('node', $uuid);
-        $renderHTML = $this->getNodeComments($node, $request, $ext_type);
+        $renderHTML .= $this->getNodeComments($node, $request, $ext_type);
+
         // change relative urls to absolute urls
         $renderHTML = str_replace('href="', 'href="' . $request->getScheme() . '://' . $request->getHttpHost(), $renderHTML);
         $renderHTML = str_replace('about="', 'about="' . $request->getScheme() . '://' . $request->getHttpHost(), $renderHTML);
         $renderHTML = str_replace('action="', 'action="' . $request->getScheme() . '://' . $request->getHttpHost(), $renderHTML);
+
         // remove class icon from button
         $renderHTML = str_replace(
           '<span class="icon glyphicon glyphicon-ok" aria-hidden="true"></span>',
@@ -175,10 +176,7 @@ class ExternalCommentController extends CommentController {
       $module_handler = \Drupal::service('module_handler');
       $module_path = $module_handler->getModule('external_comment')->getPath();
       $css = '<link rel="stylesheet" type="text/css" href="/' . $module_path . '/css/style.css" />';
-
-      // Load existing comments
-      $commentsHTML = comment_node_update_index($entity);
-      $renderHTML .= ($commentsHTML) ? $css . '<h2>' . t('Comments') . '</h2>' . $commentsHTML : '';
+      $js = '<script src="//cdn.jsdelivr.net/npm/details-polyfill@1/index.min.js"></script>';
 
       // Load comments form
       $commentForm = $this->getReplyForm($req, $entity, 'comment')['comment_form'];
@@ -192,7 +190,11 @@ class ExternalCommentController extends CommentController {
       $commentFormHTML = \Drupal::service('renderer')->render($commentForm);
 
       // Concatenate HTML to generate final HTML
-      $renderHTML .= '<h2>' . t('Add new comment') . '</h2>' . $commentFormHTML . '<br/>';
+      $renderHTML .= $js . '<h2>' . t('Add new comment') . '</h2>' . $commentFormHTML;
+
+      // Load existing comments
+      $commentsHTML = comment_node_update_index($entity);
+      $renderHTML .= ($commentsHTML) ? $css . '<h2>' . t('Comments') . '</h2>' . $commentsHTML : '';
     }
 
     return $renderHTML;
@@ -216,7 +218,9 @@ class ExternalCommentController extends CommentController {
     $referer_type = prev($url_explode);
 
     // map suggested dataset type
-    if ($ext_type == 'suggest-dataset' && $url_explode[count($url_explode)-3] == 'sd') {
+    if ($ext_type == 'suggest-dataset'
+      && isset($url_explode[count($url_explode)-3])
+      && $url_explode[count($url_explode)-3] == 'sd') {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
       $domain = \Drupal\Core\Site\Settings::get('search_domain');
       $search_domain = $domain[$langcode];

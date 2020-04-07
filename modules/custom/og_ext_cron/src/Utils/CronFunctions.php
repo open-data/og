@@ -150,14 +150,14 @@ class CronFunctions {
 
           // get webform submission for suggested datasets
           if ($wid = $node->get('field_webform_submission_id')->getValue()[0]['value']) {
-            $webform_submission = WebformSubmission::load($wid);
-
-            $webform_data = [
-              'webform_submission_id' => $wid,
-              'reason' => $webform_submission->getElementData('reason'),
-              'email' => $webform_submission->getElementData('e_mail_address'),
-            ];
-            $data = array_merge($data, $webform_data);
+            if ($webform_submission = WebformSubmission::load($wid)) {
+              $webform_data = [
+                'webform_submission_id' => $wid,
+                'reason' => $webform_submission->getElementData('reason'),
+                'email' => $webform_submission->getElementData('e_mail_address'),
+              ];
+              $data = array_merge($data, $webform_data);
+            }
           }
           $export_data[] = $data;
         }

@@ -5,7 +5,11 @@ namespace Drupal\voting_webform\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-//use Drupal\webform\Entity\Webform;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\WebformSubmissionForm;
 
 /**
  * Class VotingWebformController.
@@ -75,58 +79,130 @@ class VotingWebformController extends ControllerBase {
     return new Response($renderHTML);
   }
 
-/*
-  public function getRatingExternalForm(Request $request, $uuid)  {
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $action = '/'. $langcode . '/vote?uuid=' . $uuid;
+  /**
+   * Render the voting webform for external search system
+   * @param Request $request
+   * @param $ext_type
+   * @param NodeInterface $node
+   * @return Response
+   */
+  public function getVotingExposedForm(Request $request, $ext_type, NodeInterface $node) {
     $renderHTML = '';
+    $response = new Response();
 
-    $vote_webform = [
-      '#type' => 'webform',
-      '#webform' => 'vote',
-      '#default_data' => ['dataset_uuid' => $uuid],
-    ];
-    $vote_webformHTML = \Drupal::service('renderer')->render($vote_webform);
-    $vote_webformHTML = str_replace('form_action_p_pvdeGsVG5zNF_XLGPTvYSKCf43t8qZYSwcfZl2uzM', $action, $vote_webformHTML);
+    if ($this->validate($request, $node->id(), $ext_type)) {
+      if ($ext_type == 'suggest-dataset') {
+        // retrieve search domain
+        $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+        $search_domain = $request->getScheme() . '://' . \Drupal\Core\Site\Settings::get('search_domain')[$langcode];
 
-    $renderHTML .= '<link rel="stylesheet" media="all" href="/modules/custom/voting_webform/css/rating.css">';
-    $renderHTML .= '<link rel="stylesheet" media="all" href="https://cdn.jsdelivr.net/gh/gjunge/rateit.js@1.1.2/scripts/rateit.css">';
-    $renderHTML .= '<link rel="stylesheet" media="all" href="/modules/contrib/webform/css/webform.element.rating.css">';
-    $renderHTML .= $vote_webformHTML;
-    $renderHTML .= '<script src="https://cdn.jsdelivr.net/gh/gjunge/rateit.js@1.1.2/scripts/jquery.rateit.min.js"></script>';
-    $renderHTML .= '<script src="/modules/contrib/webform/js/webform.element.rating.js?v=8.7.5"></script>';
-    $renderHTML .= '<script src="/core/assets/vendor/jquery/jquery.min.js?v=3.2.1"></script>';
+        // render webform
+        $vote_webform = [
+          '#type' => 'webform',
+          '#webform' => 'vote_up_down',
+        ];
 
-    // highlighted block or messaging
-    $block_manager = \Drupal::service('plugin.manager.block');
-    $config = [];
-    $plugin_block = $block_manager->createInstance('system_messages_block', $config);
-    $access_result = $plugin_block->access(\Drupal::currentUser());
-    $messages = is_object($access_result) && $access_result->isForbidden() || is_bool($access_result) && !$access_result
-      ? []
-      : $plugin_block->build();
-    $messagesHTML = \Drupal::service('renderer')->render($messages);
-    $renderHTML .= $messagesHTML;
+        $renderHTML = \Drupal::service('renderer')->render($vote_webform);
+        $action = $request->getScheme() . '://' . $request->getHttpHost() . $request->getRequestUri() . '/submit';
+        $renderHTML = str_replace('form_action_p_pvdeGsVG5zNF_XLGPTvYSKCf43t8qZYSwcfZl2uzM', $action, $renderHTML);
+        $renderHTML = str_replace('glyphicon glyphicon-thumbs-up', '', $renderHTML);
+        $renderHTML = str_replace('</button>', '<span class="glyphicon glyphicon-thumbs-up"></span></button>', $renderHTML);
 
-    return new Response($renderHTML);
+        $response->headers->set('Content-Type', 'text/html');
+        $response->headers->set('Access-Control-Allow-Origin', $search_domain);
+      }
+    }
+
+    // return response
+    $response->setContent($renderHTML);
+    $response->setStatusCode(Response::HTTP_OK);
+    return $response;
   }
-*/
-  public function validate(Request $request, $uuid, $type) {
-    // get url, uuid and domain of request object
+
+  /**
+   * Submit voting webform for external search system
+   * @param Request $request
+   * @param $ext_type
+   * @param NodeInterface $node
+   * @return mixed
+   */
+  public function submitVotingExposedForm(Request $request, $ext_type, NodeInterface $node) {
+    if ($this->validate($request, $node->id(), $ext_type)) {
+      if ($ext_type == 'suggest-dataset') {
+        $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+        $reqtime = \Drupal::time()->getRequestTime();
+
+        // set submission values
+        $values = [
+          'webform_id' => 'vote_up_down',
+          'entity_type' => 'node',
+          'entity_id' => $node->id(),
+          'in_draft' => FALSE,
+          'uid' => '0',
+          'langcode' => $langcode,
+          'token' => $request->cookies->get('csrftoken'),
+          'uri' => '/' . $langcode . '/node/' . $node->id(),
+          'remote_addr' => $request->getClientIp(),
+          'data' => [],
+          'created' => $reqtime,
+          'completed' => $reqtime,
+          'changed' => $reqtime,
+          'current_page' => '',
+          'locked' => '0',
+          'sticky' => '0',
+          'notes' => '',
+        ];
+
+        // create submission if webform is open
+        $webform = Webform::load($values['webform_id']);
+        $is_open = WebformSubmissionForm::isOpen($webform);
+
+        if ($is_open === TRUE) {
+          $webform_submission = WebformSubmission::create($values);
+          WebformSubmissionForm::submitWebformSubmission($webform_submission);
+        }
+      }
+    }
+
+    $path = $request->getScheme() . '://' . $request->getHttpHost() . '/node/' . $node->id();
+    $response = new TrustedRedirectResponse($path);
+    return $response->send();
+  }
+
+  /**
+   * Validation function for requests from external systems
+   * @param Request $request
+   * @param $uuid
+   * @param $type
+   * @return bool
+   */
+  public function validate(Request $request, $id, $type) {
+    // get url, id and domain of request object
+    $host_domain = $request->getHttpHost();
     $referer_url = $request->headers->get('referer');
     $url_explode = explode("/",$referer_url);
-    $referer_uuid = end($url_explode);
-    $referer_uuid = explode('?' , $referer_uuid);
-    $referer_uuid = $referer_uuid[0];
+    $referer_id = end($url_explode);
+    $referer_id = explode('?' , $referer_id);
+    $referer_id = $referer_id[0];
+
+    // map suggested dataset type
+    if ($type == 'suggest-dataset'
+      && isset($url_explode[count($url_explode)-3])
+      && $url_explode[count($url_explode)-3] == 'sd') {
+      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      $domain = \Drupal\Core\Site\Settings::get('search_domain');
+      $search_domain = $domain[$langcode];
+    } else
+      $search_domain = '';
 
     if ($referer_url) {
-      $host_domain = $request->getHttpHost();
       $url_components = parse_url($referer_url);
       $referer_domain = $url_components['host'];
       if (array_key_exists('port', $url_components)) {
         $referer_domain .= ':' . $url_components['port'];
       }
-    }
+    } else
+      $referer_domain = '';
 
     // condition 1 - no url for referrer
     if ((empty($referer_url))) {
@@ -135,19 +211,19 @@ class VotingWebformController extends ControllerBase {
     }
 
     // condition 2 - domain name of both request and referrer are same
-    elseif ($host_domain != $referer_domain) {
+    elseif (!in_array($referer_domain, [$host_domain, $search_domain])) {
       \Drupal::logger('vote')->warning($type. ': Host domain name and referrer domain name do not match');
       return false;
     }
 
     // condition 3 - uuid has a value
-    elseif (empty ($uuid)){
+    elseif (empty ($id)){
       \Drupal::logger('vote')->warning($type. ': No uuid given for vote');
       return false;
     }
 
     // condition 4 - invalid uuid
-    elseif (($uuid != $referer_uuid) || (strlen($uuid) != 36 && strlen($uuid) != 32)) {
+    elseif ($type != 'suggest-dataset' && ($id != $referer_id || !in_array(strlen($id),[ 36, 32]))) {
       \Drupal::logger('vote')->warning($type . ': Invalid UUID');
       return false;
     }

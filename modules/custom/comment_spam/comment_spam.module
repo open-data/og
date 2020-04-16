@@ -345,7 +345,9 @@ function comment_spam_cron(){
     foreach($comments as $comment){
         $created=$comment->get('created')->value;
         //one week expiry
-        $date_diff = ($time-$created)/604800;
+        //$date_diff = ($time-$created)/604800;
+        //30 day expiry
+        $date_diff = ($time-$created)/2592000;
         if($date_diff>=1){
             $comment->delete();
         }
@@ -360,7 +362,10 @@ function comment_spam_cron(){
     foreach($results as $key => $value){
         $webform_submission = \Drupal\webform\Entity\WebformSubmission::load($key);
         $created=$webform_submission->get('created')->value;
-        $date_diff = ($time-$created)/604800;
+        //one week expiry
+        //$date_diff = ($time-$created)/604800;
+        //30 day expiry
+        $date_diff = ($time-$created)/2592000;
         if($date_diff>=1){
             $webform_submission->delete();
         }

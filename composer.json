@@ -87,7 +87,7 @@
         "drupal/simple_sitemap": "3.5.0",
         "drupal/token_filter": "1.1.0",
         "drupal/views_bootstrap": "4.1.0",
-        "drupal/webform": "5.8.0",
+        "drupal/webform": "5.11.0",
         "drush/drush": "^9.7",
         "fortawesome/font-awesome": "5.9.0",
         "oomphinc/composer-installers-extender": "^1.1",

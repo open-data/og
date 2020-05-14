@@ -216,7 +216,7 @@ function alter_field_update_8001() {
  * change field value to field code
  * for example changes Treasury Board to tbs-sct
  */
-function alter_field_update_8002()
+function alter_field_update_8005()
 {
   // find allowed values for field_organization
   $entityManager = \Drupal::service('entity_field.manager');
@@ -227,6 +227,7 @@ function alter_field_update_8002()
 
   $nids = \Drupal::entityQuery('node')
     ->condition('type', 'suggested_dataset')
+    ->condition('status', 1)
     ->execute();
 
   if ($nids) {
@@ -236,26 +237,24 @@ function alter_field_update_8002()
       // replace existing value with matching allowed value
       if (!$node->get('field_organization')->getValue()) {
         \Drupal::logger('migration')->error('No organization found for node ' . $node->id());
-        break;
       }
 
       $existing_value = $node->get('field_organization')->getValue()[0]['value'];
-      if (array_key_exists($existing_value, $options))
-        break;
+      if (!array_key_exists($existing_value, $options)) {
+        $new_value = array_search($existing_value, $options);
+        if (!$new_value) {
+          \Drupal::logger('migration')->error('Invalid organization "' . $existing_value . '" found for node ' . $node->id());
+        }
 
-      $new_value = array_search($existing_value, $options);
-      if (!$new_value) {
-        \Drupal::logger('migration')->error('Invalid organization "' . $existing_value . '" found for node ' . $node->id());
-        break;
+        $node->set('field_organization', $new_value);
+        if ($node->hasTranslation('fr')) {
+          $node_fr = $node->getTranslation('fr');
+          $node_fr->set('field_organization', $new_value);
+          dump($new_value);
+          $node_fr->save();
+        }
+        $node->save();
       }
-
-      $node->set('field_organization', $new_value);
-      if ($node->hasTranslation('fr')) {
-        $node_fr = $node->getTranslation('fr');
-        $node_fr->set('field_organization', $new_value);
-        $node_fr->save();
-      }
-      $node->save();
     }
   }
 }
@@ -264,7 +263,7 @@ function alter_field_update_8002()
  * Add field_dataset_subject for content type Suggested Dataset
  * add subject for existing suggested dataset nodes
  */
-function alter_field_update_8003()
+function alter_field_update_8006()
 {
   // find allowed values for field_dataset_subject
   $entityManager = \Drupal::service('entity_field.manager');
@@ -308,7 +307,7 @@ function alter_field_update_8003()
  * set default status for any missing status for field_sd_status
  * set default keywords for any missing keywords for field_dataset_keywords
  */
-function alter_field_update_8004()
+function alter_field_update_8007()
 {
   // find default value for fields
   $entityManager = \Drupal::service('entity_field.manager');

@@ -12,17 +12,36 @@ voting_webform.getVoteAverage:
   dependencies:
     - drupal:webform
 
-#voting_webform.getRatingExternalForm:
-#  path: '/rate-external/{uuid}'
-#  defaults:
-#    _controller: '\Drupal\voting_webform\Controller\VotingWebformController::getRatingExternalForm'
-#    _title: 'Render the rating external webform'
-#  requirements:
-#    _permission: 'access content'
-#    uuid: '^[0-9][A-Za-z0-9 -]*$'
-#  options:
-#    parameters:
-#      uuid:
-#        type: string
-#  dependencies:
-#    - drupal:webform
+voting_webform.getVotingExposedForm:
+  path: '/external-vote/{ext_type}/{node}'
+  defaults:
+    _controller: '\Drupal\voting_webform\Controller\VotingWebformController::getVotingExposedForm'
+    _title: 'Render the vote up down webform for external systems'
+  requirements:
+    _permission: 'access content'
+    node: '^[0-9]*$'
+  options:
+    parameters:
+      ext_type:
+        type: string
+      node:
+        type: entity:node
+  dependencies:
+    - drupal:webform
+
+voting_webform.submitVotingExposedForm:
+  path: '/external-vote/{ext_type}/{node}/submit'
+  defaults:
+    _controller: '\Drupal\voting_webform\Controller\VotingWebformController::submitVotingExposedForm'
+    _title: 'Submit the vote up down webform for external systems'
+  requirements:
+    _permission: 'access content'
+    node: '^[0-9]*$'
+  options:
+    parameters:
+      ext_type:
+        type: string
+      node:
+        type: entity:node
+  dependencies:
+    - drupal:webform

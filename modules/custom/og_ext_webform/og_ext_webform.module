@@ -1,8 +1,71 @@
 <?php
 
+use \Drupal\node\Entity\Node;
+
 /**
  * @file
  * Contains od_ext_webform.module.
  */
 
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function og_ext_webform_webform_options_character_set_alter(array &$options, array &$element) {
+  $options = read_options_from_json('character_set');
+}
 
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function og_ext_webform_webform_options_dataset_audience_alter(array &$options, array &$element) {
+  $options = read_options_from_json('audience');
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function og_ext_webform_webform_options_dataset_format_alter(array &$options, array &$element) {
+  $options = read_options_from_json('format');
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function og_ext_webform_webform_options_dataset_language_alter(array &$options, array &$element) {
+  $options = read_options_from_json('language');
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function og_ext_webform_webform_options_dataset_reason_alter(array &$options, array &$element) {
+  $options = read_options_from_json('reason');
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function og_ext_webform_webform_options_dataset_subject_alter(array &$options, array &$element) {
+  $options = read_options_from_json('subject');
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function og_ext_webform_webform_options_maintenance_update_frequency_alter(array &$options, array &$element) {
+  $options = read_options_from_json('frequency');
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function og_ext_webform_webform_options_organization_alter(array &$options, array &$element) {
+  $options = read_options_from_json('organizations');
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter
+ */
+function og_ext_webform_webform_options_resource_type_alter(array &$options, array &$element) {
+  $options = read_options_from_json('resource_type');
+}

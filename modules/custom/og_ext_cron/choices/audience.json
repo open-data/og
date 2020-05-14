@@ -1,0 +1,98 @@
+{
+    "aboriginal_peoples": {
+        "en": "Aboriginal peoples",
+        "fr": "Peuples autochtones"
+    },
+    "business": {
+        "en": "Business",
+        "fr": "Entreprises"
+    },
+    "children": {
+        "en": "Children",
+        "fr": "Enfants"
+    },
+    "educators": {
+        "en": "Educators",
+        "fr": "\u00c9ducateurs"
+    },
+    "employers": {
+        "en": "Employers",
+        "fr": "Employeurs"
+    },
+    "funding_applicants": {
+        "en": "Funding applicants",
+        "fr": "Demandeurs de financement"
+    },
+    "general_public": {
+        "en": "General public",
+        "fr": "Grand public"
+    },
+    "government": {
+        "en": "Government",
+        "fr": "Gouvernement"
+    },
+    "immigrants": {
+        "en": "Immigrants",
+        "fr": "Immigrants"
+    },
+    "job_seekers": {
+        "en": "Job seekers",
+        "fr": "Chercheurs d\u2019emploi"
+    },
+    "media": {
+        "en": "Media",
+        "fr": "M\u00e9dias"
+    },
+    "noncanadians": {
+        "en": "Non-Canadians",
+        "fr": "Non-Canadiens"
+    },
+    "nongovernmental_organizations": {
+        "en": "Non-governmental organizations",
+        "fr": "Organisations non governementales"
+    },
+    "parents": {
+        "en": "Parents",
+        "fr": "Parents"
+    },
+    "persons_with_disabilities": {
+        "en": "Persons with disabilities",
+        "fr": "Personnes handicap\u00e9es"
+    },
+    "rural_community": {
+        "en": "Rural community",
+        "fr": "Communaut\u00e9 rurale"
+    },
+    "seniors": {
+        "en": "Seniors",
+        "fr": "A\u00een\u00e9s"
+    },
+    "scientists": {
+        "en": "Scientists",
+        "fr": "Scientifiques"
+    },
+    "students": {
+        "en": "Students",
+        "fr": "\u00c9tudiants"
+    },
+    "travellers": {
+        "en": "Travellers",
+        "fr": "Voyageurs"
+    },
+    "veterans": {
+        "en": "Veterans",
+        "fr": "Anciens combattants"
+    },
+    "visitors_to_canada": {
+        "en": "Visitors to Canada",
+        "fr": "Visiteurs au Canada"
+    },
+    "women": {
+        "en": "Women",
+        "fr": "Femmes"
+    },
+    "youth": {
+        "en": "Youth",
+        "fr": "Jeunesse"
+    }
+}

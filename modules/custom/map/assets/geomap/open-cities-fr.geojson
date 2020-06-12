@@ -1,6 +1,24 @@
 {
     "type": "FeatureCollection",
     "features": [
+         {
+            "type": "Feature",
+           "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -80.116667,
+                    43.916667,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "Ville de Orangeville",
+                "city": "Orangeville",
+                "province": "ON",
+                "url": "<a href=\"http://data.orangeville.ca/opendata.html\">Data Orangeville</a> (en anglais seulement)"
+            },
+            "id": "ov_1"
+        },
         {
             "type": "Feature",
             "geometry": {

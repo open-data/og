@@ -29,16 +29,16 @@
             "type"    : "package",
             "package" : {
                 "name"    : "wet-boew/wet-boew",
-                "version" : "v4.0.31",
+                "version" : "v4.0.32",
                 "type"    : "drupal-library",
                 "dist"    : {
-                    "url"  : "https://github.com/wet-boew/wet-boew-cdn/archive/v4.0.31.tar.gz",
+                    "url"  : "https://github.com/wet-boew/wet-boew-cdn/archive/v4.0.32.tar.gz",
                     "type" : "tar"
                 },
                 "source"  : {
                     "url"       : "https://github.com/wet-boew/wet-boew-cdn.git",
                     "type"      : "git",
-                    "reference" : "v4.0.31"
+                    "reference" : "v4.0.32"
                 }
             }
         },
@@ -46,16 +46,16 @@
             "type"    : "package",
             "package" : {
                 "name"    : "wet-boew/theme-gcweb",
-                "version" : "v5.1",
+                "version" : "v6.0",
                 "type"    : "drupal-library",
                 "dist"    : {
-                    "url"  : "https://github.com/wet-boew/themes-cdn/archive/v5.1-gcweb.tar.gz",
+                    "url"  : "https://github.com/wet-boew/themes-cdn/archive/v6.0-gcweb.tar.gz",
                     "type" : "tar"
                 },
                 "source"  : {
                     "url"       : "https://github.com/wet-boew/themes-cdn.git",
                     "type"      : "git",
-                    "reference" : "v5.1-gcweb"
+                    "reference" : "v6.0-gcweb"
                 }
             }
         }
@@ -71,7 +71,7 @@
         "drupal/bootstrap_layouts": "5.1.0",
         "drupal/ckeditor_codemirror": "2.2.0",
         "drupal/console": "1.9.4",
-        "drupal/core": "8.8.4",
+        "drupal/core": "8.8.8",
         "drupal/csv_serialization": "1.4.0",
         "drupal/facets": "1.4.0",
         "drupal/fontawesome": "2.15.0",
@@ -82,12 +82,13 @@
         "drupal/metatag": "1.11.0",
         "drupal/pathauto": "1.6.0",
         "drupal/redirect": "1.5.0",
+	"drupal/redis": "1.4",
         "drupal/search_api": "1.15.0",
         "drupal/search_api_solr": "3.9.0",
         "drupal/simple_sitemap": "3.5.0",
         "drupal/token_filter": "1.1.0",
         "drupal/views_bootstrap": "4.1.0",
-        "drupal/webform": "5.11.0",
+        "drupal/webform": "5.13.0",
         "drush/drush": "^9.7",
         "fortawesome/font-awesome": "5.9.0",
         "oomphinc/composer-installers-extender": "^1.1",

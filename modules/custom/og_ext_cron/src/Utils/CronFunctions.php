@@ -26,6 +26,13 @@ class CronFunctions {
       'pd_core_travela',
       'pd_core_travelq',
       'pd_core_wrongdoing',
+      'pd_core_ati_details.yml',
+      'pd_core_contracts_details.yml',
+      'pd_core_hospitalityq_details.yml',
+      'pd_core_reclassification_details.yml',
+      'pd_core_travelq_details.yml',
+      'pd_core_wrongdoing_details.yml',
+      'pd_core_travela_details.yml',
     ];
 
     foreach ($pd_views as $view_name) {

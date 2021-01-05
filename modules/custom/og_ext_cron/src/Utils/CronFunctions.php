@@ -119,15 +119,16 @@ class CronFunctions {
 
       foreach($nodes as $node) {
         // get translation of node
-        if ($node->hasTranslation('fr')) {
-          $node_fr = $node->getTranslation('fr');
+	$node_en = $node->hasTranslation('en') ? $node->getTranslation('en') : $node;
+	$node_fr = $node->hasTranslation('fr') ? $node->getTranslation('fr') : null;
 
+	if ($node_en && $node_fr) {
           // set default values
           $subject = $node->get('field_dataset_subject')->getValue()
             ? $this->implodeAllValues($node->get('field_dataset_subject')->getValue())
             : 'information_and_communications';
-          $keywords_en = $node->get('field_dataset_keywords')->getValue()
-            ? $this->implodeAllValues($node->get('field_dataset_keywords')->getValue())
+          $keywords_en = $node_en->get('field_dataset_keywords')->getValue()
+            ? $this->implodeAllValues($node_en->get('field_dataset_keywords')->getValue())
             : 'dataset';
           $keywords_fr = $node_fr->get('field_dataset_keywords')->getValue()
             ? $this->implodeAllValues($node_fr->get('field_dataset_keywords')->getValue())
@@ -140,10 +141,10 @@ class CronFunctions {
             'uuid' => $node->uuid(),
             'suggestion_id' => $node->id(),
             'date_created' => date('Y-m-d', $node->getCreatedTime()),
-            'title_en' => $node->getTitle(),
+            'title_en' => $node_en->getTitle(),
             'title_fr' => $node_fr->getTitle(),
             'organization' => $node->get('field_organization')->getValue()[0]['value'],
-            'description_en' => strip_tags($node->get('body')->getValue()[0]['value']),
+            'description_en' => strip_tags($node_en->get('body')->getValue()[0]['value']),
             'description_fr' => strip_tags($node_fr->get('body')->getValue()[0]['value']),
             'dataset_suggestion_status' => $status,
             'dataset_suggestion_status_link' => $node->get('field_status_link')->getValue()[0]['value'],
@@ -152,7 +153,7 @@ class CronFunctions {
             'subject' => $subject,
             'keywords_en' => $keywords_en,
             'keywords_fr' => $keywords_fr,
-            'additional_comments_and_feedback_en' =>  $node->get('field_feedback')->getValue()[0]['value'],
+            'additional_comments_and_feedback_en' =>  $node_en->get('field_feedback')->getValue()[0]['value'],
             'additional_comments_and_feedback_fr' =>  $node_fr->get('field_feedback')->getValue()[0]['value'],
           ];
 

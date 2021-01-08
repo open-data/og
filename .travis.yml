@@ -27,6 +27,7 @@ before_install:
   # update composer
   - composer clear-cache
   - composer --verbose self-update --$COMPOSER_CHANNEL
+  - composer self-update --rollback
   - composer --version
 
 install:

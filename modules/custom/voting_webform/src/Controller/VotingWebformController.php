@@ -94,7 +94,7 @@ class VotingWebformController extends ControllerBase {
       if ($ext_type == 'suggest-dataset') {
         // retrieve search domain
         $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-        $search_domain = $request->getScheme() . '://' . \Drupal\Core\Site\Settings::get('search_domain')[$langcode];
+        $search_domain = 'https://' . \Drupal\Core\Site\Settings::get('search_domain')[$langcode];
 
         // render webform
         $vote_webform = [

@@ -20,7 +20,14 @@ function map_preprocess_node(&$variables) {
     // attach polyfill for IE
     $browser = $_SERVER['HTTP_USER_AGENT'];
     if (preg_match("/MSIE/", $browser) || preg_match("/Trident.*rv\:11\./", $browser)) {
-      $variables['#attached']['library'][] = 'map/polyfill.ie';
+      $variables['#attached']['html_head'][] = [
+        [
+          '#type' => 'html_tag',
+          '#tag' => 'script',
+          '#attributes' => [ 'src' => 'https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Object.entries,Object.values,Array.prototype.find,Array.prototype.findIndex,Array.prototype.values,Array.prototype.includes,HTMLCanvasElement.prototype.toBlob,String.prototype.repeat,String.prototype.codePointAt,String.fromCodePoint,NodeList.prototype.@@iterator,Promise,Promise.prototype.finally' ],
+        ],
+        'map_utils',
+      ];
     }
 
     // fetch map keys

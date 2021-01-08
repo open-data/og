@@ -94,7 +94,7 @@ class ExternalCommentController extends CommentController {
     $response->setStatusCode(Response::HTTP_OK);
     $response->headers->set('Content-Type', 'text/html');
     if ($ext_type == 'suggest-dataset') {
-      $search_domain = $request->getScheme() . '://' . \Drupal\Core\Site\Settings::get('search_domain')[$langcode];
+      $search_domain = 'https://' . \Drupal\Core\Site\Settings::get('search_domain')[$langcode];
       $response->headers->set('Access-Control-Allow-Origin', $search_domain);
     }
 

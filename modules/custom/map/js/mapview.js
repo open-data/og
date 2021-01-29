@@ -10,6 +10,14 @@
   Drupal.behaviors.MapViewer = {
     attach: function (context, settings) {
 
+      if (navigator.appName == 'Microsoft Internet Explorer' ||
+          !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) ||
+          (typeof $.browser !== "undefined" && $.browser.msie == 1))
+      {
+        document.getElementById("ie").style.display = "block";
+        document.getElementById("open-data-map").style.display = "none";
+      }
+
       function getQueryVariable(variable)
       {
         var query = window.location.search.substring(1);

@@ -1,8 +1,3 @@
-polyfill.ie:
-  version: VERSION
-  js:
-    /profiles/og/modules/custom/map/js/ie-polyfills.js: { type: external, minified: true, preprocess: false }
-
 fgpv:
   version: VERSION
   css:
@@ -10,6 +5,7 @@ fgpv:
       /profiles/og/modules/custom/map/css/rv-styles.css: { type: external, minified: true }
   js:
     /profiles/og/modules/custom/map/js/rv-main.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
+    /profiles/og/modules/custom/map/js/legacy-api.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
 
 mapview:
   version: VERSION

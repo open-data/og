@@ -12,6 +12,17 @@ function adobe_analytics_page_attachments(array &$page) {
     $current_path = \Drupal::service('path.current')->getPath();
     $host = \Drupal::request()->getHost();
 
+    if (strpos($current_path,'/user/') !== false) {
+      $metaRobots = [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'property' => 'robots',
+          'content' => 'noindex, nofollow, noarchive, nosnippet, noodp, noydir, noimageindex',
+        ],
+      ];
+      $page['#attached']['html_head'][] = [$metaRobots, 'robots'];
+    }
+
     $title = \Drupal::service('title_resolver')->getTitle($request, $route);
     $metaTitle = [
       '#tag' => 'meta',

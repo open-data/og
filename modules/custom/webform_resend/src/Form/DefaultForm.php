@@ -53,7 +53,7 @@ class DefaultForm extends FormBase {
     $form['end_date'] = [
       '#type' => 'date',
       '#title' => $this->t('Enter end date'),
-      '#attributes' => [ 'required' => 'true' ],
+      '#attributes' => [ 'type' => 'date', 'required' => 'true' ],
     ];
 
     if ($form_state->isSubmitted()) {

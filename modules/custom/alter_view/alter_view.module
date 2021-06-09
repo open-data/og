@@ -125,9 +125,9 @@ function alter_view_preprocess_views_view(&$variables) {
   $view = $variables['view'];
   if ($view->id() === 'pd_core_ati_details') {
     if ($view->result &&
-      $view->result[0]->_item->getField('number_of_pages') &&
-      $view->result[0]->_item->getField('number_of_pages')->getValues() &&
-      $view->result[0]->_item->getField('number_of_pages')->getValues()[0] == "0") {
+      $view->result[0]->_item->getField('pages') &&
+      $view->result[0]->_item->getField('pages')->getValues() &&
+      $view->result[0]->_item->getField('pages')->getValues()[0] == "0") {
         unset($variables['footer']['entity_webform'], $variables['footer']['entity_block_content']);
     }
   }

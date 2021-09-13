@@ -19,3 +19,10 @@ comment_spam.set.spam:
     _title: 'Spam'
   requirements:
     _permission: 'comment_spam set spam comments'
+comment_spam.set.not_spam:
+  path: '/comment/{comment}/notspam'
+  defaults:
+    _form: '\Drupal\comment_spam\Form\ConfirmNotSpamForm'
+    _title: 'NotSpam'
+  requirements:
+    _permission: 'comment_spam set spam comments'

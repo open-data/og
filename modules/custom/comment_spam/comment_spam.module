@@ -120,19 +120,34 @@ function comment_spam_preprocess_links__comment(&$variables) {
 
         $comment = Comment::load($commentid);
 
-        if ($comment === NULL || !$comment->hasField('field_spam') || $comment->get('field_spam')->value) {
+        if ($comment === NULL || !$comment->hasField('field_spam')) {
             return;
         }
-        $variables['links']['comment_report'] = [
+
+        if (!$comment->get('field_spam')->value) {
+          $variables['links']['comment_report'] = [
             'link' => [
-                '#type' => 'link',
-                '#title' => t('Spam'),
-                '#options' => ['ajax' => NULL],
-                '#url' => new Url('comment_spam.set.spam', ['comment' => $commentid]),
-                '#ajax' => NULL,
+              '#type' => 'link',
+              '#title' => t('Spam'),
+              '#options' => ['ajax' => NULL],
+              '#url' => new Url('comment_spam.set.spam', ['comment' => $commentid]),
+              '#ajax' => NULL,
             ],
             'text' => t('Mark as Spam'),
-        ];
+          ];
+        } else {
+          $variables['links']['comment_report'] = [
+            'link' => [
+              '#type' => 'link',
+              '#title' => t('NotSpam'),
+              '#options' => ['ajax' => NULL],
+              '#url' => new Url('comment_spam.set.not_spam', ['comment' => $commentid]),
+              '#ajax' => NULL,
+            ],
+            'text' => t('Mark as not Spam'),
+          ];
+        }
+
     }
 }
 

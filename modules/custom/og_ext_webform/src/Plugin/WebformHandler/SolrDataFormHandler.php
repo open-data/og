@@ -40,6 +40,10 @@ class SolrDataFormHandler extends WebformHandlerBase {
               : $row->getField($key)->getValues();
             $webform_submission->setElementData($key, implode(", ", $solr_field_value));
           }
+
+        if (empty($webform_submission->getElementData('ati_email'))) {
+          $webform_submission->setElementData('ati_email', \Drupal\Core\Site\Settings::get('ati_email'));
+          } 
         }
       }
     }

@@ -103,7 +103,7 @@ class VotingWebformController extends ControllerBase {
         ];
 
         $renderHTML = \Drupal::service('renderer')->render($vote_webform);
-        $action = $request->getScheme() . '://' . $request->getHttpHost() . $request->getRequestUri() . '/submit';
+        $action = 'https://' . $request->getHttpHost() . $request->getRequestUri() . '/submit';
         $renderHTML = str_replace('form_action_p_pvdeGsVG5zNF_XLGPTvYSKCf43t8qZYSwcfZl2uzM', $action, $renderHTML);
         $renderHTML = str_replace('glyphicon glyphicon-thumbs-up', '', $renderHTML);
         $renderHTML = str_replace('</button>', '<span class="glyphicon glyphicon-thumbs-up"></span></button>', $renderHTML);

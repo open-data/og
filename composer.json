@@ -92,7 +92,7 @@
         "drupal/webform": "5.25.0",
         "drush/drush": "^9.7",
         "fortawesome/font-awesome": "5.9.0",
-        "oomphinc/composer-installers-extender": "^1.1",
+        "oomphinc/composer-installers-extender": "^2.0.0",
         "opengov/gcweb": "dev-master",
         "symfony/event-dispatcher": "4.3.4 as 3.4.99",
         "vlucas/phpdotenv": "^2.4",

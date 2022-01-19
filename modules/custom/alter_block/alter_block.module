@@ -49,9 +49,9 @@ function alter_block_preprocess_block(&$variables)
         if (isset($variables['content']['field_search_placeholder'][0])) {
           $searchForm['query']['#placeholder'] = $variables['content']['field_search_placeholder'][0]['#context']['value'];
         }
-        $searchForm['#action'] = !empty($variables['content']['field_search_path'][0])
+        $searchForm['url']['#value'] = !empty($variables['content']['field_search_path'][0])
           ? $variables['content']['field_search_path'][0]['#url']->toString()
-          : $searchForm['#action'];
+          : '';
 
         // do not show form for layout builder since the layout builder disables forms and links
         $request_uri = \Drupal::request()->getRequestUri();

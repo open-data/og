@@ -415,4 +415,36 @@ class CronFunctions {
     }
   }
 
+  /**
+   * @method generate_vote_count_json_file()
+   * @return void
+   * Generate vote count JSON file
+   */
+  public function generate_vote_count_json_file()
+  {
+
+    $inventroyIndex = \Drupal\search_api\Entity\Index::load('pd_core_inventory');
+    $indexQuery = $inventroyIndex->query();
+
+    // $localVoteCounts, if successful, will return an associative array
+    // key is the uuid, value is a standard object with parameters:
+    //  - type
+    //  - uuid
+    //  - vote_count
+    $localVoteCounts = \Drupal::database()->select( 'external_voting', 'n' )
+        ->fields( 'n', ['type', 'uuid', 'vote_count'] )
+        ->execute()->fetchAllAssoc( 'uuid' );
+
+    try{
+
+      
+
+    }catch( \Exception $_exception ){
+
+      \Drupal::logger('cron')->error( 'Unable to create vote count json file:' . $_exception->getMessage() );
+
+    }
+
+  }
+
 }

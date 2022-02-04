@@ -477,25 +477,8 @@ class CronFunctions {
 
         }
 
-        if( count( $referenceNumber ) === 0 ){
-
-          $referenceNumber = "";
-
-        }else{
-
-          $referenceNumber = $referenceNumber[0];
-
-        }
-
-        if( count( $organizationNameCode ) === 0 ){
-
-          $organizationNameCode = "";
-
-        }else{
-
-          $organizationNameCode = $organizationNameCode[0];
-
-        }
+        $referenceNumber = count( $referenceNumber ) === 0 ? "" : $referenceNumber[0];
+        $organizationNameCode = count( $organizationNameCode ) === 0 ? "" : $organizationNameCode[0];
 
         // the inventory has a vote count in the drupal database
         if( array_key_exists( $id, $localVoteCounts ) ){
@@ -527,8 +510,10 @@ class CronFunctions {
         ( $json = json_encode($output) ) !== false
       ){
 
-        $filePath = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/inventory_vote_count.json';
+        $filePath = \Drupal\Core\Site\Settings::get('file_private_path') . '/inventory_vote_count.json';
         file_put_contents( $filePath, $json );
+
+        \Drupal::logger('cron')->notice('Inventory Vote Count JSON Generated: saved to ' . $filePath );
 
       }
 

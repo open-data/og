@@ -440,14 +440,14 @@ class CronFunctions {
         ->execute()
         ->getResultItems();
 
-      // $localVoteCounts, if successful, will return an associative array
+      // localVoteCounts, if successful, will return an associative array
       // key is the uuid, value is a standard object with properties:
       //  - type
       //  - uuid
       //  - vote_count
       $localVoteCounts = \Drupal::database()->select( 'external_voting', 'n' )
-      ->fields( 'n', ['type', 'uuid', 'vote_count'] )
-      ->execute()->fetchAllAssoc( 'uuid' );
+        ->fields( 'n', ['type', 'uuid', 'vote_count'] )
+        ->execute()->fetchAllAssoc( 'uuid' );
 
       foreach( $inventroyIndexItems as $_index => $_inventroyIndexItem ){
 
@@ -458,9 +458,7 @@ class CronFunctions {
 
         if( 
           is_null( $referenceNumber ) ||
-          is_null( $organizationNameCode ) ||
-          ! isset( $localVoteCounts[$id]->vote_count ) ||
-          ! is_numeric( $localVoteCounts[$id]->vote_count )
+          is_null( $organizationNameCode )
         ){
 
           continue;
@@ -502,7 +500,18 @@ class CronFunctions {
         // the inventory has a vote count in the drupal database
         if( array_key_exists( $id, $localVoteCounts ) ){
 
-          $output["$organizationNameCode"]["$referenceNumber"] = intval($localVoteCounts[$id]->vote_count);
+          if(
+            ! isset( $localVoteCounts[$id]->vote_count ) ||
+            ! is_numeric( $localVoteCounts[$id]->vote_count )
+          ){
+
+            $output["$organizationNameCode"]["$referenceNumber"] = 0;
+
+          }else{
+
+            $output["$organizationNameCode"]["$referenceNumber"] = intval($localVoteCounts[$id]->vote_count);
+
+          }
 
         // there is no vote count in the drupal database, set to zero
         }else{

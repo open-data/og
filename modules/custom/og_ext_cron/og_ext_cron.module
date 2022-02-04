@@ -44,4 +44,7 @@ function og_ext_cron_cron() {
 
   // export suggested datasets
   $cron_tasks->export_suggested_datasets();
+
+  // generate inventory vote count json file
+  $cron_tasks->generate_vote_count_json_file();
 }

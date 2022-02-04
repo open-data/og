@@ -415,4 +415,129 @@ class CronFunctions {
     }
   }
 
+  /**
+   * @method generate_vote_count_json_file()
+   * @return void
+   * Generate vote count JSON file
+   */
+  public function generate_vote_count_json_file()
+  {
+
+    try{
+
+      $output = [];
+
+      $inventroyIndexCount = \Drupal\search_api\Entity\Index::load('pd_core_inventory')
+        ->query()
+        ->execute()
+        ->getResultCount();
+
+      // inventroyIndexItems, if successful, will return an associative array
+      // key is generate from the search_api query class, value is a \Drupal\search_api\Item\ItemInterface object
+      $inventroyIndexItems = \Drupal\search_api\Entity\Index::load('pd_core_inventory')
+        ->query()
+        ->range(0,$inventroyIndexCount)
+        ->execute()
+        ->getResultItems();
+
+      // localVoteCounts, if successful, will return an associative array
+      // key is the uuid, value is a standard object with properties:
+      //  - type
+      //  - uuid
+      //  - vote_count
+      $localVoteCounts = \Drupal::database()->select( 'external_voting', 'n' )
+        ->fields( 'n', ['type', 'uuid', 'vote_count'] )
+        ->execute()->fetchAllAssoc( 'uuid' );
+
+      foreach( $inventroyIndexItems as $_index => $_inventroyIndexItem ){
+
+        $id = $_inventroyIndexItem->getField('id')->getValues()[0];
+
+        $referenceNumber = $_inventroyIndexItem->getField('ref_number');
+        $organizationNameCode = $_inventroyIndexItem->getField('org_name_code');
+
+        if( 
+          is_null( $referenceNumber ) ||
+          is_null( $organizationNameCode )
+        ){
+
+          continue;
+
+        }
+
+        $referenceNumber = $referenceNumber->getValues();
+        $organizationNameCode = $organizationNameCode->getValues();
+
+        if( 
+          ! is_array( $referenceNumber ) ||
+          ! is_array( $organizationNameCode )          
+        ){
+
+          continue;
+
+        }
+
+        if( count( $referenceNumber ) === 0 ){
+
+          $referenceNumber = "";
+
+        }else{
+
+          $referenceNumber = $referenceNumber[0];
+
+        }
+
+        if( count( $organizationNameCode ) === 0 ){
+
+          $organizationNameCode = "";
+
+        }else{
+
+          $organizationNameCode = $organizationNameCode[0];
+
+        }
+
+        // the inventory has a vote count in the drupal database
+        if( array_key_exists( $id, $localVoteCounts ) ){
+
+          if(
+            ! isset( $localVoteCounts[$id]->vote_count ) ||
+            ! is_numeric( $localVoteCounts[$id]->vote_count )
+          ){
+
+            $output["$organizationNameCode"]["$referenceNumber"] = 0;
+
+          }else{
+
+            $output["$organizationNameCode"]["$referenceNumber"] = intval($localVoteCounts[$id]->vote_count);
+
+          }
+
+        // there is no vote count in the drupal database, set to zero
+        }else{
+
+          $output["$organizationNameCode"]["$referenceNumber"] = 0;
+
+        }
+
+      }
+
+      if( 
+        count( $output ) > 0 &&
+        ( $json = json_encode($output) ) !== false
+      ){
+
+        $filePath = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/inventory_vote_count.json';
+        file_put_contents( $filePath, $json );
+
+      }
+
+    }catch( \Exception $_exception ){
+
+      \Drupal::logger('cron')->error( 'Unable to create vote count json file:' . $_exception->getMessage() );
+
+    }
+
+  }
+
 }

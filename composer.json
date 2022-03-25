@@ -61,7 +61,7 @@
         "drupal/google_analytics": "3.1.0",
         "drupal/honeypot": "2.0.2",
         "drupal/menu_breadcrumb": "1.16.0",
-        "drupal/metatag": "1.19.0",
+        "drupal/metatag": "1.16.0",
         "drupal/password_policy": "3.1.0",
         "drupal/pathauto": "1.9.0",
         "drupal/redirect": "1.7.0",

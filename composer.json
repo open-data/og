@@ -77,7 +77,6 @@
         "oomphinc/composer-installers-extender": "^2.0.0",
         "opengov/gcweb": "dev-master",
         "symfony/event-dispatcher": "4.3.4 as 3.4.99",
-        "vlucas/phpdotenv": "^5.4.1",
         "webmozart/path-util": "^2.3",
         "wikimedia/composer-merge-plugin": "2.0.1",
         "zaporylie/composer-drupal-optimizations": "^1.2.0"

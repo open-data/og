@@ -87,7 +87,7 @@
     },
     "conflict": {
         "drupal/drupal": "*",
-        "symfony/http-foundation": "3.4.35"
+        "symfony/http-foundation": "~3.4.35"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

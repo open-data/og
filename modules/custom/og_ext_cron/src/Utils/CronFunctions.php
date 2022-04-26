@@ -68,7 +68,7 @@ class CronFunctions {
         $node = $comment->getCommentedEntity();
 
         // Loop over and get fields for published comments
-        if ($comment->getStatus() == 1 && $node->isPublished()) {
+        if ($comment->isPublished() && $node->isPublished()) {
           $url_en = ($node->hasTranslation('en') ? 'https://open.canada.ca' . $node->getTranslation('en')->url() : '');
           $url_fr = ($node->hasTranslation('fr') ? 'https://ouvert.canada.ca' . $node->getTranslation('fr')->url() : '');
           $comments_data[] = [
@@ -390,7 +390,7 @@ class CronFunctions {
     try {
       // create output csv
       $path = $public
-        ? \Drupal::service('file_system')->realpath(file_default_scheme() . "://")
+        ? \Drupal::service('file_system')->realpath(\Drupal::config('system.file')->get('default_scheme') . "://")
         : \Drupal\Core\Site\Settings::get('file_private_path');
       $output = fopen($path . '/' . $filename, 'w');
       if (!$output) {

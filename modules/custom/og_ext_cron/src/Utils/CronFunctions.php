@@ -390,7 +390,7 @@ class CronFunctions {
     try {
       // create output csv
       $path = $public
-        ? \Drupal::service('file_system')->realpath(file_default_scheme() . "://")
+        ? \Drupal::service('file_system')->realpath(\Drupal::config('system.file')->get('default_scheme') . "://")
         : \Drupal\Core\Site\Settings::get('file_private_path');
       $output = fopen($path . '/' . $filename, 'w');
       if (!$output) {

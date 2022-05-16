@@ -44,7 +44,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=8",
         "ext-json": "*",
         "composer/installers": "^1.2",
         "cweagans/composer-patches": "^1.6.5",

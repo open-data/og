@@ -47,7 +47,7 @@ class SpamComments extends LocalTaskDefault implements ContainerFactoryPluginInt
             $configuration,
             $plugin_id,
             $plugin_definition,
-            $container->get('entity_type.manager')->getStorage('comment')
+            $container->get('entity_type.manager')::getStorage('comment')
         );
     }
 

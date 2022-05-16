@@ -318,7 +318,7 @@ class ExternalCommentController extends CommentController {
             ->loadMultiple($comment_ids);
           foreach($comments as $comment) {
             // Loop over and get fields for published comments
-            if ($comment->isPublished()) {
+            if ($comment::isPublished()) {
               $comments_json['comments'][] = [
                 'comment_id' => $comment->id(),
                 'parent_id' => $comment->getParentComment() ? $comment->getParentComment()->id() : null,

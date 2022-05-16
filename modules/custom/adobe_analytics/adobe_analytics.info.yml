@@ -2,5 +2,4 @@ name: Adobe Analytics
 type: module
 description: Adding Adobe Analytics metadata and javascript libraries
 package: Open Government
-core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9

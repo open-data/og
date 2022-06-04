@@ -68,9 +68,9 @@ class CronFunctions {
         $node = $comment->getCommentedEntity();
 
         // Loop over and get fields for published comments
-        if ($comment::isPublished() && $node::isPublished()) {
-          $url_en = ($node->hasTranslation('en') ? 'https://open.canada.ca' . $node->getTranslation('en')->url() : '');
-          $url_fr = ($node->hasTranslation('fr') ? 'https://ouvert.canada.ca' . $node->getTranslation('fr')->url() : '');
+        if ($comment->isPublished() && $node->isPublished()) {
+          $url_en = ($node->hasTranslation('en') ? 'https://open.canada.ca' . $node->getTranslation('en')->toUrl()->toString() : '');
+          $url_fr = ($node->hasTranslation('fr') ? 'https://ouvert.canada.ca' . $node->getTranslation('fr')->toUrl()->toString() : '');
           $comments_data[] = [
             'comment_id' => $comment->id(),
             'page_en' => $url_en,

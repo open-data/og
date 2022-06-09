@@ -134,7 +134,7 @@ class CronFunctions {
             ? $this->implodeAllValues($node_fr->get('field_dataset_keywords')->getValue())
             : 'Jeu de données';
           $status = $node->get('field_sd_status')->getValue()
-            ? $node->get('field_sd_status')->getValue()[0]['value']
+            ? $node->get('field_sd_status')->getString()
             : 'department_contacted';
 
           $data = [
@@ -143,22 +143,22 @@ class CronFunctions {
             'date_created' => date('Y-m-d', $node->getCreatedTime()),
             'title_en' => $node_en->getTitle(),
             'title_fr' => $node_fr->getTitle(),
-            'organization' => $node->get('field_organization')->getValue()[0]['value'],
-            'description_en' => strip_tags($node_en->get('body')->getValue()[0]['value']),
-            'description_fr' => strip_tags($node_fr->get('body')->getValue()[0]['value']),
+            'organization' => $node->get('field_organization')->getString(),
+            'description_en' => strip_tags($node_en->get('body')->getString()),
+            'description_fr' => strip_tags($node_fr->get('body')->getString()),
             'dataset_suggestion_status' => $status,
-            'dataset_suggestion_status_link' => $node->get('field_status_link')->getValue()[0]['value'],
-            'dataset_released_date' => $node->get('field_date_published')->getValue()[0]['value'],
-            'votes' => $node->get('field_vote_up_down')->getValue()[0]['value'],
+            'dataset_suggestion_status_link' => $node->get('field_status_link')->getString(),
+            'dataset_released_date' => $node->get('field_date_published')->getString(),
+            'votes' => $node->get('field_vote_up_down')->getString(),
             'subject' => $subject,
             'keywords_en' => $keywords_en,
             'keywords_fr' => $keywords_fr,
-            'additional_comments_and_feedback_en' =>  $node_en->get('field_feedback')->getValue()[0]['value'],
-            'additional_comments_and_feedback_fr' =>  $node_fr->get('field_feedback')->getValue()[0]['value'],
+            'additional_comments_and_feedback_en' =>  $node_en->get('field_feedback')->getString(),
+            'additional_comments_and_feedback_fr' =>  $node_fr->get('field_feedback')->getString(),
           ];
 
           // get webform submission for suggested datasets
-          if ($wid = $node->get('field_webform_submission_id')->getValue()[0]['value']) {
+          if ($wid = $node->get('field_webform_submission_id')->getString()) {
             if ($webform_submission = WebformSubmission::load($wid)) {
               $webform_data = [
                 'webform_submission_id' => $wid,
@@ -231,8 +231,13 @@ class CronFunctions {
 
       while (!gzeof($handle)) {
         $line = gzgets($handle);
-        $data = json_decode($line, TRUE);
-        $datasets[$data['id']] = ['en' => $data['title_translated']['en'], 'fr' => $data['title_translated']['fr']];
+	$data = json_decode($line, TRUE);
+	$datasets[$data['id']] = [
+		'en' => $data['title_translated']['en'], 
+		'fr' => array_key_exists("fr", $data['title_translated']) 
+			  ? $data['title_translated']['fr'] 
+			  : $data['title_translated']['fr-t-en']
+	];
       }
       gzclose($handle);
 

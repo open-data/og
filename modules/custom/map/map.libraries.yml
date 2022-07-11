@@ -1,19 +1,16 @@
 fgpv:
-  remote: https://github.com/fgpv-vpgf/fgpv-vpgf
   version: 3.3.5
-  license:
-    name: MIT
-    url: https://github.com/fgpv-vpgf/fgpv-vpgf/blob/master/LICENSE
-    gpl-compatible: true
   css:
     base:
-      https://viewer-visualiseur.services.geo.ca/apps/RAMP/contributed-plugins/range-slider/range-slider.css: { type: external, minified: false, preprocess: false }
-      https://viewer-visualiseur.services.geo.ca/apps/RAMP/contributed-plugins/chart/chart.css: { type: external, minified: false, preprocess: false }
-      https://viewer-visualiseur.services.geo.ca/apps/RAMP/fgpv/fgpv-3.3.5/rv-styles.css: { type: external, minified: false, preprocess: false }
-  header: true
+      /profiles/og/modules/custom/map/css/rv-styles.css: { type: external, minified: true, preprocess: false }
+      /profiles/og/modules/custom/map/css/chart.css: { type: external, minified: true, preprocess: false }
+      /profiles/og/modules/custom/map/css/rv-styles.css: { type: external, minified: true, preprocess: false }
   js:
-    https://viewer-visualiseur.services.geo.ca/apps/RAMP/contributed-plugins/range-slider/range-slider.js: { type: external, minified: true, preprocess: false, attributes: { async: true }}
-    https://viewer-visualiseur.services.geo.ca/apps/RAMP/contributed-plugins/chart/chart.js: { type: external, minified: true, preprocess: false, attributes: { async: true }}
+    /profiles/og/modules/custom/map/js/polyfill.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
+    /profiles/og/modules/custom/map/js/legacy-api.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
+    /profiles/og/modules/custom/map/js/rv-main.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
+    /profiles/og/modules/custom/map/js/range-slider.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
+    /profiles/og/modules/custom/map/js/chart.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
 
 mapview:
   version: VERSION
@@ -21,13 +18,8 @@ mapview:
     base:
       /profiles/og/modules/custom/map/css/map.css: {}
   js:
-    https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Object.entries,Object.values,Array.prototype.find,Array.prototype.findIndex,Array.prototype.values,Array.prototype.includes,HTMLCanvasElement.prototype.toBlob,String.prototype.repeat,String.prototype.codePointAt,String.fromCodePoint,NodeList.prototype.@@iterator,Promise,Promise.prototype.finally: { type: external, preprocess: false, minified: true }
-    https://viewer-visualiseur.services.geo.ca/apps/RAMP/fgpv/fgpv-3.3.5/legacy-api.js: { type: external, preprocess: false, minified: true }
-    https://viewer-visualiseur.services.geo.ca/apps/RAMP/fgpv/fgpv-3.3.5/rv-main.js: { type: external, preprocess: false, minified: true }
     /profiles/og/modules/custom/map/js/mapview.js: { preprocess: false, attributes: { defer: true } }
   dependencies:
-    - core/jquery
-    - core/jquery.once
     - core/drupalSettings
 
 geomap:

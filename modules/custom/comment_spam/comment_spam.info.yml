@@ -6,4 +6,4 @@ dependencies:
   -drupal:views
   -drupal:comment
 type: module
-core_version_requirement: ^9
+core_version_requirement: ^8 || ^9

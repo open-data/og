@@ -1,11 +1,16 @@
 fgpv:
-  version: VERSION
+  version: 3.3.5
   css:
     base:
-      /profiles/og/modules/custom/map/css/rv-styles.css: { type: external, minified: true }
+      /profiles/og/modules/custom/map/css/rv-styles.css: { type: external, minified: true, preprocess: false }
+      /profiles/og/modules/custom/map/css/chart.css: { type: external, minified: true, preprocess: false }
+      /profiles/og/modules/custom/map/css/rv-styles.css: { type: external, minified: true, preprocess: false }
   js:
-    /profiles/og/modules/custom/map/js/rv-main.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
+    /profiles/og/modules/custom/map/js/polyfill.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
     /profiles/og/modules/custom/map/js/legacy-api.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
+    /profiles/og/modules/custom/map/js/rv-main.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
+    /profiles/og/modules/custom/map/js/range-slider.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
+    /profiles/og/modules/custom/map/js/chart.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
 
 mapview:
   version: VERSION
@@ -15,8 +20,6 @@ mapview:
   js:
     /profiles/og/modules/custom/map/js/mapview.js: { preprocess: false, attributes: { defer: true } }
   dependencies:
-    - core/jquery
-    - core/jquery.once
     - core/drupalSettings
 
 geomap:

@@ -11,12 +11,22 @@
       ]
     },
     "sideMenu": {
-      "logo": false
-	},
-    "help": {
-      "folderName": "default"
+      "logo": true,
+      "items": [
+        [
+          "layers",
+          "basemap"
+        ],
+        [
+          "fullscreen",
+          "export",
+          "share",
+          "touch",
+          "help"
+        ]
+      ]
     },
-    "about": {
+    "help": {
       "folderName": "default"
     },
     "legendIsOpen": {
@@ -25,7 +35,7 @@
       "small": false
     }
   },
-  "version": "2.0",
+  "version": "3.3.1",
   "language": "en",
   "services": {
     "proxyUrl": "https://maps.canada.ca/wmsproxy/ws/wmsproxy/executeFromProxy",
@@ -49,6 +59,14 @@
         "provinces": "https://geogratis.gc.ca/services/geoname/en/codes/province.json",
         "types": "https://geogratis.gc.ca/services/geoname/en/codes/concise.json"
       }
+    }
+  },
+  "plugins": {
+    "chart": {
+      "enable": false
+    },
+    "rangeSlider": {
+      "enable": false
     }
   },
   "map": {
@@ -512,3 +530,4 @@
     ]
   }
 }
+

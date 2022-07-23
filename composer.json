@@ -78,7 +78,7 @@
         "opengov/gcweb": "dev-master",
         "symfony/event-dispatcher": "^4.4",
         "webmozart/path-util": "^2.3",
-        "wikimedia/composer-merge-plugin": "^2.0.0",
+        "wikimedia/composer-merge-plugin": "^2.0.0"
     },
     "require-dev": {
         "drupal/core-dev": "^9"

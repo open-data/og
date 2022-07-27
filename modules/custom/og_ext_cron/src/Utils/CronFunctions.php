@@ -19,20 +19,14 @@ class CronFunctions {
   public function clear_view_caches() {
     $pd_views = [
       'pd_core_ati',
-      'pd_core_contracts',
       'pd_core_inventory',
       'pd_core_hospitalityq',
       'pd_core_reclassification',
-      'pd_core_travela',
-      'pd_core_travelq',
       'pd_core_wrongdoing',
       'pd_core_ati_details',
-      'pd_core_contracts_details',
       'pd_core_hospitalityq_details',
       'pd_core_reclassification_details',
-      'pd_core_travelq_details',
       'pd_core_wrongdoing_details',
-      'pd_core_travela_details',
       'pd_core_inventory_details',
     ];
 

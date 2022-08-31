@@ -23,6 +23,7 @@ div.svg div.rateit-range {
 }
 
 div.svg div.rateit-hover {
+  cursor: pointer;
   background: url(https://open.canada.ca/profiles/og/modules/custom/voting_webform/images/rating/mapleleaf-hover.svg) !important;
 }
 

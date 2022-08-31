@@ -9,17 +9,17 @@
 
 /* rating */
 div.svg div.rateit-range {
-  background: url(../images/rating/mapleleaf-normal.svg) !important;
+  background: url(https://open.canada.ca/profiles/og/modules/custom/voting_webform/images/rating/mapleleaf-normal.svg) !important;
 }
 
 div.svg div.rateit-hover {
-  background: url(../images/rating/mapleleaf-hover.svg) !important;
+  background: url(https://open.canada.ca/profiles/og/modules/custom/voting_webform/images/rating/mapleleaf-hover.svg) !important;
 }
 
 div.svg div.rateit-selected {
-  background: url(../images/rating/mapleleaf-selected.svg) !important;
+  background: url(https://open.canada.ca/profiles/og/modules/custom/voting_webform/images/rating/mapleleaf-selected.svg) !important;
 }
 
 div.svg div.rateit-preset {
-  background: url(../images/rating/mapleleaf-preset.svg) !important;
+  background: url(https://open.canada.ca/profiles/og/modules/custom/voting_webform/images/rating/mapleleaf-preset.svg) !important;
 }

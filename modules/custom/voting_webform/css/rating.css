@@ -7,6 +7,16 @@
   padding: 1em;
 }
 
+@media all and (min-width: 500px){
+  div.rateit.svg{
+    transform: translateY(6px);
+  }
+}
+
+label[for="edit-rating"]{
+  margin-top: 0 !important;
+}
+
 /* rating */
 div.svg div.rateit-range {
   background: url(https://open.canada.ca/profiles/og/modules/custom/voting_webform/images/rating/mapleleaf-normal.svg) !important;

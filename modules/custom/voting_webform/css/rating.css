@@ -7,19 +7,49 @@
   padding: 1em;
 }
 
+@media all and (min-width: 500px){
+  div.rateit.svg{
+    transform: translateY(6px);
+  }
+}
+
+label[for="edit-rating"]{
+  margin-top: 0 !important;
+}
+
+@keyframes og-fade-in{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+.og-fade-in{
+  animation-name: og-fade-in;
+  animation-delay: 0.125s;
+  animation-duration: 0.625s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in-out;
+}
+
 /* rating */
 div.svg div.rateit-range {
-  background: url(../images/rating/mapleleaf-normal.svg) !important;
+  background: url(https://open.canada.ca/profiles/og/modules/custom/voting_webform/images/rating/mapleleaf-normal.svg) !important;
 }
 
 div.svg div.rateit-hover {
-  background: url(../images/rating/mapleleaf-hover.svg) !important;
+  cursor: pointer;
+  background: url(https://open.canada.ca/profiles/og/modules/custom/voting_webform/images/rating/mapleleaf-hover.svg) !important;
 }
 
 div.svg div.rateit-selected {
-  background: url(../images/rating/mapleleaf-selected.svg) !important;
+  background: url(https://open.canada.ca/profiles/og/modules/custom/voting_webform/images/rating/mapleleaf-selected.svg) !important;
 }
 
 div.svg div.rateit-preset {
-  background: url(../images/rating/mapleleaf-preset.svg) !important;
+  background: url(https://open.canada.ca/profiles/og/modules/custom/voting_webform/images/rating/mapleleaf-preset.svg) !important;
 }

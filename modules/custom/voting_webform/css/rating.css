@@ -17,6 +17,25 @@ label[for="edit-rating"]{
   margin-top: 0 !important;
 }
 
+@keyframes og-fade-in{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+.og-fade-in{
+  animation-name: og-fade-in;
+  animation-delay: 0.125s;
+  animation-duration: 0.625s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in-out;
+}
+
 /* rating */
 div.svg div.rateit-range {
   background: url(https://open.canada.ca/profiles/og/modules/custom/voting_webform/images/rating/mapleleaf-normal.svg) !important;

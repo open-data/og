@@ -538,10 +538,6 @@ class CronFunctions {
       $return = str_replace( 'solr_document/', '', $return );
       return $return;
 
-    }else{
-
-      $return = $_itemInterface->getField($_field);
-
     }
 
     $return = $_itemInterface->getField($_field);
@@ -554,7 +550,7 @@ class CronFunctions {
 
     $return = $return->getValues();
 
-    if( ! is_array($return) ){
+    if( ! is_array($return) || count($return) == 0 ){
 
       return null;
 

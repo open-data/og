@@ -613,15 +613,18 @@ class CronFunctions {
         ->getResultItems();
 
       $parsedAtiIndexItems = [];
-      foreach( $atiIndexItems as $_index => $_atiIndexItem ){
+      foreach( $atiIndexItems as $_uuid => $_atiIndexItem ){
+        /**
+         * @var \Drupal\search_api\Item\ItemInterface $_atiIndexItem
+         */
 
-        $id = $this->get_item_interface_field_value($_atiIndexItem, 'id');
-        $requestNumber = $this->get_item_interface_field_value($_atiIndexItem, 'request_number');
-        $summaryEn = $this->get_item_interface_field_value($_atiIndexItem, 'summary_en');
-        $summaryFr = $this->get_item_interface_field_value($_atiIndexItem, 'summary_fr');
-        $ownerOrgCode = $this->get_item_interface_field_value($_atiIndexItem, 'org_name_code');
-        $ownerOrgNameEn = $this->get_item_interface_field_value($_atiIndexItem, 'org_name_en');
-        $ownerOrgNameFr = $this->get_item_interface_field_value($_atiIndexItem, 'org_name_fr');
+        $id = $this->get_item_interface_field_value( $_atiIndexItem, 'id' );
+        $requestNumber = $this->get_item_interface_field_value( $_atiIndexItem, 'request_number' );
+        $summaryEn = $this->get_item_interface_field_value( $_atiIndexItem, 'summary_en' );
+        $summaryFr = $this->get_item_interface_field_value( $_atiIndexItem, 'summary_fr' );
+        $ownerOrgCode = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_code' );
+        $ownerOrgNameEn = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_en' );
+        $ownerOrgNameFr = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_fr' );
 
         if(
           is_null($id) ||
@@ -633,7 +636,6 @@ class CronFunctions {
           is_null($ownerOrgNameFr)
         ){
 
-          #TODO: solve issues with the above fields coming back as null all the time...
           continue;
 
         }
@@ -648,8 +650,6 @@ class CronFunctions {
         ];
 
       }
-
-      \Drupal::logger('cron')->notice(gettype($parsedAtiIndexItems['a078e60aa2038a5c3986486c8e2cf9d1']));
 
       $rows = [];
       $missingIndexItemsCounter = 0;
@@ -667,13 +667,13 @@ class CronFunctions {
             $rows[] = [
               'year'              => $_year,
               'month'             => $_month,
-              'id'                => $id,
-              'request_number'    => $parsedAtiIndexItems[$requestNumber]['request_number'],
-              'summary_en'        => $parsedAtiIndexItems[$requestNumber]['summary_en'],
-              'summary_fr'        => $parsedAtiIndexItems[$requestNumber]['summary_fr'],
-              'owner_org_code'    => $parsedAtiIndexItems[$requestNumber]['owner_org_code'],
-              'owner_org_name_en' => $parsedAtiIndexItems[$requestNumber]['owner_org_name_en'],
-              'owner_org_name_fr' => $parsedAtiIndexItems[$requestNumber]['owner_org_name_fr'],
+              'id'                => $_id,
+              'request_number'    => $parsedAtiIndexItems[$_id]['request_number'],
+              'summary_en'        => $parsedAtiIndexItems[$_id]['summary_en'],
+              'summary_fr'        => $parsedAtiIndexItems[$_id]['summary_fr'],
+              'owner_org_code'    => $parsedAtiIndexItems[$_id]['owner_org_code'],
+              'owner_org_name_en' => $parsedAtiIndexItems[$_id]['owner_org_name_en'],
+              'owner_org_name_fr' => $parsedAtiIndexItems[$_id]['owner_org_name_fr'],
               'request_count'     => $_count,
             ];
 
@@ -686,8 +686,6 @@ class CronFunctions {
       if( $missingIndexItemsCounter > 0 ){
         \Drupal::logger('cron')->notice("$missingIndexItemsCounter requests not matched. ATI Summaries not found in the core_ati index...");
       }
-      \Drupal::logger('cron')->notice(count($localAtiRequestCounts));
-      \Drupal::logger('cron')->notice(count($rows));
 
       $this->write_to_csv(
         'ati-informal-requests-analytics.csv',

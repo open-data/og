@@ -551,7 +551,7 @@ class CronFunctions {
 
     $return = $return->getValues();
 
-    if( ! is_array($return) ){
+    if( ! is_array($return) || count($return) == 0 ){
 
       return null;
 

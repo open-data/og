@@ -212,7 +212,7 @@ class CronFunctions {
                         ORDER BY vote_average DESC, vote_count DESC", [':type' => 'dataset',]);
 
       if (!$result) {
-        throw new Exception('Failed to return results from database.');
+        throw new \Exception('Failed to return results from database.');
       }
 
       // fetch dataset titles from ckan
@@ -220,7 +220,7 @@ class CronFunctions {
       $filename = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/od-do-canada.jl.gz';
       $handle = gzopen($filename, 'r');
       if (!$handle) {
-        throw new Exception('Failed to open Portal Catalogue dataset.');
+        throw new \Exception('Failed to open Portal Catalogue dataset.');
       }
 
       while (!gzeof($handle)) {
@@ -236,7 +236,7 @@ class CronFunctions {
       gzclose($handle);
 
       if (!sizeof($datasets)) {
-        throw new Exception('Failed to read content from Portal Catalogue dataset.');
+        throw new \Exception('Failed to read content from Portal Catalogue dataset.');
       }
 
       // generate output data stream
@@ -265,7 +265,7 @@ class CronFunctions {
       \Drupal::logger('cron')->notice('Dataset ratings exported');
     }
 
-    catch (Exception $e) {
+    catch (\Exception $e) {
       \Drupal::logger('cron')->error('Unable to export dataset ratings ' . $e->getMessage());
     }
   }
@@ -350,7 +350,7 @@ class CronFunctions {
             \Drupal::logger('cron')->error('Unable to fetch ' . $field_name . ' from CKAN');
         }
       }
-      catch (Exception $e) {
+      catch (\Exception $e) {
         \Drupal::logger('cron')->error('Unable to fetch from api for ' . $url
           . ' Exception: ' . $e->getMessage());
       }
@@ -393,7 +393,7 @@ class CronFunctions {
         : \Drupal\Core\Site\Settings::get('file_private_path');
       $output = fopen($path . '/' . $filename, 'w');
       if (!$output) {
-        throw new Exception('Failed to create export file.');
+        throw new \Exception('Failed to create export file.');
       }
 
       // add BOM to fix UTF-8 in Excel
@@ -409,7 +409,7 @@ class CronFunctions {
       fclose($output);
     }
 
-    catch (Exception $e) {
+    catch (\Exception $e) {
       \Drupal::logger('cron')->error('Unable to create ' . $filename . ' ' . $e->getMessage());
     }
   }

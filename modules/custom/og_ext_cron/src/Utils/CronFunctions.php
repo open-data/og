@@ -700,7 +700,16 @@ class CronFunctions {
         ],
         true
       );
-
+      
+      $filePath = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/ati-informal-requests-analytics.csv';
+      $ckanFilePath = '/opt/tbs/ckan/smb/portal/public/ati-informal-requests-analytics.csv';
+      
+      $success = copy($filePath, $ckanFilePath);
+      
+      if( ! $success ){
+      	\Drupal::logger('cron')->notice("Failed to copy $filePath to $ckanFilePath"); 
+      }
+      
       // log results
       \Drupal::logger('cron')->notice('ATI informal requests csv file completed');
 

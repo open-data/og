@@ -390,7 +390,7 @@ class CronFunctions {
     try {
       // create output csv
       $path = $public
-        ? \Drupal::service('file_system')->realpath(file_default_scheme() . "://")
+        ? \Drupal::service('file_system')->realpath(\file_default_scheme() . "://")
         : \Drupal\Core\Site\Settings::get('file_private_path');
       $output = fopen($path . '/' . $filename, 'w');
       if (!$output) {
@@ -701,7 +701,7 @@ class CronFunctions {
         true
       );
       
-      $filePath = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/ati-informal-requests-analytics.csv';
+      $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/ati-informal-requests-analytics.csv';
       $ckanFilePath = '/opt/tbs/ckan/smb/portal/public/ati-informal-requests-analytics.csv';
       
       $success = copy($filePath, $ckanFilePath);

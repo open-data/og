@@ -704,7 +704,7 @@ class CronFunctions {
       $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/ati-informal-requests-analytics.csv';
       $ckanFilePath = '/opt/tbs/ckan/smb/portal/public/ati-informal-requests-analytics.csv';
       
-      $success = chmod($filePath, 664);
+      $success = chmod($filePath, 0664);
       
       if( ! $success ){
       	\Drupal::logger('cron')->notice("Failed to set permissions for $filePath"); 
@@ -716,7 +716,7 @@ class CronFunctions {
       	\Drupal::logger('cron')->notice("Failed to copy $filePath to $ckanFilePath"); 
       }
       
-      $success = chmod($ckanFilePath, 664);
+      $success = chmod($ckanFilePath, 0664);
       
       if( ! $success ){
       	\Drupal::logger('cron')->notice("Failed to set permissions for $ckanFilePath"); 

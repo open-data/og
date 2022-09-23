@@ -702,7 +702,7 @@ class CronFunctions {
       );
       
       $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/ati-informal-requests-analytics.csv';
-      $ckanFilePath = '/opt/tbs/ckan/smb/portal/public/ati-informal-requests-analytics.csv';
+      $ckanFilePath = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/ati-informal-requests-analytics.csv';
       
       $success = chmod($filePath, 0664);
       

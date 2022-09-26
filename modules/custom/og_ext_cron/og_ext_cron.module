@@ -47,4 +47,7 @@ function og_ext_cron_cron() {
 
   // generate inventory vote count json file
   $cron_tasks->generate_vote_count_json_file();
+
+  // generate ATI informal requests CSV file
+  $cron_tasks->generate_ati_requests_csv_file();
 }

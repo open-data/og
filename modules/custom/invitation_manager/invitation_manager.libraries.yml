@@ -1,0 +1,12 @@
+# Library for Service Canada Invitation Manager assets
+invitation-manager:
+  version: 1.0.0
+  css:
+    base:
+      /profiles/og/modules/custom/invitation_manager/library/Overlay.css: { preprocess: false, minified: false, attributes: { defer: true } }
+  js:
+    /profiles/og/modules/custom/invitation_manager/library/Overlay.js: { preprocess: false, minified: false, attributes: { defer: true } }
+    /profiles/og/modules/custom/invitation_manager/library/InvitationManager.js: { preprocess: false, minified: false, attributes: { defer: true } }
+  dependencies:
+    - core/jquery
+

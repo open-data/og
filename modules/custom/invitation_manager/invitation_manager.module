@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains invitation_manager.module.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ * This function loads assets from the Service Canada GC Invitation Manager library
+ * Only public page sessions (not when a user is logged in) load survey pop-up
+ */
+function invitation_manager_page_attachments(array &$attachments) {
+  $node = \Drupal::request()->get('node');
+  if (is_object($node) && 
+    $node->getType() === 'landing_page' && 
+    \Drupal::currentUser()->isAuthenticated() === false) {
+
+    if (!in_array('core/jquery', $attachments['#attached']['library']))
+      $attachments['#attached']['library'][] = 'core/jquery';
+    
+    $attachments['#attached']['library'][] = 'invitation_manager/invitation-manager';
+  }
+}

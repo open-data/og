@@ -1,0 +1,43 @@
+﻿{
+  "settings":
+  {
+    "duration-delay": 15,
+    "page-probability": 0.7,
+    "site-probability": 0.3,
+    "blacklist": [{"url" : ""}],
+    "whitelist": [
+        { "url" : "^staging.open.canada.ca\/" },
+        { "url" : "^stadification.ouvert.canada.ca\/" },
+        { "url" : "^test.open.canada.ca\/" },
+        { "url" : "^essai.ouvert.canada.ca\/" },
+        { "url" : "^open.canada.ca\/" },
+        { "url" : "^ouvert.canada.ca\/" }
+    ]
+  },
+  "surveys" : [
+  {
+    "id" : "1",
+    "title-en" : "We need your feedback!",
+    "title-fr" : "Nous avons besoin de vos commentaires!",
+    "body-en" : "Please take our survey of the Canadian Basemap.",
+    "body-fr" : "Veuillez répondre à notre sondage sur la carte de base du Canada.",
+    "link-en" : "https://www.surveymonkey.com/r/KMH8JWN?site=OpenMaps",
+    "link-fr" : "https://www.surveymonkey.com/r/KMH8JWN?site=OpenMaps&lang=fr",
+    "start-on" : "2022-09-28T00:00:00",
+    "end-on" : "2050-09-28T23:59:00",
+    "type" : "Page",
+    "probability" : 0.25,
+    "yes-en" : "<strong>Yes, <span class='wb-inv'>I will take the exit survey </span> after my visit.</strong>",
+    "yes-fr" : "<strong>Oui, <span class='wb-inv'>je vais participer au sondage de départ </span> après ma visite.</strong>",
+    "no-en" : "No, <span class='wb-inv'>I do not want to take the exit survey, </span> thank you.",
+    "no-fr" : "Non, <span class='wb-inv'>je ne veux pas participer au sondage de départ, </span> merci.",
+    "close-en" : "Close: Exit survey (escape key)",
+    "close-fr" : "Fermer : Sondage de fin de visite (touche d&apos;échappement)",
+    "name" : "TBS/SCT - Canadian Base Map - Transportation (CBMT) Survey - 2022-09-28",
+    "survey-urls" : [
+      { "url" : "^(staging.|test.)*open.canada.ca/open-maps" },
+      { "url" : "^(staging.|test.)*open.canada.ca/en/open-maps" },
+      { "url" : "^(staging.|test.)*open.canada.ca/fr/cartes-ouvert" }
+    ]
+  }]
+}

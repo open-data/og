@@ -35,9 +35,8 @@
     "close-fr" : "Fermer : Sondage de fin de visite (touche d&apos;échappement)",
     "name" : "TBS/SCT - Canadian Base Map - Transportation (CBMT) Survey - 2022-09-28",
     "survey-urls" : [
-      { "url" : "^(staging.|test.)*open.canada.ca/open-maps" },
-      { "url" : "^(staging.|test.)*open.canada.ca/en/open-maps" },
-      { "url" : "^(staging.|test.)*open.canada.ca/fr/cartes-ouvert" }
+      { "url" : "https://open.canada.ca/en/open-maps" },
+      { "url" : "https://ouvert.canada.ca/fr/cartes-ouvert" }
     ]
   }]
 }

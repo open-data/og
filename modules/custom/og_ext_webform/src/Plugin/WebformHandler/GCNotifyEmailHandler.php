@@ -53,8 +53,6 @@ class GCNotifyEmailHandler extends WebformHandlerBase
 
     $created = $webform_submission->get('created')->value;
 
-    $user = ($webform_submission->getOwner()->isAnonymous()) ? 'Anonymous' : $webform_submission->getOwner();
-
     // hide deprecated fields from ATI template update
     // https://github.com/open-data/ckanext-canada/blob/master/ckanext/canada/tables/ati.yaml
     $ati_hide_fields = ['solr_core', 'organization', 'request_summary', 'number_of_pages', 'e_mail_ati_recipient', ];
@@ -99,7 +97,6 @@ class GCNotifyEmailHandler extends WebformHandlerBase
     $personalisation = [
       'webform_submission_sid' => $webform_submission->id(),
       'webform_submission_created' => \Drupal::service('date.formatter')->format($created, 'medium'),
-      'webform_submission_user' => $user,
       'webform_submission_values' => $ati_data,
     ];
 
@@ -195,8 +192,8 @@ class GCNotifyEmailHandler extends WebformHandlerBase
             'status_code' => $response->getStatusCode(),
             'gcnotify_error' => $response_data['errors'],
           ]);
-          $notes .= "\r\n" . $note;
         }
+        $notes .= "\r\n" . $note;
       }
     }
 

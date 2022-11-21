@@ -69,10 +69,9 @@ class GCNotifyEmailHandler extends WebformHandlerBase
           : $webform->getElement($key)['#title'];
 
         // generate element in pattern [key]: value
-        $ati_data .= $element_label;
-        $ati_data .= ($langcode == 'fr') ? ' : ' : ': ';
+        $ati_data .= '**' . $element_label . '**' . "\r\n";
         if ($element['#type'] == 'webform_address' ) {
-          $ati_data .= "\r\n" . $value['address'];
+          $ati_data .= $value['address'];
           if (!empty($value['address_2']))
             $ati_data .= "\r\n" . $value['address_2'];
           $ati_data .= "\r\n" . $value['city'];
@@ -84,13 +83,10 @@ class GCNotifyEmailHandler extends WebformHandlerBase
         elseif ($element['#type'] == 'select' )
           $ati_data .= $element['#options'][$value];
 
-        elseif ($element['#type'] == 'textarea' )
-          $ati_data .= "\r\n" . $value . "\r\n";
-
         else
           $ati_data .= $value;
 
-        $ati_data .= "\r\n";
+        $ati_data .= "\r\n \r\n";
       }
     }
 

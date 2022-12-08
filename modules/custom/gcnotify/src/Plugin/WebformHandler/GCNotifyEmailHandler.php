@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\og_ext_webform\Plugin\WebformHandler;
+namespace Drupal\gcnotify\Plugin\WebformHandler;
 
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\webformSubmissionInterface;
@@ -114,6 +114,7 @@ class GCNotifyEmailHandler extends WebformHandlerBase
         'json' => [
           'email_address' => $recipient,
           'template_id' => $template_id,
+          'reference' => \Drupal::request()->headers->get('referer'),
           'personalisation' => $personalisation,
         ],
         'headers' => [
@@ -174,20 +175,22 @@ class GCNotifyEmailHandler extends WebformHandlerBase
     foreach ($responses as $handler_id => $response) {
       if ($response) {
         if ($response->getStatusCode() == '200' || $response->getStatusCode() == '201') {
+          $note = "\r\n" . ucfirst($handler_id) . " email sent using GCNotify. Details:\r\n";
           $response_data = json_decode($response->getBody()->getContents(), TRUE);
-          $note = json_encode([
+          $note .= json_encode([
             'handler_id' => $handler_id,
             'status_code' => $response->getStatusCode(),
-            'gcnotify_id' => $response_data['id'],
-          ]);
+            'gcnotify_response' => $response_data,
+          ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
         }
         else {
+          $note = "\r\n" . ucfirst($handler_id) . " email failed to send using GCNotify. Details:\r\n";
           $response_data = json_decode($response->getBody(), TRUE);
-          $note = json_encode([
+          $note .= json_encode([
             'handler_id' => $handler_id,
             'status_code' => $response->getStatusCode(),
-            'gcnotify_error' => $response_data['errors'],
-          ]);
+            'gcnotify_response' => $response_data,
+          ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
         }
         $notes .= "\r\n" . $note;
       }

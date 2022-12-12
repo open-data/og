@@ -66,6 +66,11 @@
           'type' => 'int',
           'unsigned' => TRUE,
         ],
+	'environment' => [
+          'description' => 'The environment from which a request to GC Notify was originated.',
+          'type' => 'varchar',
+          'length' => 255,
+	],
         'notification_type' => [
           'description' => 'The notification type',
           'type' => 'varchar',

@@ -31,10 +31,10 @@
     public function validateForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission) {
       $spam = False;
       $webform_id = $this->getWebform()->id();
-      $limit = $this->getWebform()->getSetting('entity_limit_user');
+      $limit = $this->getWebform()->getSetting('limit_user');
       if (!$limit)
         $limit = 5;
-      $interval = $this->getWebform()->getSetting('entity_limit_user_interval');
+      $interval = $this->getWebform()->getSetting('limit_user_interval');
       if (!$interval)
         $interval = 86400;
       $submission_addr = $webform_submission->get('remote_addr')->value;

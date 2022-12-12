@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains gcnotify.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function gcnotify_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the gcnotify module.
+    case 'help.page.gcnotify':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Integrate GC Notify service with Drupal for messaging') . '</p>';
+      return $output;
+
+    default:
+  }
+}

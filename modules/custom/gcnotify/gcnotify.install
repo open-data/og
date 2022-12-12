@@ -1,0 +1,112 @@
+<?php
+
+  /**
+   * @file
+   * Create table for storing GC Notify status updates.
+   */
+
+  /**
+   * Implements hook_schema().
+   */
+  function gcnotify_schema() {
+    $schema['gcnotify'] = [
+      'description' => 'GC Notify storage.',
+      'fields' => [
+        'id' => [
+          'description' => 'GC Notify’s id for the status receipts.',
+          'type' => 'varchar',
+          'length' => 128,
+          'not null' => TRUE,
+        ],
+        'reference' => [
+          'description' => 'The reference sent by the service.',
+          'type' => 'varchar',
+          'length' => 255,
+        ],
+        'to' => [
+          'description' => 'The email address or phone number of the recipient.',
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+        ],
+        'status' => [
+          'description' => 'The status of the notification.',
+          'type' => 'varchar',
+          'length' => 128,
+          'not null' => TRUE,
+        ],
+        'provider_response' => [
+          'description' => 'The detailed response from the provider. This will only be not null in a case of a technical failure.',
+          'type' => 'text',
+        ],
+        'created_at' => [
+          'description' => 'The time the service sent the request.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'completed_at' => [
+          'description' => 'The last time the status was updated.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+        ],
+        'sent_at' => [
+          'description' => 'The time the notification was sent.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+        ],
+        'callback_received' => [
+          'description' => 'The time the gcnotify callback api call was received.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'webform_sid' => [
+          'description' => 'The webform submission id, if found.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+        ],
+	'environment' => [
+          'description' => 'The environment from which a request to GC Notify was originated.',
+          'type' => 'varchar',
+          'length' => 255,
+	],
+        'notification_type' => [
+          'description' => 'The notification type',
+          'type' => 'varchar',
+          'length' => 16,
+          'not_null' => TRUE,
+        ],
+      ],
+      'primary key' => [
+        'id',
+        'created_at',
+        'callback_received',
+      ],
+      'indexes' => [
+        'id' => [
+          'id',
+        ],
+        'status' => [
+          'status',
+        ],
+        'to' => [
+          'to',
+        ],
+        'webform_sid' => [
+          'webform_sid',
+        ],
+      ],
+      // For documentation purposes only; foreign keys are not created in the
+      // database.
+      'foreign keys' => [
+        'webform_sid' => [
+          'table' => 'webform_submission',
+          'columns' => [
+            'webform_sid' => 'sid',
+          ],
+        ],
+      ],
+    ];
+  return $schema;
+}

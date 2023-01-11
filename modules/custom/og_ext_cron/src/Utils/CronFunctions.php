@@ -682,6 +682,10 @@ class CronFunctions {
         \Drupal::logger('cron')->notice("$missingIndexItemsCounter requests not matched. ATI Summaries not found in the core_ati index...");
       }
 
+      usort($rows, function($a, $b){
+        return -1 * ([$a['year'], $a['month']] <=> [$b['year'], $b['month']]);
+      });
+
       $this->write_to_csv(
         'ati-informal-requests-analytics.csv',
         $rows,

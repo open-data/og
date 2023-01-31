@@ -31,7 +31,7 @@ function obd_page_attachments_alter(&$page) {
   // Load obd library only for the Open by Default page
   $path = \Drupal::service('path.current')->getPath();
   if (strpos($path, '/node/') === 0) {
-      $alias = \Drupal::service('path.alias_manager')->getAliasByPath($path);
+      $alias = \Drupal::service('path_alias.manager')->getAliasByPath($path);
       if ($alias == '/obd') {
           $page['#attached']['library'][] = 'obd/obd';
     }

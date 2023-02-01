@@ -122,22 +122,28 @@ class GCNotifyRestController extends ControllerBase {
     $status['sent_at'] = strtotime($status['sent_at']);
 
     if (array_key_exists('reference', $status)) {
-      $url_components = parse_url($status['reference']);
-      $domain = isset($url_components['host']) ? $url_components['host'] : '';
-      if ($domain === "open.canada.ca" || $domain === "ouvert.canada.ca")
-        $status['environment'] = 'PRODUCTION PORTAL';
-      elseif ($domain === "staging.open.canada.ca" || $domain === "stadification.ouvert.canada.ca")
-        $status['environment'] = 'STAGING PORTAL';
-      elseif ($domain === "test.open.canada.ca" || $domain === "essai.ouvert.canada.ca")
-        $status['environment'] = 'TEST PORTAL';
-      elseif ($domain === "registry.open.canada.ca" || $domain === "registre.ouvert.canada.ca")
-        $status['environment'] = 'PRODUCTION REGISTRY';
-      elseif ($domain === "registry-staging.open.canada.ca" || $domain === "stadification-registre.ouvert.canada.ca")
-        $status['environment'] = 'STAGING REGISTRY';
-      elseif ($domain === "test-registry.open.canada.ca" || $domain === "essai-registre.ouvert.canada.ca")
-        $status['environment'] = 'TEST REGISTRY';
+      if (filter_var($status['reference'], FILTER_VALIDATE_URL) !== FALSE) {
+        $url_components = parse_url($status['reference']);
+        $domain = isset($url_components['host']) ? $url_components['host'] : '';
+        if ($domain === "open.canada.ca" || $domain === "ouvert.canada.ca")
+          $status['environment'] = 'PRODUCTION PORTAL';
+        elseif ($domain === "staging.open.canada.ca" || $domain === "stadification.ouvert.canada.ca")
+          $status['environment'] = 'STAGING PORTAL';
+        elseif ($domain === "test.open.canada.ca" || $domain === "essai.ouvert.canada.ca")
+          $status['environment'] = 'TEST PORTAL';
+        elseif ($domain === "registry.open.canada.ca" || $domain === "registre.ouvert.canada.ca")
+          $status['environment'] = 'PRODUCTION REGISTRY';
+        elseif ($domain === "registry-staging.open.canada.ca" || $domain === "stadification-registre.ouvert.canada.ca")
+          $status['environment'] = 'STAGING REGISTRY';
+        elseif ($domain === "test-registry.open.canada.ca" || $domain === "essai-registre.ouvert.canada.ca")
+          $status['environment'] = 'TEST REGISTRY';
+        else
+          $status['environment'] = $domain;
+      }
+      elseif (strpos($status['reference'], 'tbs-sct.gc.ca') !== FALSE)
+        $status['environment'] = 'SERVER';
       else
-        $status['environment'] = $domain;
+        $status['environment'] = 'UNABLE TO RESOLVE';
     }
     else
       $status['environment'] = '';

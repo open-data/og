@@ -5,7 +5,6 @@ namespace Drupal\gcnotify\Plugin\WebformHandler;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\webformSubmissionInterface;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
 use Drupal\webform\Utility\WebformElementHelper;
 
@@ -106,7 +105,7 @@ class GCNotifyEmailHandler extends WebformHandlerBase
 
     if ($gcnotify_settings) {
 
-      $api_endpoint = $gcnotify_settings['api_endpoint'];
+      $api_endpoint = $gcnotify_settings['api_endpoint'] . '/email';
       $authorization = $gcnotify_settings['authorization'];
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
       $template_id = $gcnotify_settings['template_id'][$langcode];
@@ -128,26 +127,35 @@ class GCNotifyEmailHandler extends WebformHandlerBase
       try {
 
         $response = $client->post($api_endpoint, $options);
+
         if ($response->getStatusCode() == '200' || $response->getStatusCode() == '201')
           \Drupal::logger('gcnotify')->notice($handler_id . ' sent for webform "' . $this->getWebform()->label() . '" using GC Notify.');
 
         return $response;
+
       }
 
-      catch (RequestException $request_exception) {
+      catch (\Exception $exception) {
 
-        $response = $request_exception->getResponse();
-        $response_data = json_decode($response->getBody()->getContents(), TRUE);
+        $error_msg = 'Unable to send email ' . $handler_id
+          . ' for webform "' . $this->getWebform()->label()
+          . '" using GC Notify.';
 
-        \Drupal::logger('gcnotify')->error(
-          'Unable to send email ' . $handler_id . ' for webform "' . $this->getWebform()->label() . '" using GC Notify.'
-          . '<pre><code>' . print_r($response_data, TRUE) . '</code></pre>'
-        );
+        $response = $exception->getResponse();
+
+        $response_info = $response
+          ? '<pre><code>' . print_r(json_decode($response->getBody()->getContents(), TRUE), TRUE) . '</code></pre>'
+          : $exception->getMessage();
+
+        \Drupal::logger('gcnotify')->error( $error_msg . $response_info);
 
         $this->sendDefaultEmail($handler_id);
+
         return $response;
+
       }
     }
+
     else {
 
       \Drupal::logger('gcnotify')->error(

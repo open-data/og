@@ -215,5 +215,36 @@ function gcnotify_views_data() {
     ],
   ];
 
+  $data['gcnotify']['api_response'] = [
+    'title' => t('api_response'),
+    'help' => t('The json response from GCNotify. This will be updated as part of a cron job.'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['gcnotify']['api_response_date'] = [
+    'title' => t('api_response_date'),
+    'help' => t('The timestamp when GET api_response was received from GC Notify API.'),
+    'field' => [
+      'id' => 'date',
+    ],
+    'sort' => [
+      'id' => 'date',
+    ],
+    'filter' => [
+      'id' => 'date',
+    ],
+  ];
+
   return $data;
 }

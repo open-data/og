@@ -5,7 +5,10 @@
  * Contains gcnotify.module.
  */
 
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Routing\RouteMatchInterface;
+use GuzzleHttp\Client;
+
 
 /**
  * Implements hook_help().
@@ -21,4 +24,84 @@ function gcnotify_help($route_name, RouteMatchInterface $route_match) {
 
     default:
   }
+}
+
+/**
+ * Implements hook_cron().
+ * save notification details from GC Notify API
+ */
+function gcnotify_cron() {
+
+  // 1. get all records from gcnotify table for past 10 days
+
+  $timestamp = (new DrupalDateTime())->getTimestamp();
+  $database = \Drupal::service('database');
+  $db_notifications = $database->select('gcnotify', 'g')
+    ->fields('g')
+    ->condition('g.callback_received', $timestamp - (86400 * 10), '>=')
+    ->execute()
+    ->fetchAll();
+
+  // 2. get all notifications from GC Notify API
+
+  $gcnotify_settings = \Drupal\Core\Site\Settings::get('gcnotify');
+  if (!isset($gcnotify_settings)) {
+    \Drupal::logger('gcnotify')->error('GC Notify Settings not available.');
+    return;
+  }
+
+  $header = [
+    'headers' => [
+      'Authorization' => $gcnotify_settings['authorization'],
+      'Content-Type' => 'application/json',
+    ],
+  ];
+
+  $api_endpoint = $gcnotify_settings['api_endpoint'];
+  $client = new Client();
+  $api_notifications = [];
+
+  while (!empty($api_endpoint)) {
+    try {
+      $response = $client->get($api_endpoint, $header);
+      if ($response->getStatusCode() == '200' || $response->getStatusCode() == '201') {
+        $data = json_decode($response->getBody()->getContents(), TRUE);
+        $api_endpoint = isset($data['links']['next']) ? $data['links']['next'] : '';
+        $api_notifications += $data['notifications'];
+      }
+      else {
+        \Drupal::logger('gcnotify')->error('Failed to get notifications from GC Notify API '
+        . $response->getStatusCode() . $response->getMessage());
+      }
+    } catch (\Exception $exception) {
+      \Drupal::logger('gcnotify')->error('Failed to get notifications from GC Notify API '
+        . $exception->getMessage());
+    }
+  }
+
+  // 3. match notification id and update
+
+  foreach($api_notifications as $api_notification) {
+    foreach($db_notifications as $db_notification) {
+      if ($api_notification['id'] == $db_notification->id) {
+
+        // 4. save response
+        $database->update('gcnotify')
+          ->fields([
+            'api_response' => json_encode($api_notification,
+              JSON_PRETTY_PRINT
+              | JSON_UNESCAPED_UNICODE
+              | JSON_UNESCAPED_SLASHES
+              | JSON_UNESCAPED_LINE_TERMINATORS),
+            'api_response_date' => $timestamp,
+            ])
+          ->condition('id', $api_notification['id'], '=')
+          ->execute();
+
+      }
+    }
+  }
+
+  \Drupal::logger('gcnotify')->notice('Completed update of notifications from GC Notify API');
+
 }

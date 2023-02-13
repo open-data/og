@@ -71,6 +71,7 @@ class CronFunctions {
         if ($comment->getStatus() == 1 && $node->isPublished()) {
           $url_en = ($node->hasTranslation('en') ? 'https://open.canada.ca' . $node->getTranslation('en')->url() : '');
           $url_fr = ($node->hasTranslation('fr') ? 'https://ouvert.canada.ca' . $node->getTranslation('fr')->url() : '');
+	  $uuid = ($node->type->entity->id() === 'external') ? $node->field_uuid->value : '';
           $comments_data[] = [
             'comment_id' => $comment->id(),
             'page_en' => $url_en,
@@ -78,7 +79,10 @@ class CronFunctions {
             'subject' => $comment->getSubject(),
             'comment_body' => $comment->get('comment_body')->getValue()[0]['value'],
             'comment_posted_by' => $comment->getAuthorName(),
-            'date_posted' => \Drupal::service('date.formatter')->format($comment->getCreatedTime(), 'html_date')
+            'date_posted' => \Drupal::service('date.formatter')->format($comment->getCreatedTime(), 'html_date'),
+	    'node_id' => $node->id(),
+	    'node_type' => $node->type->entity->label(),
+	    'dataset_uuid' => $uuid,
           ];
         }
       }
@@ -91,7 +95,10 @@ class CronFunctions {
       'Subject',
       'Body',
       'Posted by',
-      'Date posted'
+      'Date posted',
+      'Node ID',
+      'Node type',
+      'Dataset ID',
     ];
 
     // export as csv

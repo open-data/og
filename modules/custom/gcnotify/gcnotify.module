@@ -7,6 +7,7 @@
 
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\gcnotify\Utils\NotificationAPIHandler;
 use GuzzleHttp\Client;
 
 
@@ -44,50 +45,22 @@ function gcnotify_cron() {
 
   // 2. get all notifications from GC Notify API
 
-  $gcnotify_settings = \Drupal\Core\Site\Settings::get('gcnotify');
-  if (!isset($gcnotify_settings)) {
-    \Drupal::logger('gcnotify')->error('GC Notify Settings not available.');
-    return;
-  }
-
-  $header = [
-    'headers' => [
-      'Authorization' => $gcnotify_settings['authorization'],
-      'Content-Type' => 'application/json',
-    ],
-  ];
-
-  $api_endpoint = $gcnotify_settings['api_endpoint'];
-  $client = new Client();
-  $api_notifications = [];
-
-  while (!empty($api_endpoint)) {
-    try {
-      $response = $client->get($api_endpoint, $header);
-      if ($response->getStatusCode() == '200' || $response->getStatusCode() == '201') {
-        $data = json_decode($response->getBody()->getContents(), TRUE);
-        $api_endpoint = isset($data['links']['next']) ? $data['links']['next'] : '';
-        $api_notifications += $data['notifications'];
-      }
-      else {
-        \Drupal::logger('gcnotify')->error('Failed to get notifications from GC Notify API '
-        . $response->getStatusCode() . $response->getMessage());
-      }
-    } catch (\Exception $exception) {
-      \Drupal::logger('gcnotify')->error('Failed to get notifications from GC Notify API '
-        . $exception->getMessage());
-    }
-  }
+  $notify = new NotificationAPIHandler();
+  $api_notifications = $notify->getEmailNotifications();
 
   // 3. match notification id and update
 
   foreach($api_notifications as $api_notification) {
+
     foreach($db_notifications as $db_notification) {
+
       if ($api_notification['id'] == $db_notification->id) {
 
         // 4. save response
+
         $database->update('gcnotify')
           ->fields([
+            'status' => $api_notification['status'],
             'api_response' => json_encode($api_notification,
               JSON_PRETTY_PRINT
               | JSON_UNESCAPED_UNICODE
@@ -99,7 +72,9 @@ function gcnotify_cron() {
           ->execute();
 
       }
+
     }
+
   }
 
   \Drupal::logger('gcnotify')->notice('Completed update of notifications from GC Notify API');

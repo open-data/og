@@ -2,11 +2,12 @@
 
 namespace Drupal\gcnotify\Plugin\WebformHandler;
 
+use Drupal\gcnotify\Utils\NotificationAPIHandler;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\webformSubmissionInterface;
-use GuzzleHttp\Client;
-use Psr\Http\Message\ResponseInterface;
 use Drupal\webform\Utility\WebformElementHelper;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Form submission handler.
@@ -20,30 +21,46 @@ use Drupal\webform\Utility\WebformElementHelper;
  *   results = \Drupal\webform\Plugin\WebformHandlerInterface::RESULTS_PROCESSED,
  * )
  */
-class GCNotifyEmailHandler extends WebformHandlerBase
-{
+class GCNotifyEmailHandler extends WebformHandlerBase {
 
-  public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE)
-  {
+  public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {
 
+    $is_default_mail = false;
+    $notify = new NotificationAPIHandler();
     $personalisation = $this->getRequestOptions($webform_submission);
 
     // 1. send notification email to department
+
     $dept_email = $webform_submission->getElementData('ati_email');
-    $dept_response = $this->sendGCNotifyEmail($dept_email, $personalisation, 'notifications');
+    $dept_response = $notify->sendGCNotifyEmail($dept_email, 'ati_email', $personalisation);
+
+    if ($dept_response === False || in_array($dept_response->getStatusCode(), ['200', '201']) === False )
+      $is_default_mail = $this->sendDefaultEmail('notifications');
+
 
     // 2. send confirmation email to user
-    $user_email = $webform_submission->getElementData('your_e_mail_address');
-    $user_response = $this->sendGCNotifyEmail($user_email, $personalisation, 'confirmation');
 
-    $this->addNotesToWebformSubmission($webform_submission,
-      [ 'notification' => $dept_response,
+    $user_email = $webform_submission->getElementData('your_e_mail_address');
+    $user_response = $notify->sendGCNotifyEmail($user_email, 'ati_email', $personalisation);
+
+    if ($user_response === False || in_array($user_response->getStatusCode(), ['200', '201']) === False )
+      $is_default_mail = $this->sendDefaultEmail('confirmation');
+
+    // 3. add response to webform submission notes
+
+    $this->addNotesToWebformSubmission(
+      $webform_submission,
+      $is_default_mail,
+      [
+        'notification' => $dept_response,
         'confirmation' => $user_response,
-      ]);
+      ]
+    );
 
   }
 
   protected function getRequestOptions($webform_submission) {
+
     $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     $webform_translation_manager = \Drupal::service('webform.translation_manager');
     $webform = $webform_submission->getWebform();
@@ -98,100 +115,32 @@ class GCNotifyEmailHandler extends WebformHandlerBase
     return $personalisation;
   }
 
-  protected function sendGCNotifyEmail($recipient, $personalisation, $handler_id)
-  {
+  protected function addNotesToWebformSubmission($webform_submission, $default_mail, $responses) {
 
-    $gcnotify_settings = \Drupal\Core\Site\Settings::get('gcnotify');
-
-    if ($gcnotify_settings) {
-
-      $api_endpoint = $gcnotify_settings['api_endpoint'] . '/email';
-      $authorization = $gcnotify_settings['authorization'];
-      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-      $template_id = $gcnotify_settings['template_id'][$langcode];
-      $options = [
-        'json' => [
-          'email_address' => $recipient,
-          'template_id' => $template_id,
-          'reference' => \Drupal::request()->headers->get('referer'),
-          'personalisation' => $personalisation,
-        ],
-        'headers' => [
-          'Authorization' => $authorization,
-          'Content-Type' => 'application/json',
-        ],
-      ];
-
-      $client = new Client();
-
-      try {
-
-        $response = $client->post($api_endpoint, $options);
-
-        if ($response->getStatusCode() == '200' || $response->getStatusCode() == '201')
-          \Drupal::logger('gcnotify')->notice($handler_id . ' sent for webform "' . $this->getWebform()->label() . '" using GC Notify.');
-
-        return $response;
-
-      }
-
-      catch (\Exception $exception) {
-
-        $error_msg = 'Unable to send email ' . $handler_id
-          . ' for webform "' . $this->getWebform()->label()
-          . '" using GC Notify.';
-
-        $response = $exception->getResponse();
-
-        $response_info = $response
-          ? '<pre><code>' . print_r(json_decode($response->getBody()->getContents(), TRUE), TRUE) . '</code></pre>'
-          : $exception->getMessage();
-
-        \Drupal::logger('gcnotify')->error( $error_msg . $response_info);
-
-        $this->sendDefaultEmail($handler_id);
-
-        return $response;
-
-      }
-    }
-
-    else {
-
-      \Drupal::logger('gcnotify')->error(
-        'Unable to send email ' . $handler_id . ' for webform "' . $this->getWebform()->label() . '" using GC Notify. 
-        GC Notify Settings not available.');
-
-      $this->sendDefaultEmail($handler_id);
-    }
-
-  }
-
-  protected function sendDefaultEmail($handler_id) {
-    // if GC Notify service fails, default to email handler
-    $webform = $this->getWebform();
-    $handler = $webform->getHandler($handler_id);
-    $webform_submission = $handler->getWebformSubmission();
-    $message = $handler->getMessage($webform_submission);
-    $handler->sendMessage($webform_submission, $message);
-  }
-
-  protected function addNotesToWebformSubmission($webform_submission, $responses) {
     // add GC Notify response as Administrative notes to the webform submission
+
     $notes = ($webform_submission->hasNotes()) ? $webform_submission->getNotes() : '';
 
     foreach ($responses as $handler_id => $response) {
+
+      if ($default_mail)
+        $notes .= "\r\n" . 'Unable to send ' . $handler_id . ' email using GC Notify. Email sent using PHP mail.';
+
       if ($response) {
+
         if ($response->getStatusCode() == '200' || $response->getStatusCode() == '201') {
-          $note = "\r\n" . ucfirst($handler_id) . " email sent using GCNotify. Details:\r\n";
+
           $response_data = json_decode($response->getBody()->getContents(), TRUE);
+          $note = "\r\n" . ucfirst($handler_id) . " email sent using GCNotify. Details:\r\n";
           $note .= json_encode([
             'handler_id' => $handler_id,
             'status_code' => $response->getStatusCode(),
             'gcnotify_response' => $response_data,
           ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
         }
+
         else {
+
           $note = "\r\n" . ucfirst($handler_id) . " email failed to send using GCNotify. Details:\r\n";
           $response_data = json_decode($response->getBody(), TRUE);
           $note .= json_encode([
@@ -200,12 +149,32 @@ class GCNotifyEmailHandler extends WebformHandlerBase
             'gcnotify_response' => $response_data,
           ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
         }
+
         $notes .= "\r\n" . $note;
       }
+
+      else
+        $notes .= "\r\n" . 'Unable to send email using GC Notify. GC Notify Settings not available.';
+
     }
 
     $webform_submission->setNotes($notes);
     $webform_submission->resave();
+
+  }
+
+  protected function sendDefaultEmail($handler_id) {
+
+    // if GC Notify service fails, default to email handler
+
+    $webform = $this->getWebform();
+    $handler = $webform->getHandler($handler_id);
+    $webform_submission = $handler->getWebformSubmission();
+    $message = $handler->getMessage($webform_submission);
+    $handler->sendMessage($webform_submission, $message);
+
+    return true;
+
   }
 
 }

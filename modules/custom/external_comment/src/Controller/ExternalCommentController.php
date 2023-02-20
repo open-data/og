@@ -44,7 +44,9 @@ class ExternalCommentController extends CommentController {
     $uuid = explode('?' , $uuid);
     $uuid = $uuid[0];
     $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $excluded_uuid = \Drupal\Core\Site\Settings::get('external_comment')['exclude'];
+    $excluded_uuid = (\Drupal\Core\Site\Settings::get('external_comment'))
+            ? \Drupal\Core\Site\Settings::get('external_comment')['exclude']
+            : [];
 
     // only display the comment form if uuid is not excluded and if the request is valid
     if (!in_array($uuid, $excluded_uuid) && $this->validate($request, $ext_type, $uuid)) {

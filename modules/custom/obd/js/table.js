@@ -78,7 +78,7 @@
       var name = '<li class="bg-info mrgn-tp-lg" style="padding:15px;">'
                      + resource_columns[lang]['name']
                      + resource['name_translated'][lang]
-                     + '<a class="btn btn-sm btn-primary pull-right" target="_blank" href="' + resource['url'] + '">'
+                     + '<a class="btn btn-sm btn-primary pull-right" target="_blank" href="/' + lang + resource['url'] + '">'
                      + resource_columns[lang]['access'] + '</a>'
                      + '</li>';
       formattedResources += name;

@@ -1,3 +1,18 @@
+<section class="alert alert-warning wb-inview" data-inview="archived-bnr" id="archived">
+<h2 class="h4">Archived information</h2>
+
+<p>This page has been archived and will no longer receive updates. Please contact <a href="mailto:open-ouvert@tbs-sct.gc.ca">open-ouvert@tbs-sct.gc.ca</a> for additional information.</p>
+</section>
+
+<section class="wb-overlay modal-content overlay-def wb-bar-t" id="archived-bnr">
+<header>
+<h2 class="wb-inv">Archived</h2>
+</header>
+
+<p><a href="#archived">This page has been archived.</a></p>
+</section>
+
+<section class="mrgn-tp-xl">
 <div class="row">
 <div class="col-md-3">
 <h2 class="h3 mrgn-tp-0">Search Filters <small><a href="[site:url]/obd">Clear All</a></small></h2>
@@ -91,3 +106,4 @@
 </table>
 </div>
 </div>
+</section>

@@ -19,14 +19,20 @@ class CronFunctions {
   public function clear_view_caches() {
     $pd_views = [
       'pd_core_ati',
+      'pd_core_contracts',
       'pd_core_inventory',
       'pd_core_hospitalityq',
       'pd_core_reclassification',
+      'pd_core_travela',
+      'pd_core_travelq',
       'pd_core_wrongdoing',
       'pd_core_ati_details',
+      'pd_core_contracts_details',
       'pd_core_hospitalityq_details',
       'pd_core_reclassification_details',
+      'pd_core_travelq_details',
       'pd_core_wrongdoing_details',
+      'pd_core_travela_details',
       'pd_core_inventory_details',
     ];
 
@@ -62,10 +68,10 @@ class CronFunctions {
         $node = $comment->getCommentedEntity();
 
         // Loop over and get fields for published comments
-        if ($comment->isPublished() && $node->isPublished()) {
-          $url_en = ($node->hasTranslation('en') ? 'https://open.canada.ca' . $node->getTranslation('en')->toUrl()->toString() : '');
-          $url_fr = ($node->hasTranslation('fr') ? 'https://ouvert.canada.ca' . $node->getTranslation('fr')->toUrl()->toString() : '');
-  	      $uuid = ($node->type->entity->id() === 'external') ? $node->field_uuid->value : '';
+        if ($comment->getStatus() == 1 && $node->isPublished()) {
+          $url_en = ($node->hasTranslation('en') ? 'https://open.canada.ca' . $node->getTranslation('en')->url() : '');
+          $url_fr = ($node->hasTranslation('fr') ? 'https://ouvert.canada.ca' . $node->getTranslation('fr')->url() : '');
+	  $uuid = ($node->type->entity->id() === 'external') ? $node->field_uuid->value : '';
           $comments_data[] = [
             'comment_id' => $comment->id(),
             'page_en' => $url_en,
@@ -74,9 +80,9 @@ class CronFunctions {
             'comment_body' => $comment->get('comment_body')->getValue()[0]['value'],
             'comment_posted_by' => $comment->getAuthorName(),
             'date_posted' => \Drupal::service('date.formatter')->format($comment->getCreatedTime(), 'html_date'),
-	        'node_id' => $node->id(),
-	        'node_type' => $node->type->entity->label(),
-	        'dataset_uuid' => $uuid,
+	    'node_id' => $node->id(),
+	    'node_type' => $node->type->entity->label(),
+	    'dataset_uuid' => $uuid,
           ];
         }
       }
@@ -135,7 +141,7 @@ class CronFunctions {
             ? $this->implodeAllValues($node_fr->get('field_dataset_keywords')->getValue())
             : 'Jeu de données';
           $status = $node->get('field_sd_status')->getValue()
-            ? $node->get('field_sd_status')->getString()
+            ? $node->get('field_sd_status')->getValue()[0]['value']
             : 'department_contacted';
 
           $data = [
@@ -144,22 +150,22 @@ class CronFunctions {
             'date_created' => date('Y-m-d', $node->getCreatedTime()),
             'title_en' => $node_en->getTitle(),
             'title_fr' => $node_fr->getTitle(),
-            'organization' => $node->get('field_organization')->getString(),
-            'description_en' => strip_tags($node_en->get('body')->getString()),
-            'description_fr' => strip_tags($node_fr->get('body')->getString()),
+            'organization' => $node->get('field_organization')->getValue()[0]['value'],
+            'description_en' => strip_tags($node_en->get('body')->getValue()[0]['value']),
+            'description_fr' => strip_tags($node_fr->get('body')->getValue()[0]['value']),
             'dataset_suggestion_status' => $status,
-            'dataset_suggestion_status_link' => $node->get('field_status_link')->getString(),
-            'dataset_released_date' => $node->get('field_date_published')->getString(),
-            'votes' => $node->get('field_vote_up_down')->getString(),
+            'dataset_suggestion_status_link' => $node->get('field_status_link')->getValue()[0]['value'],
+            'dataset_released_date' => $node->get('field_date_published')->getValue()[0]['value'],
+            'votes' => $node->get('field_vote_up_down')->getValue()[0]['value'],
             'subject' => $subject,
             'keywords_en' => $keywords_en,
             'keywords_fr' => $keywords_fr,
-            'additional_comments_and_feedback_en' =>  $node_en->get('field_feedback')->getString(),
-            'additional_comments_and_feedback_fr' =>  $node_fr->get('field_feedback')->getString(),
+            'additional_comments_and_feedback_en' =>  $node_en->get('field_feedback')->getValue()[0]['value'],
+            'additional_comments_and_feedback_fr' =>  $node_fr->get('field_feedback')->getValue()[0]['value'],
           ];
 
           // get webform submission for suggested datasets
-          if ($wid = $node->get('field_webform_submission_id')->getString()) {
+          if ($wid = $node->get('field_webform_submission_id')->getValue()[0]['value']) {
             if ($webform_submission = WebformSubmission::load($wid)) {
               $webform_data = [
                 'webform_submission_id' => $wid,
@@ -211,10 +217,10 @@ class CronFunctions {
     try {
       // fetch ratings from database
       $database = \Drupal::database();
-      $result = $database->query("SELECT uuid, vote_average, vote_count, 
+      $result = $database->query("SELECT uuid, vote_average, vote_count,
                           CONCAT('https://open.canada.ca/data/en/dataset/', uuid) as url_en,
-                          CONCAT('https://ouvert.canada.ca/data/fr/dataset/', uuid) as url_fr 
-                        FROM {external_rating} 
+                          CONCAT('https://ouvert.canada.ca/data/fr/dataset/', uuid) as url_fr
+                        FROM {external_rating}
                         WHERE type = :type
                         ORDER BY vote_average DESC, vote_count DESC", [':type' => 'dataset',]);
 
@@ -232,13 +238,8 @@ class CronFunctions {
 
       while (!gzeof($handle)) {
         $line = gzgets($handle);
-	$data = json_decode($line, TRUE);
-	$datasets[$data['id']] = [
-		'en' => $data['title_translated']['en'], 
-		'fr' => array_key_exists("fr", $data['title_translated']) 
-			  ? $data['title_translated']['fr'] 
-			  : $data['title_translated']['fr-t-en']
-	];
+        $data = json_decode($line, TRUE);
+        $datasets[$data['id']] = ['en' => $data['title_translated']['en'], 'fr' => $data['title_translated']['fr']];
       }
       gzclose($handle);
 
@@ -396,7 +397,7 @@ class CronFunctions {
     try {
       // create output csv
       $path = $public
-        ? \Drupal::service('file_system')->realpath(\Drupal::config('system.file')->get('default_scheme') . "://")
+        ? \Drupal::service('file_system')->realpath(\file_default_scheme() . "://")
         : \Drupal\Core\Site\Settings::get('file_private_path');
       $output = fopen($path . '/' . $filename, 'w');
       if (!$output) {
@@ -462,7 +463,7 @@ class CronFunctions {
         $referenceNumber = $_inventroyIndexItem->getField('ref_number');
         $organizationNameCode = $_inventroyIndexItem->getField('org_name_code');
 
-        if( 
+        if(
           is_null( $referenceNumber ) ||
           is_null( $organizationNameCode )
         ){
@@ -474,9 +475,9 @@ class CronFunctions {
         $referenceNumber = $referenceNumber->getValues();
         $organizationNameCode = $organizationNameCode->getValues();
 
-        if( 
+        if(
           ! is_array( $referenceNumber ) ||
-          ! is_array( $organizationNameCode )          
+          ! is_array( $organizationNameCode )
         ){
 
           continue;
@@ -511,7 +512,7 @@ class CronFunctions {
 
       }
 
-      if( 
+      if(
         count( $output ) > 0 &&
         ( $json = json_encode($output) ) !== false
       ){
@@ -530,7 +531,7 @@ class CronFunctions {
     }
 
   }
-  
+
   /**
    * @method get_item_interface_value(
    * @param \Drupal\search_api\Item\ItemInterface $_itemInterface
@@ -608,11 +609,18 @@ class CronFunctions {
         ->execute()
         ->getResultCount();
 
-      $atiIndexItems = \Drupal\search_api\Entity\Index::load('pd_core_ati')
-        ->query()
-        ->range(0, $atiIndexCount)
-        ->execute()
-        ->getResultItems();
+      $interval = 500;
+      $offset = 0;
+      $atiIndexItems = [];
+      while($offset <= $atiIndexCount){
+        $return = \Drupal\search_api\Entity\Index::load('pd_core_ati')
+          ->query()
+          ->range($offset, $offset + $interval)
+          ->execute()
+          ->getResultItems();
+        array_push($atiIndexItems, $return);
+        $offset += count($return);
+      }
 
       $parsedAtiIndexItems = [];
       foreach( $atiIndexItems as $_uuid => $_atiIndexItem ){
@@ -710,28 +718,28 @@ class CronFunctions {
         ],
         true
       );
-      
-      $filePath = \Drupal::service('file_system')->realpath(\Drupal::config('system.file')->get('default_scheme') . "://") . '/ati-informal-requests-analytics.csv';
+
+      $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/ati-informal-requests-analytics.csv';
       $ckanFilePath = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/ati-informal-requests-analytics.csv';
-      
+
       $success = chmod($filePath, 0664);
-      
+
       if( ! $success ){
-      	\Drupal::logger('cron')->notice("Failed to set permissions for $filePath"); 
+      	\Drupal::logger('cron')->notice("Failed to set permissions for $filePath");
       }
-      
+
       $success = copy($filePath, $ckanFilePath);
-      
+
       if( ! $success ){
-      	\Drupal::logger('cron')->notice("Failed to copy $filePath to $ckanFilePath"); 
+      	\Drupal::logger('cron')->notice("Failed to copy $filePath to $ckanFilePath");
       }
-      
+
       $success = chmod($ckanFilePath, 0664);
-      
+
       if( ! $success ){
-      	\Drupal::logger('cron')->notice("Failed to set permissions for $ckanFilePath"); 
+      	\Drupal::logger('cron')->notice("Failed to set permissions for $ckanFilePath");
       }
-      
+
       // log results
       \Drupal::logger('cron')->notice('ATI informal requests csv file completed');
 

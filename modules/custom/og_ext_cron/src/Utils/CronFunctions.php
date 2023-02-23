@@ -217,10 +217,10 @@ class CronFunctions {
     try {
       // fetch ratings from database
       $database = \Drupal::database();
-      $result = $database->query("SELECT uuid, vote_average, vote_count, 
+      $result = $database->query("SELECT uuid, vote_average, vote_count,
                           CONCAT('https://open.canada.ca/data/en/dataset/', uuid) as url_en,
-                          CONCAT('https://ouvert.canada.ca/data/fr/dataset/', uuid) as url_fr 
-                        FROM {external_rating} 
+                          CONCAT('https://ouvert.canada.ca/data/fr/dataset/', uuid) as url_fr
+                        FROM {external_rating}
                         WHERE type = :type
                         ORDER BY vote_average DESC, vote_count DESC", [':type' => 'dataset',]);
 
@@ -463,7 +463,7 @@ class CronFunctions {
         $referenceNumber = $_inventroyIndexItem->getField('ref_number');
         $organizationNameCode = $_inventroyIndexItem->getField('org_name_code');
 
-        if( 
+        if(
           is_null( $referenceNumber ) ||
           is_null( $organizationNameCode )
         ){
@@ -475,9 +475,9 @@ class CronFunctions {
         $referenceNumber = $referenceNumber->getValues();
         $organizationNameCode = $organizationNameCode->getValues();
 
-        if( 
+        if(
           ! is_array( $referenceNumber ) ||
-          ! is_array( $organizationNameCode )          
+          ! is_array( $organizationNameCode )
         ){
 
           continue;
@@ -512,7 +512,7 @@ class CronFunctions {
 
       }
 
-      if( 
+      if(
         count( $output ) > 0 &&
         ( $json = json_encode($output) ) !== false
       ){
@@ -531,7 +531,7 @@ class CronFunctions {
     }
 
   }
-  
+
   /**
    * @method get_item_interface_value(
    * @param \Drupal\search_api\Item\ItemInterface $_itemInterface
@@ -711,28 +711,28 @@ class CronFunctions {
         ],
         true
       );
-      
+
       $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/ati-informal-requests-analytics.csv';
       $ckanFilePath = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/ati-informal-requests-analytics.csv';
-      
+
       $success = chmod($filePath, 0664);
-      
+
       if( ! $success ){
-      	\Drupal::logger('cron')->notice("Failed to set permissions for $filePath"); 
+      	\Drupal::logger('cron')->notice("Failed to set permissions for $filePath");
       }
-      
+
       $success = copy($filePath, $ckanFilePath);
-      
+
       if( ! $success ){
-      	\Drupal::logger('cron')->notice("Failed to copy $filePath to $ckanFilePath"); 
+      	\Drupal::logger('cron')->notice("Failed to copy $filePath to $ckanFilePath");
       }
-      
+
       $success = chmod($ckanFilePath, 0664);
-      
+
       if( ! $success ){
-      	\Drupal::logger('cron')->notice("Failed to set permissions for $ckanFilePath"); 
+      	\Drupal::logger('cron')->notice("Failed to set permissions for $ckanFilePath");
       }
-      
+
       // log results
       \Drupal::logger('cron')->notice('ATI informal requests csv file completed');
 

@@ -609,11 +609,18 @@ class CronFunctions {
         ->execute()
         ->getResultCount();
 
-      $atiIndexItems = \Drupal\search_api\Entity\Index::load('pd_core_ati')
-        ->query()
-        ->range(0, $atiIndexCount)
-        ->execute()
-        ->getResultItems();
+      $interval = 500;
+      $offset = 0;
+      $atiIndexItems = [];
+      while($offset <= $atiIndexCount){
+        $return = \Drupal\search_api\Entity\Index::load('pd_core_ati')
+          ->query()
+          ->range($offset, $offset + $interval)
+          ->execute()
+          ->getResultItems();
+        array_push($atiIndexItems, $return);
+        $offset += count($return);
+      }
 
       $parsedAtiIndexItems = [];
       foreach( $atiIndexItems as $_uuid => $_atiIndexItem ){

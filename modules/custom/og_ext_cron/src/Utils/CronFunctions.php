@@ -593,6 +593,8 @@ class CronFunctions {
         ->condition( 'nt.name', 'entity_id' )
         ->execute()->fetchAllAssoc( 'sid' );
 
+      \Drupal::logger('cron')->notice('Collected ' . count($localAtiRequests) . ' Informal ATI Request submissions.');
+
       $localAtiRequestCounts = [];
       foreach( $localAtiRequests as $_sid => $_localAtiRequest ){
 
@@ -609,18 +611,24 @@ class CronFunctions {
         ->execute()
         ->getResultCount();
 
-      $interval = 500;
+      \Drupal::logger('cron')->notice("Found $atiIndexCount ATI Summaries in the pd_core_ati solr index. Collecting all of them...");
+
+      $interval = 20;
       $offset = 0;
       $atiIndexItems = [];
       while($offset <= $atiIndexCount){
         $return = \Drupal\search_api\Entity\Index::load('pd_core_ati')
           ->query()
-          ->range($offset, $offset + $interval)
+          ->range($offset, $interval)
           ->execute()
           ->getResultItems();
-        array_push($atiIndexItems, $return);
+        #TODO: get verbose log level??
+        #\Drupal::logger('cron')->notice('Collected ' . count($return) . ' ATI Summaries from the pd_core_ati solr index. (' . $offset . '-' . ( (int)$offset + $interval ) . ' of ' . $atiIndexCount . ')');
         $offset += count($return);
+        array_push($atiIndexItems, $return);
       }
+
+      \Drupal::logger('cron')->notice('Collected a total of ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index.');
 
       $parsedAtiIndexItems = [];
       foreach( $atiIndexItems as $_uuid => $_atiIndexItem ){
@@ -694,7 +702,7 @@ class CronFunctions {
       }
 
       if( $missingIndexItemsCounter > 0 ){
-        \Drupal::logger('cron')->notice("$missingIndexItemsCounter requests not matched. ATI Summaries not found in the core_ati index...");
+        \Drupal::logger('cron')->notice("$missingIndexItemsCounter requests not matched. ATI Summaries not found in the pd_core_ati solr index...");
       }
 
       usort($rows, function($a, $b){

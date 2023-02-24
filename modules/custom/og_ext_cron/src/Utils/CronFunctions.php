@@ -405,10 +405,10 @@ class CronFunctions {
         throw new \Exception('Failed to create export file.');
       }
 
-      // add BOM to fix UTF-8 in Excel
-      fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
-      // add csv header columns
       if( ! $_append ){
+        // add BOM to fix UTF-8 in Excel
+        fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+        // add csv header columns
         fputcsv($output, $csv_header, ',', '"');
       }
 

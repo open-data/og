@@ -393,13 +393,14 @@ class CronFunctions {
   /**
    * Generate output file for given data and headers
    */
-  private function write_to_csv($filename, $data_to_write, $csv_header, $public = TRUE) {
+  private function write_to_csv($filename, $data_to_write, $csv_header, $public = TRUE, $_append = FALSE) {
     try {
       // create output csv
       $path = $public
         ? \Drupal::service('file_system')->realpath(\file_default_scheme() . "://")
         : \Drupal\Core\Site\Settings::get('file_private_path');
-      $output = fopen($path . '/' . $filename, 'w');
+      $fileMode = $_append ? 'a' : 'w';
+      $output = fopen($path . '/' . $filename, $fileMode);
       if (!$output) {
         throw new \Exception('Failed to create export file.');
       }
@@ -407,7 +408,9 @@ class CronFunctions {
       // add BOM to fix UTF-8 in Excel
       fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
       // add csv header columns
-      fputcsv($output, $csv_header, ',', '"');
+      if( ! $_append ){
+        fputcsv($output, $csv_header, ',', '"');
+      }
 
       // write to csv
       foreach($data_to_write as $row) {
@@ -575,6 +578,165 @@ class CronFunctions {
   }
 
   /**
+   * @method get_ati_request_submission_counts_by_date
+   * @return array
+   */
+  private function get_ati_request_submission_counts_by_date(){
+
+    //get webform submissions from `ati_records` form
+    $atiSubmissionsQuery = \Drupal::database()->select( 'webform_submission', 'n' );
+    $atiSubmissionsQuery->innerJoin( 'webform_submission_data', 'nt', 'nt.sid = n.sid' );
+    $atiSubmissions = $atiSubmissionsQuery
+      ->fields( 'n', ['sid', 'completed'] )
+      ->fields( 'nt', ['value'] )
+      ->condition( 'n.webform_id', 'ati_records' )
+      ->condition( 'nt.name', 'entity_id' )
+      ->execute()->fetchAllAssoc( 'sid' );
+
+    \Drupal::logger('cron')->notice('Collected ' . count($atiSubmissions) . ' Informal ATI Request submissions.');
+
+    $atiSubmissionCounts = [];
+    foreach( $atiSubmissions as $_sid => $_atiSubmission ){
+
+      $year = gmdate("Y", $_atiSubmission->completed);
+      $month = gmdate("n", $_atiSubmission->completed);
+      // value is `entity_id`
+      $atiSubmissionCounts[$_atiSubmission->value][$year][$month] = isset( $atiSubmissionCounts[$_atiSubmission->value][$year][$month] ) ? intval($atiSubmissionCounts[$_atiSubmission->value][$year][$month]) + 1 : 1;
+
+    }
+
+    return $atiSubmissionCounts;
+
+  }
+
+  /**
+   * @method get_ati_index_record_count
+   * @return int|null
+   */
+  private function get_ati_index_record_count(){
+
+    //get solr index data for `core_ati`
+    $atiIndexCount = \Drupal\search_api\Entity\Index::load('pd_core_ati')
+    ->query()
+    ->execute()
+    ->getResultCount();
+
+    \Drupal::logger('cron')->notice("Found $atiIndexCount ATI Summaries in the pd_core_ati solr index.");
+
+    return $atiIndexCount;
+
+  }
+
+  /**
+   * @method get_ati_index_records
+   * @param int $_offset
+   * @param int $_limit
+   * @return array
+   */
+  private function get_ati_index_records($_offset, $_limit){
+
+    $atiIndexItems = \Drupal\search_api\Entity\Index::load('pd_core_ati')
+      ->query()
+      ->range($_offset, $_limit)
+      ->execute()
+      ->getResultItems();
+
+    $parsedAtiIndexItems = [];
+    foreach( $atiIndexItems as $_uuid => $_atiIndexItem ){
+      /**
+       * @var \Drupal\search_api\Item\ItemInterface $_atiIndexItem
+       */
+
+      $id = $this->get_item_interface_field_value( $_atiIndexItem, 'id' );
+      $requestNumber = $this->get_item_interface_field_value( $_atiIndexItem, 'request_number' );
+      $summaryEn = $this->get_item_interface_field_value( $_atiIndexItem, 'summary_en' );
+      $summaryFr = $this->get_item_interface_field_value( $_atiIndexItem, 'summary_fr' );
+      $ownerOrgCode = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_code' );
+      $ownerOrgNameEn = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_en' );
+      $ownerOrgNameFr = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_fr' );
+
+      if(
+        is_null($id) ||
+        is_null($requestNumber) ||
+        is_null($summaryEn) ||
+        is_null($summaryFr) ||
+        is_null($ownerOrgCode) ||
+        is_null($ownerOrgNameEn) ||
+        is_null($ownerOrgNameFr)
+      ){
+
+        continue;
+
+      }
+
+      $parsedAtiIndexItems[$id] = [
+        'request_number'    => $requestNumber,
+        'summary_en'        => $summaryEn,
+        'summary_fr'        => $summaryFr,
+        'owner_org_code'    => $ownerOrgCode,
+        'owner_org_name_en' => $ownerOrgNameEn,
+        'owner_org_name_fr' => $ownerOrgNameFr
+      ];
+
+    }
+
+    return $parsedAtiIndexItems;
+
+  }
+
+  /**
+   * @method parse_ati_submission_counts_and_index_records_to_rows
+   * @param array $_submissions
+   * @param array $_records
+   * @return array
+   */
+  private function parse_ati_submission_counts_and_index_records_to_rows($_submissionCounts, $_indexRecords){
+
+    $rows = [];
+    $missingIndexItemsCounter = 0;
+    foreach( $_submissionCounts as $_id => $_years ){
+
+      if( ! array_key_exists( $_id, $_indexRecords ) ){
+        $missingIndexItemsCounter++;
+        continue;
+      }
+
+      foreach( $_years as $_year => $_months ){
+
+        foreach( $_months as $_month => $_count ){
+
+          $rows[] = [
+            'year'              => $_year,
+            'month'             => $_month,
+            'id'                => $_id,
+            'request_number'    => $_indexRecords[$_id]['request_number'],
+            'summary_en'        => $_indexRecords[$_id]['summary_en'],
+            'summary_fr'        => $_indexRecords[$_id]['summary_fr'],
+            'owner_org_code'    => $_indexRecords[$_id]['owner_org_code'],
+            'owner_org_name_en' => $_indexRecords[$_id]['owner_org_name_en'],
+            'owner_org_name_fr' => $_indexRecords[$_id]['owner_org_name_fr'],
+            'request_count'     => $_count,
+          ];
+
+        }
+
+      }
+
+    }
+
+    if( $missingIndexItemsCounter > 0 ){
+      \Drupal::logger('cron')->notice("$missingIndexItemsCounter requests not matched. ATI Summaries not found in the pd_core_ati solr index...");
+    }
+
+    usort($rows, function($a, $b){
+      return -1 * ([$a['year'], $a['month']] <=> [$b['year'], $b['month']]);
+    });
+
+    return $rows;
+
+  }
+
+  /**
    * @method generate_ati_requests_csv_file()
    * @return void
    * Generate ATI informal requests CSV file
@@ -583,149 +745,39 @@ class CronFunctions {
 
     try{
 
-      //get webform submissions from `ati_records` form
-      $localAtiRequestsQuery = \Drupal::database()->select( 'webform_submission', 'n' );
-      $localAtiRequestsQuery->innerJoin( 'webform_submission_data', 'nt', 'nt.sid = n.sid' );
-      $localAtiRequests = $localAtiRequestsQuery
-        ->fields( 'n', ['sid', 'completed'] )
-        ->fields( 'nt', ['value'] )
-        ->condition( 'n.webform_id', 'ati_records' )
-        ->condition( 'nt.name', 'entity_id' )
-        ->execute()->fetchAllAssoc( 'sid' );
+      $atiSubmissionCounts = $this->get_ati_request_submission_counts_by_date();
+      $atiIndexCount = $this->get_ati_index_record_count();
 
-      \Drupal::logger('cron')->notice('Collected ' . count($localAtiRequests) . ' Informal ATI Request submissions.');
-
-      $localAtiRequestCounts = [];
-      foreach( $localAtiRequests as $_sid => $_localAtiRequest ){
-
-        $year = gmdate("Y", $_localAtiRequest->completed);
-        $month = gmdate("n", $_localAtiRequest->completed);
-        // value is `entity_id`
-        $localAtiRequestCounts[$_localAtiRequest->value][$year][$month] = isset( $localAtiRequestCounts[$_localAtiRequest->value][$year][$month] ) ? intval($localAtiRequestCounts[$_localAtiRequest->value][$year][$month]) + 1 : 1;
-
-      }
-
-      //get solr index data for `core_ati`
-      $atiIndexCount = \Drupal\search_api\Entity\Index::load('pd_core_ati')
-        ->query()
-        ->execute()
-        ->getResultCount();
-
-      \Drupal::logger('cron')->notice("Found $atiIndexCount ATI Summaries in the pd_core_ati solr index. Collecting all of them...");
-
-      $interval = 20;
       $offset = 0;
-      $atiIndexItems = [];
-      while($offset <= $atiIndexCount){
-        $return = \Drupal\search_api\Entity\Index::load('pd_core_ati')
-          ->query()
-          ->range($offset, $interval)
-          ->execute()
-          ->getResultItems();
-        #TODO: get verbose log level??
-        #\Drupal::logger('cron')->notice('Collected ' . count($return) . ' ATI Summaries from the pd_core_ati solr index. (' . $offset . '-' . ( (int)$offset + $interval ) . ' of ' . $atiIndexCount . ')');
-        $offset += count($return);
-        array_push($atiIndexItems, $return);
-      }
+      $limit = 20;
+      while($offset < $atiIndexCount){
 
-      \Drupal::logger('cron')->notice('Collected a total of ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index.');
+        $atiIndexItems = $this->get_ati_index_records($offset, $limit);
+        \Drupal::logger('cron')->notice('Collected ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index.');
 
-      $parsedAtiIndexItems = [];
-      foreach( $atiIndexItems as $_uuid => $_atiIndexItem ){
-        /**
-         * @var \Drupal\search_api\Item\ItemInterface $_atiIndexItem
-         */
+        $rows = $this->parse_ati_submission_counts_and_index_records_to_rows($atiSubmissionCounts, $atiIndexItems);
+        $this->write_to_csv(
+          'ati-informal-requests-analytics.csv',
+          $rows,
+          [
+            'Year',
+            'Month',
+            'Unique Identifier',
+            'Request Number',
+            'Summary - EN',
+            'Summary - FR',
+            'owner_org',
+            'Organization Name - EN',
+            'Organization Name - FR',
+            'Number of Informal Requests'
+          ],
+          true,
+          ($offset == 0)
+        );
 
-        $id = $this->get_item_interface_field_value( $_atiIndexItem, 'id' );
-        $requestNumber = $this->get_item_interface_field_value( $_atiIndexItem, 'request_number' );
-        $summaryEn = $this->get_item_interface_field_value( $_atiIndexItem, 'summary_en' );
-        $summaryFr = $this->get_item_interface_field_value( $_atiIndexItem, 'summary_fr' );
-        $ownerOrgCode = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_code' );
-        $ownerOrgNameEn = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_en' );
-        $ownerOrgNameFr = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_fr' );
-
-        if(
-          is_null($id) ||
-          is_null($requestNumber) ||
-          is_null($summaryEn) ||
-          is_null($summaryFr) ||
-          is_null($ownerOrgCode) ||
-          is_null($ownerOrgNameEn) ||
-          is_null($ownerOrgNameFr)
-        ){
-
-          continue;
-
-        }
-
-        $parsedAtiIndexItems[$id] = [
-          'request_number'    => $requestNumber,
-          'summary_en'        => $summaryEn,
-          'summary_fr'        => $summaryFr,
-          'owner_org_code'    => $ownerOrgCode,
-          'owner_org_name_en' => $ownerOrgNameEn,
-          'owner_org_name_fr' => $ownerOrgNameFr
-        ];
+        $offset += count($atiIndexItems);
 
       }
-
-      $rows = [];
-      $missingIndexItemsCounter = 0;
-      foreach( $localAtiRequestCounts as $_id => $_years ){
-
-        if( ! array_key_exists( $_id, $parsedAtiIndexItems ) ){
-          $missingIndexItemsCounter++;
-          continue;
-        }
-
-        foreach( $_years as $_year => $_months ){
-
-          foreach( $_months as $_month => $_count ){
-
-            $rows[] = [
-              'year'              => $_year,
-              'month'             => $_month,
-              'id'                => $_id,
-              'request_number'    => $parsedAtiIndexItems[$_id]['request_number'],
-              'summary_en'        => $parsedAtiIndexItems[$_id]['summary_en'],
-              'summary_fr'        => $parsedAtiIndexItems[$_id]['summary_fr'],
-              'owner_org_code'    => $parsedAtiIndexItems[$_id]['owner_org_code'],
-              'owner_org_name_en' => $parsedAtiIndexItems[$_id]['owner_org_name_en'],
-              'owner_org_name_fr' => $parsedAtiIndexItems[$_id]['owner_org_name_fr'],
-              'request_count'     => $_count,
-            ];
-
-          }
-
-        }
-
-      }
-
-      if( $missingIndexItemsCounter > 0 ){
-        \Drupal::logger('cron')->notice("$missingIndexItemsCounter requests not matched. ATI Summaries not found in the pd_core_ati solr index...");
-      }
-
-      usort($rows, function($a, $b){
-        return -1 * ([$a['year'], $a['month']] <=> [$b['year'], $b['month']]);
-      });
-
-      $this->write_to_csv(
-        'ati-informal-requests-analytics.csv',
-        $rows,
-        [
-          'Year',
-          'Month',
-          'Unique Identifier',
-          'Request Number',
-          'Summary - EN',
-          'Summary - FR',
-          'owner_org',
-          'Organization Name - EN',
-          'Organization Name - FR',
-          'Number of Informal Requests'
-        ],
-        true
-      );
 
       $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/ati-informal-requests-analytics.csv';
       $ckanFilePath = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/ati-informal-requests-analytics.csv';

@@ -753,7 +753,8 @@ class CronFunctions {
       while($offset < $atiIndexCount){
 
         $atiIndexItems = $this->get_ati_index_records($offset, $limit);
-        \Drupal::logger('cron')->notice('Collected ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index.');
+        # TODO: only output if cron verbosity is on??
+        #\Drupal::logger('cron')->notice('Collected ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index. (' . $offset . '-' . ( $offset + $limit ) . ' of ' . $atiIndexCount . ')');
 
         $rows = $this->parse_ati_submission_counts_and_index_records_to_rows($atiSubmissionCounts, $atiIndexItems);
         $this->write_to_csv(

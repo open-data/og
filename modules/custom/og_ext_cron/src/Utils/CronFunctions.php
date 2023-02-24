@@ -728,10 +728,6 @@ class CronFunctions {
       \Drupal::logger('cron')->notice("$missingIndexItemsCounter requests not matched. ATI Summaries not found in the pd_core_ati solr index...");
     }
 
-    usort($rows, function($a, $b){
-      return -1 * ([$a['year'], $a['month']] <=> [$b['year'], $b['month']]);
-    });
-
     return $rows;
 
   }
@@ -742,6 +738,9 @@ class CronFunctions {
    * Generate ATI informal requests CSV file
    */
   public function generate_ati_requests_csv_file(){
+    # Due to the 40k+ records, we have to append to a csv file
+    # similar to an output stream. This prevents us from being
+    # able to sort the csv rows before writing them.
 
     try{
 

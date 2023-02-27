@@ -755,11 +755,18 @@ class CronFunctions {
       while($offset < $atiIndexCount){
 
         $atiIndexItems = $this->get_ati_index_records($offset, $limit);
+
+        if( count($atiIndexItems) === 0 ){
+          \Drupal::logger('cron')->notice('Collected zero(0) ATI Summaries from the pd_core_ati solr index...finishing up...');
+          break;
+        }
+
         if( Drush::verbose() ){
           \Drupal::logger('cron')->notice('Collected ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index. (' . $offset . '-' . ( $offset + $limit ) . ' of ' . $atiIndexCount . ')');
         }
 
         $rows = $this->parse_ati_submission_counts_and_index_records_to_rows($atiSubmissionCounts, $atiIndexItems);
+        $append = $offset === 0 ? false : true;
         $this->write_to_csv(
           'ati-informal-requests-analytics.csv',
           $rows,
@@ -776,7 +783,7 @@ class CronFunctions {
             'Number of Informal Requests'
           ],
           true,
-          ($offset == 0)
+          $append
         );
 
         $offset += count($atiIndexItems);
@@ -788,7 +795,7 @@ class CronFunctions {
 
       $success = chmod($filePath, 0664);
 
-      if( ! $success ){
+      if( Drush::verbose() && ! $success ){
       	\Drupal::logger('cron')->notice("Failed to set permissions for $filePath");
       }
 
@@ -800,7 +807,7 @@ class CronFunctions {
 
       $success = chmod($ckanFilePath, 0664);
 
-      if( ! $success ){
+      if( Drush::verbose() && ! $success ){
       	\Drupal::logger('cron')->notice("Failed to set permissions for $ckanFilePath");
       }
 

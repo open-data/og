@@ -7,6 +7,7 @@ use \Drupal\node\Entity\Node;
 use Symfony\Component\Yaml\Parser;
 use Drupal\views\Views;
 use \Drupal\webform\Entity\WebformSubmission;
+use \Drush\Drush;
 
 /**
  * Class CronFunctions.
@@ -433,6 +434,8 @@ class CronFunctions {
   public function generate_vote_count_json_file()
   {
 
+    #FIXME: uses a lot of memory...make an output stream for json files??
+
     try{
 
       $output = [];
@@ -694,14 +697,14 @@ class CronFunctions {
 
     $rows = [];
     $missingIndexItemsCounter = 0;
-    foreach( $_submissionCounts as $_id => $_years ){
+    foreach( $_indexRecords as $_id => $_data ){
 
-      if( ! array_key_exists( $_id, $_indexRecords ) ){
+      if( ! array_key_exists( $_id, $_submissionCounts ) ){
         $missingIndexItemsCounter++;
         continue;
       }
 
-      foreach( $_years as $_year => $_months ){
+      foreach( $_submissionCounts[$_id] as $_year => $_months ){
 
         foreach( $_months as $_month => $_count ){
 
@@ -709,12 +712,12 @@ class CronFunctions {
             'year'              => $_year,
             'month'             => $_month,
             'id'                => $_id,
-            'request_number'    => $_indexRecords[$_id]['request_number'],
-            'summary_en'        => $_indexRecords[$_id]['summary_en'],
-            'summary_fr'        => $_indexRecords[$_id]['summary_fr'],
-            'owner_org_code'    => $_indexRecords[$_id]['owner_org_code'],
-            'owner_org_name_en' => $_indexRecords[$_id]['owner_org_name_en'],
-            'owner_org_name_fr' => $_indexRecords[$_id]['owner_org_name_fr'],
+            'request_number'    => $_data['request_number'],
+            'summary_en'        => $_data['summary_en'],
+            'summary_fr'        => $_data['summary_fr'],
+            'owner_org_code'    => $_data['owner_org_code'],
+            'owner_org_name_en' => $_data['owner_org_name_en'],
+            'owner_org_name_fr' => $_data['owner_org_name_fr'],
             'request_count'     => $_count,
           ];
 
@@ -724,7 +727,7 @@ class CronFunctions {
 
     }
 
-    if( $missingIndexItemsCounter > 0 ){
+    if( Drush::verbose() && $missingIndexItemsCounter > 0 ){
       \Drupal::logger('cron')->notice("$missingIndexItemsCounter requests not matched. ATI Summaries not found in the pd_core_ati solr index...");
     }
 
@@ -748,12 +751,13 @@ class CronFunctions {
       $atiIndexCount = $this->get_ati_index_record_count();
 
       $offset = 0;
-      $limit = 20;
+      $limit = 500;
       while($offset < $atiIndexCount){
 
         $atiIndexItems = $this->get_ati_index_records($offset, $limit);
-        # TODO: only output if cron verbosity is on??
-        #\Drupal::logger('cron')->notice('Collected ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index. (' . $offset . '-' . ( $offset + $limit ) . ' of ' . $atiIndexCount . ')');
+        if( Drush::verbose() ){
+          \Drupal::logger('cron')->notice('Collected ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index. (' . $offset . '-' . ( $offset + $limit ) . ' of ' . $atiIndexCount . ')');
+        }
 
         $rows = $this->parse_ati_submission_counts_and_index_records_to_rows($atiSubmissionCounts, $atiIndexItems);
         $this->write_to_csv(

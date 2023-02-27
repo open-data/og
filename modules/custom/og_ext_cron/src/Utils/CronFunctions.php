@@ -413,6 +413,10 @@ class CronFunctions {
         fputcsv($output, $csv_header, ',', '"');
       }
 
+      if( Drush::verbose() ){
+        \Drupal::logger('cron')->notice('Writing ' . count($data_to_write) . ' rows with mode ' . $fileMode);
+      }
+
       // write to csv
       foreach($data_to_write as $row) {
         fputcsv($output, $row, ',', '"');

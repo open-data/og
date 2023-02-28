@@ -394,28 +394,21 @@ class CronFunctions {
   /**
    * Generate output file for given data and headers
    */
-  private function write_to_csv($filename, $data_to_write, $csv_header, $public = TRUE, $_append = FALSE) {
+  private function write_to_csv($filename, $data_to_write, $csv_header, $public = TRUE) {
     try {
       // create output csv
       $path = $public
         ? \Drupal::service('file_system')->realpath(\file_default_scheme() . "://")
         : \Drupal\Core\Site\Settings::get('file_private_path');
-      $fileMode = $_append ? 'a' : 'w';
-      $output = fopen($path . '/' . $filename, $fileMode);
+      $output = fopen($path . '/' . $filename, 'w');
       if (!$output) {
         throw new \Exception('Failed to create export file.');
       }
 
-      if( ! $_append ){
-        // add BOM to fix UTF-8 in Excel
-        fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
-        // add csv header columns
-        fputcsv($output, $csv_header, ',', '"');
-      }
-
-      if( Drush::verbose() ){
-        \Drupal::logger('cron')->notice('Writing ' . count($data_to_write) . ' rows with mode ' . $fileMode);
-      }
+      // add BOM to fix UTF-8 in Excel
+      fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+      // add csv header columns
+      fputcsv($output, $csv_header, ',', '"');
 
       // write to csv
       foreach($data_to_write as $row) {
@@ -754,65 +747,96 @@ class CronFunctions {
       $atiSubmissionCounts = $this->get_ati_request_submission_counts_by_date();
       $atiIndexCount = $this->get_ati_index_record_count();
 
-      $offset = 0;
-      $limit = 500;
-      while($offset < $atiIndexCount){
+      $filename = 'ati-informal-requests-analytics.csv';
+      $csv_header = [
+        'Year',
+        'Month',
+        'Unique Identifier',
+        'Request Number',
+        'Summary - EN',
+        'Summary - FR',
+        'owner_org',
+        'Organization Name - EN',
+        'Organization Name - FR',
+        'Number of Informal Requests'
+      ];
 
-        $atiIndexItems = $this->get_ati_index_records($offset, $limit);
+      try {
 
-        if( count($atiIndexItems) === 0 ){
-          \Drupal::logger('cron')->notice('Collected zero(0) ATI Summaries from the pd_core_ati solr index...finishing up...');
-          break;
+        // create new output csv
+        $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/' . $filename;
+        $output = fopen($filePath, 'w');
+        if (!$output) {
+          throw new \Exception('Failed to create export file.');
         }
 
-        if( Drush::verbose() ){
-          \Drupal::logger('cron')->notice('Collected ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index. (' . $offset . '-' . ( $offset + $limit ) . ' of ' . $atiIndexCount . ')');
-        }
+        // add BOM to fix UTF-8 in Excel
+        fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+        // add csv header columns
+        fputcsv($output, $csv_header, ',', '"');
 
-        $rows = $this->parse_ati_submission_counts_and_index_records_to_rows($atiSubmissionCounts, $atiIndexItems);
-        $append = $offset === 0 ? false : true;
-        $this->write_to_csv(
-          'ati-informal-requests-analytics.csv',
-          $rows,
-          [
-            'Year',
-            'Month',
-            'Unique Identifier',
-            'Request Number',
-            'Summary - EN',
-            'Summary - FR',
-            'owner_org',
-            'Organization Name - EN',
-            'Organization Name - FR',
-            'Number of Informal Requests'
-          ],
-          true,
-          $append
-        );
+        fclose($output);
 
-        $offset += count($atiIndexItems);
+      }catch (\Exception $e) {
+
+        \Drupal::logger('cron')->error('Unable to create ' . $filename . ' ' . $e->getMessage());
 
       }
 
-      $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/ati-informal-requests-analytics.csv';
-      $ckanFilePath = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/ati-informal-requests-analytics.csv';
+      try {
 
-      $success = chmod($filePath, 0664);
+        // append rows to csv
+        $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/' . $filename;
+        $output = fopen($filePath, 'a');
+        if (!$output) {
+          throw new \Exception('Failed to open export file in append mode.');
+        }
 
-      if( Drush::verbose() && ! $success ){
-      	\Drupal::logger('cron')->notice("Failed to set permissions for $filePath");
+        $offset = 0;
+        $limit = 500;
+        while($offset < $atiIndexCount){
+
+          $atiIndexItems = $this->get_ati_index_records($offset, $limit);
+
+          if( count($atiIndexItems) === 0 ){
+            \Drupal::logger('cron')->notice('Collected zero(0) ATI Summaries from the pd_core_ati solr index...finishing up...');
+            break;
+          }
+
+          if( Drush::verbose() ){
+            \Drupal::logger('cron')->notice('Collected ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index. (' . $offset . '-' . ( $offset + $limit ) . ' of ' . $atiIndexCount . ')');
+          }
+
+          $rows = $this->parse_ati_submission_counts_and_index_records_to_rows($atiSubmissionCounts, $atiIndexItems);
+
+          if( Drush::verbose() ){
+            \Drupal::logger('cron')->notice('Writing ' . count($rows) . ' rows with mode a');
+          }
+
+          // write to csv
+          foreach($rows as $row) {
+            fputcsv($output, $row, ',', '"');
+          }
+
+          $offset += count($atiIndexItems);
+
+        }
+
+        fclose($output);
+
+      }catch (\Exception $e) {
+
+        \Drupal::logger('cron')->error('Unable to create ' . $filename . ' ' . $e->getMessage());
+
       }
+
+      $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/' . $filename;
+      $ckanFilePath = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/' . $filename;
 
       $success = copy($filePath, $ckanFilePath);
 
       if( ! $success ){
       	\Drupal::logger('cron')->notice("Failed to copy $filePath to $ckanFilePath");
-      }
-
-      $success = chmod($ckanFilePath, 0664);
-
-      if( Drush::verbose() && ! $success ){
-      	\Drupal::logger('cron')->notice("Failed to set permissions for $ckanFilePath");
       }
 
       // log results

@@ -394,21 +394,28 @@ class CronFunctions {
   /**
    * Generate output file for given data and headers
    */
-  private function write_to_csv($filename, $data_to_write, $csv_header, $public = TRUE) {
+  private function write_to_csv($filename, $data_to_write, $csv_header, $public = TRUE, $_append = FALSE) {
     try {
       // create output csv
       $path = $public
         ? \Drupal::service('file_system')->realpath(\file_default_scheme() . "://")
         : \Drupal\Core\Site\Settings::get('file_private_path');
-      $output = fopen($path . '/' . $filename, 'w');
+      $fileMode = $_append ? 'a' : 'w';
+      $output = fopen($path . '/' . $filename, $fileMode);
       if (!$output) {
         throw new \Exception('Failed to create export file.');
       }
 
-      // add BOM to fix UTF-8 in Excel
-      fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
-      // add csv header columns
-      fputcsv($output, $csv_header, ',', '"');
+      if( ! $_append ){
+        // add BOM to fix UTF-8 in Excel
+        fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+        // add csv header columns
+        fputcsv($output, $csv_header, ',', '"');
+      }
+
+      if( Drush::verbose() ){
+        \Drupal::logger('cron')->notice('Writing ' . count($data_to_write) . ' rows with mode ' . $fileMode);
+      }
 
       // write to csv
       foreach($data_to_write as $row) {
@@ -744,11 +751,8 @@ class CronFunctions {
 
     try{
 
-      $atiSubmissionCounts = $this->get_ati_request_submission_counts_by_date();
-      $atiIndexCount = $this->get_ati_index_record_count();
-
       $filename = 'ati-informal-requests-analytics.csv';
-      $csv_header = [
+      $headers = [
         'Year',
         'Month',
         'Unique Identifier',
@@ -761,72 +765,35 @@ class CronFunctions {
         'Number of Informal Requests'
       ];
 
-      try {
+      $atiSubmissionCounts = $this->get_ati_request_submission_counts_by_date();
+      $atiIndexCount = $this->get_ati_index_record_count();
 
-        // create new output csv
-        $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/' . $filename;
-        $output = fopen($filePath, 'w');
-        if (!$output) {
-          throw new \Exception('Failed to create export file.');
+      $offset = 0;
+      $limit = 500;
+      while($offset < $atiIndexCount){
+
+        $atiIndexItems = $this->get_ati_index_records($offset, $limit);
+
+        if( count($atiIndexItems) === 0 ){
+          \Drupal::logger('cron')->notice('Collected zero(0) ATI Summaries from the pd_core_ati solr index...finishing up...');
+          break;
         }
 
-        // add BOM to fix UTF-8 in Excel
-        fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
-        // add csv header columns
-        fputcsv($output, $csv_header, ',', '"');
-
-        fclose($output);
-
-      }catch (\Exception $e) {
-
-        \Drupal::logger('cron')->error('Unable to create ' . $filename . ' ' . $e->getMessage());
-
-      }
-
-      try {
-
-        // append rows to csv
-        $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/' . $filename;
-        $output = fopen($filePath, 'a');
-        if (!$output) {
-          throw new \Exception('Failed to open export file in append mode.');
+        if( Drush::verbose() ){
+          \Drupal::logger('cron')->notice('Collected ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index. (' . $offset . '-' . ( $offset + $limit ) . ' of ' . $atiIndexCount . ')');
         }
 
-        $offset = 0;
-        $limit = 500;
-        while($offset < $atiIndexCount){
+        $rows = $this->parse_ati_submission_counts_and_index_records_to_rows($atiSubmissionCounts, $atiIndexItems);
+        $append = $offset === 0 ? false : true;
+        $this->write_to_csv(
+          $filename,
+          $rows,
+          $headers,
+          true,
+          $append
+        );
 
-          $atiIndexItems = $this->get_ati_index_records($offset, $limit);
-
-          if( count($atiIndexItems) === 0 ){
-            \Drupal::logger('cron')->notice('Collected zero(0) ATI Summaries from the pd_core_ati solr index...finishing up...');
-            break;
-          }
-
-          if( Drush::verbose() ){
-            \Drupal::logger('cron')->notice('Collected ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index. (' . $offset . '-' . ( $offset + $limit ) . ' of ' . $atiIndexCount . ')');
-          }
-
-          $rows = $this->parse_ati_submission_counts_and_index_records_to_rows($atiSubmissionCounts, $atiIndexItems);
-
-          if( Drush::verbose() ){
-            \Drupal::logger('cron')->notice('Writing ' . count($rows) . ' rows with mode a');
-          }
-
-          // write to csv
-          foreach($rows as $row) {
-            fputcsv($output, $row, ',', '"');
-          }
-
-          $offset += count($atiIndexItems);
-
-        }
-
-        fclose($output);
-
-      }catch (\Exception $e) {
-
-        \Drupal::logger('cron')->error('Unable to create ' . $filename . ' ' . $e->getMessage());
+        $offset += count($atiIndexItems);
 
       }
 

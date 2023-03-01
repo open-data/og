@@ -128,7 +128,7 @@ function alter_view_preprocess_views_view(&$variables) {
       $view->result[0]->_item->getField('pages') &&
       $view->result[0]->_item->getField('pages')->getValues() &&
       $view->result[0]->_item->getField('pages')->getValues()[0] == "0") {
-        unset($variables['footer']['entity_webform'], $variables['footer']['entity_block_content']);
+        unset($variables['footer']['area_text_custom_1'], $variables['footer']['entity_webform'], $variables['footer']['entity_block_content']);
     }
   }
 }

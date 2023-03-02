@@ -19,7 +19,7 @@ use \Drupal\Core\Queue\QueueWorkerBase;
  *   cron = {"time" = 300}
  * )
  */
-final class OGPCustomQueue extends QueueWorkerBase{
+final class ogp_custom_queue extends QueueWorkerBase{
 
   /**
    * {@inheritdoc}

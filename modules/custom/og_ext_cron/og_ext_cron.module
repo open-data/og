@@ -13,9 +13,7 @@ use Drupal\og_ext_cron\Utils\CronFunctions;
  */
 function og_ext_cron_cron() {
   // clear proactive disclosure view caches
-  gc_disable();
   CronFunctions::clear_view_caches();
-  gc_enable();
   gc_collect_cycles();
 
 /*
@@ -40,32 +38,22 @@ function og_ext_cron_cron() {
 */
 
   // export dataset comments
-  gc_disable();
   CronFunctions::export_external_comments();
-  gc_enable();
   gc_collect_cycles();
 
   // export dataset ratings
-  gc_disable();
   CronFunctions::export_cumulative_dataset_ratings();
-  gc_enable();
   gc_collect_cycles();
 
   // export suggested datasets
-  gc_disable();
   CronFunctions::export_suggested_datasets();
-  gc_enable();
   gc_collect_cycles();
 
   // generate inventory vote count json file
-  gc_disable();
   CronFunctions::generate_vote_count_json_file();
-  gc_enable();
   gc_collect_cycles();
 
   // generate ATI informal requests CSV file
-  gc_disable();
   CronFunctions::generate_ati_requests_csv_file();
-  gc_enable();
   gc_collect_cycles();
 }

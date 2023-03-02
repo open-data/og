@@ -534,6 +534,11 @@ final class CronFunctions {
 
       }
 
+      $output = null;
+      $inventroyIndexCount = null;
+      $inventroyIndexItems = null;
+      $localVoteCounts = null;
+
     }catch( \Exception $_exception ){
 
       \Drupal::logger('cron')->error( 'Unable to create vote count json file:' . $_exception->getMessage() );
@@ -640,7 +645,7 @@ final class CronFunctions {
    * @param int $_limit
    * @return array
    */
-  private static function get_ati_index_records($_offset, $_limit){
+  private static function get_ati_index_records(&$_offset, &$_limit){
 
     $atiIndexItems = \Drupal\search_api\Entity\Index::load('pd_core_ati')
       ->query()
@@ -697,7 +702,7 @@ final class CronFunctions {
    * @param array $_records
    * @return array
    */
-  private static function parse_ati_submission_counts_and_index_records_to_rows($_submissionCounts, $_indexRecords){
+  private static function parse_ati_submission_counts_and_index_records_to_rows(&$_submissionCounts, &$_indexRecords){
 
     $rows = [];
     $missingIndexItemsCounter = 0;
@@ -794,8 +799,13 @@ final class CronFunctions {
         );
 
         $offset += count($atiIndexItems);
+        $atiIndexItems = null;
+        $rows = null;
 
       }
+
+      $atiSubmissionCounts = null;
+      $atiIndexCount = null;
 
       $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/' . $filename;
       $ckanFilePath = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/' . $filename;

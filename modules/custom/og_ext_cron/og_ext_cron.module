@@ -9,12 +9,10 @@ use Drupal\og_ext_cron\Utils\CronFunctions;
 
 /**
  * Implements hook_cron().
- * clear cache of views generated using Solr
  */
 function og_ext_cron_cron() {
   // clear proactive disclosure view caches
   CronFunctions::clear_view_caches();
-  gc_collect_cycles();
 
 /*
   // fetch organizations list from CKAN
@@ -39,21 +37,16 @@ function og_ext_cron_cron() {
 
   // export dataset comments
   CronFunctions::export_external_comments();
-  gc_collect_cycles();
 
   // export dataset ratings
   CronFunctions::export_cumulative_dataset_ratings();
-  gc_collect_cycles();
 
   // export suggested datasets
   CronFunctions::export_suggested_datasets();
-  gc_collect_cycles();
 
   // generate inventory vote count json file
   CronFunctions::generate_vote_count_json_file();
-  gc_collect_cycles();
 
   // generate ATI informal requests CSV file
   CronFunctions::generate_ati_requests_csv_file();
-  gc_collect_cycles();
 }

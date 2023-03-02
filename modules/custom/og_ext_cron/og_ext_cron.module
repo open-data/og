@@ -12,13 +12,15 @@ use Drupal\og_ext_cron\Utils\CronFunctions;
  * clear cache of views generated using Solr
  */
 function og_ext_cron_cron() {
-  $cron_tasks = new CronFunctions;
-
   // clear proactive disclosure view caches
-  $cron_tasks->clear_view_caches();
+  gc_disable();
+  CronFunctions::clear_view_caches();
+  gc_enable();
+  gc_collect_cycles();
+
 /*
   // fetch organizations list from CKAN
-  $cron_tasks->fetch_orgs_from_ckan();
+  CronFunctions::fetch_orgs_from_ckan();
 
   // fetch field lists from CKAN
   $fields = [
@@ -33,21 +35,37 @@ function og_ext_cron_cron() {
   ];
 
   foreach ($fields as $field => $type) {
-    $cron_tasks->fetch_from_ckan($field, $type);
+    CronFunctions::fetch_from_ckan($field, $type);
   }
 */
+
   // export dataset comments
-  $cron_tasks->export_external_comments();
+  gc_disable();
+  CronFunctions::export_external_comments();
+  gc_enable();
+  gc_collect_cycles();
 
   // export dataset ratings
-  $cron_tasks->export_cumulative_dataset_ratings();
+  gc_disable();
+  CronFunctions::export_cumulative_dataset_ratings();
+  gc_enable();
+  gc_collect_cycles();
 
   // export suggested datasets
-  $cron_tasks->export_suggested_datasets();
+  gc_disable();
+  CronFunctions::export_suggested_datasets();
+  gc_enable();
+  gc_collect_cycles();
 
   // generate inventory vote count json file
-  $cron_tasks->generate_vote_count_json_file();
+  gc_disable();
+  CronFunctions::generate_vote_count_json_file();
+  gc_enable();
+  gc_collect_cycles();
 
   // generate ATI informal requests CSV file
-  $cron_tasks->generate_ati_requests_csv_file();
+  gc_disable();
+  CronFunctions::generate_ati_requests_csv_file();
+  gc_enable();
+  gc_collect_cycles();
 }

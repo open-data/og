@@ -12,12 +12,12 @@ use \Drush\Drush;
 /**
  * Class CronFunctions.
  */
-class CronFunctions {
+final class CronFunctions {
 
   /**
    * clear cache of views generated using Solr
    */
-  public function clear_view_caches() {
+  public static function clear_view_caches() {
     $pd_views = [
       'pd_core_ati',
       'pd_core_contracts',
@@ -50,7 +50,7 @@ class CronFunctions {
   /**
    * Export all published comments into a csv file
    */
-  public function export_external_comments() {
+  public static function export_external_comments() {
     // fetch comments
     $comment_ids = \Drupal::entityQuery('comment')
       ->condition('entity_type', 'node')
@@ -103,7 +103,7 @@ class CronFunctions {
     ];
 
     // export as csv
-    $this->write_to_csv('export_comments.csv', $comments_data, $header);
+    self::write_to_csv('export_comments.csv', $comments_data, $header);
 
     // log results
     \Drupal::logger('cron')->notice('Comments export to csv file completed');
@@ -112,7 +112,7 @@ class CronFunctions {
   /**
    * Export all published comments into a csv file
    */
-  public function export_suggested_datasets() {
+  public static function export_suggested_datasets() {
     // fetch suggested dataset nodes
     $nids = \Drupal::entityQuery('node')
       ->condition('status', 1)
@@ -133,13 +133,13 @@ class CronFunctions {
 	if ($node_en && $node_fr) {
           // set default values
           $subject = $node->get('field_dataset_subject')->getValue()
-            ? $this->implodeAllValues($node->get('field_dataset_subject')->getValue())
+            ? self::implodeAllValues($node->get('field_dataset_subject')->getValue())
             : 'information_and_communications';
           $keywords_en = $node_en->get('field_dataset_keywords')->getValue()
-            ? $this->implodeAllValues($node_en->get('field_dataset_keywords')->getValue())
+            ? self::implodeAllValues($node_en->get('field_dataset_keywords')->getValue())
             : 'dataset';
           $keywords_fr = $node_fr->get('field_dataset_keywords')->getValue()
-            ? $this->implodeAllValues($node_fr->get('field_dataset_keywords')->getValue())
+            ? self::implodeAllValues($node_fr->get('field_dataset_keywords')->getValue())
             : 'Jeu de données';
           $status = $node->get('field_sd_status')->getValue()
             ? $node->get('field_sd_status')->getValue()[0]['value']
@@ -205,7 +205,7 @@ class CronFunctions {
     ];
 
     // export as csv
-    $this->write_to_csv('suggested-dataset.csv', $export_data, $header, FALSE);
+    self::write_to_csv('suggested-dataset.csv', $export_data, $header, FALSE);
 
     // log results
     \Drupal::logger('cron')->notice('Suggested datasets exported');
@@ -214,7 +214,7 @@ class CronFunctions {
   /**
    * Export dataset ratings as CSV with cumulative ratings and vote count
    */
-  public function export_cumulative_dataset_ratings() {
+  public static function export_cumulative_dataset_ratings() {
     try {
       // fetch ratings from database
       $database = \Drupal::database();
@@ -268,7 +268,7 @@ class CronFunctions {
       ];
 
       // export as csv
-      $this->write_to_csv('dataset-ratings.csv', $output_data, $header);
+      self::write_to_csv('dataset-ratings.csv', $output_data, $header);
 
       // log results
       \Drupal::logger('cron')->notice('Dataset ratings exported');
@@ -283,7 +283,7 @@ class CronFunctions {
    * Set dynamic allowed values for organization field
    * The options will be same as CKAN
    */
-  public function fetch_orgs_from_ckan() {
+  public static function fetch_orgs_from_ckan() {
     $options = [];
     $filename = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/od-do-orgs.jsonl';
     if (file_exists($filename) && $contents = file($filename)) {
@@ -317,7 +317,7 @@ class CronFunctions {
    * Set dynamic allowed values for given field
    * The options will be same as CKAN
    */
-  public function fetch_from_ckan($field_name, $field_type) {
+  public static function fetch_from_ckan($field_name, $field_type) {
 //    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     $options = [];
     $url = 'https://open.canada.ca/data/api/action/scheming_dataset_schema_show?type=dataset';
@@ -373,7 +373,7 @@ class CronFunctions {
    * @param $parentArray
    * @return string
    */
-  private function implodeAllValues($parentArray) {
+  private static function implodeAllValues($parentArray) {
     $values = '';
     $size = sizeof($parentArray);
     $i=0;
@@ -394,7 +394,7 @@ class CronFunctions {
   /**
    * Generate output file for given data and headers
    */
-  private function write_to_csv($filename, $data_to_write, $csv_header, $public = TRUE, $_append = FALSE) {
+  private static function write_to_csv($filename, $data_to_write, $csv_header, $public = TRUE, $_append = FALSE) {
     try {
       // create output csv
       $path = $public
@@ -435,7 +435,7 @@ class CronFunctions {
    * @return void
    * Generate vote count JSON file
    */
-  public function generate_vote_count_json_file()
+  public static function generate_vote_count_json_file()
   {
 
     #FIXME: uses a lot of memory...make an output stream for json files??
@@ -548,7 +548,7 @@ class CronFunctions {
    * @param string $_field
    * @return mixed
    */
-  private function get_item_interface_field_value( $_itemInterface, $_field, $_singleValue = True ){
+  private static function get_item_interface_field_value( $_itemInterface, $_field, $_singleValue = True ){
 
     if( $_field == 'id' ){
 
@@ -588,7 +588,7 @@ class CronFunctions {
    * @method get_ati_request_submission_counts_by_date
    * @return array
    */
-  private function get_ati_request_submission_counts_by_date(){
+  private static function get_ati_request_submission_counts_by_date(){
 
     //get webform submissions from `ati_records` form
     $atiSubmissionsQuery = \Drupal::database()->select( 'webform_submission', 'n' );
@@ -620,7 +620,7 @@ class CronFunctions {
    * @method get_ati_index_record_count
    * @return int|null
    */
-  private function get_ati_index_record_count(){
+  private static function get_ati_index_record_count(){
 
     //get solr index data for `core_ati`
     $atiIndexCount = \Drupal\search_api\Entity\Index::load('pd_core_ati')
@@ -640,7 +640,7 @@ class CronFunctions {
    * @param int $_limit
    * @return array
    */
-  private function get_ati_index_records($_offset, $_limit){
+  private static function get_ati_index_records($_offset, $_limit){
 
     $atiIndexItems = \Drupal\search_api\Entity\Index::load('pd_core_ati')
       ->query()
@@ -654,13 +654,13 @@ class CronFunctions {
        * @var \Drupal\search_api\Item\ItemInterface $_atiIndexItem
        */
 
-      $id = $this->get_item_interface_field_value( $_atiIndexItem, 'id' );
-      $requestNumber = $this->get_item_interface_field_value( $_atiIndexItem, 'request_number' );
-      $summaryEn = $this->get_item_interface_field_value( $_atiIndexItem, 'summary_en' );
-      $summaryFr = $this->get_item_interface_field_value( $_atiIndexItem, 'summary_fr' );
-      $ownerOrgCode = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_code' );
-      $ownerOrgNameEn = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_en' );
-      $ownerOrgNameFr = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_fr' );
+      $id = self::get_item_interface_field_value( $_atiIndexItem, 'id' );
+      $requestNumber = self::get_item_interface_field_value( $_atiIndexItem, 'request_number' );
+      $summaryEn = self::get_item_interface_field_value( $_atiIndexItem, 'summary_en' );
+      $summaryFr = self::get_item_interface_field_value( $_atiIndexItem, 'summary_fr' );
+      $ownerOrgCode = self::get_item_interface_field_value( $_atiIndexItem, 'org_name_code' );
+      $ownerOrgNameEn = self::get_item_interface_field_value( $_atiIndexItem, 'org_name_en' );
+      $ownerOrgNameFr = self::get_item_interface_field_value( $_atiIndexItem, 'org_name_fr' );
 
       if(
         is_null($id) ||
@@ -697,7 +697,7 @@ class CronFunctions {
    * @param array $_records
    * @return array
    */
-  private function parse_ati_submission_counts_and_index_records_to_rows($_submissionCounts, $_indexRecords){
+  private static function parse_ati_submission_counts_and_index_records_to_rows($_submissionCounts, $_indexRecords){
 
     $rows = [];
     $missingIndexItemsCounter = 0;
@@ -744,7 +744,7 @@ class CronFunctions {
    * @return void
    * Generate ATI informal requests CSV file
    */
-  public function generate_ati_requests_csv_file(){
+  public static function generate_ati_requests_csv_file(){
     # Due to the 40k+ records, we have to append to a csv file
     # similar to an output stream. This prevents us from being
     # able to sort the csv rows before writing them.
@@ -765,14 +765,14 @@ class CronFunctions {
         'Number of Informal Requests'
       ];
 
-      $atiSubmissionCounts = $this->get_ati_request_submission_counts_by_date();
-      $atiIndexCount = $this->get_ati_index_record_count();
+      $atiSubmissionCounts = self::get_ati_request_submission_counts_by_date();
+      $atiIndexCount = self::get_ati_index_record_count();
 
       $offset = 0;
       $limit = 500;
       while($offset < $atiIndexCount){
 
-        $atiIndexItems = $this->get_ati_index_records($offset, $limit);
+        $atiIndexItems = self::get_ati_index_records($offset, $limit);
 
         if( count($atiIndexItems) === 0 ){
           \Drupal::logger('cron')->notice('Collected zero(0) ATI Summaries from the pd_core_ati solr index...finishing up...');
@@ -783,9 +783,9 @@ class CronFunctions {
           \Drupal::logger('cron')->notice('Collected ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index. (' . $offset . '-' . ( $offset + $limit ) . ' of ' . $atiIndexCount . ')');
         }
 
-        $rows = $this->parse_ati_submission_counts_and_index_records_to_rows($atiSubmissionCounts, $atiIndexItems);
+        $rows = self::parse_ati_submission_counts_and_index_records_to_rows($atiSubmissionCounts, $atiIndexItems);
         $append = $offset === 0 ? false : true;
-        $this->write_to_csv(
+        self::write_to_csv(
           $filename,
           $rows,
           $headers,

@@ -593,7 +593,7 @@ final class CronFunctions {
    * @param string $_field
    * @return mixed
    */
-  private static function get_item_interface_field_value( &$_itemInterface, &$_field, &$_singleValue = True ){
+  private static function get_item_interface_field_value( &$_itemInterface, $_field, $_singleValue = True ){
 
     if( $_field == 'id' ){
 

@@ -97,7 +97,7 @@ function create_queue_item(&$_queue, $_data) {
  * @QueueWorker(
  *   id = "ogp_custom_queue",
  *   title = @Translation("OGP Custom Queue"),
- *   cron = {"time" = 60}
+ *   cron = {"time" = 300}
  * )
  */
 final class OGPCustomQueue extends QueueWorkerBase{

@@ -61,7 +61,7 @@ function og_ext_cron_cron() {
  * @param array $_data
  * @return mixed
  */
-function create_queue_item(&$_queue, &$_data) {
+function create_queue_item(&$_queue, $_data) {
 
   if(
     ! is_array( $_data )

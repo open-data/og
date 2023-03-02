@@ -119,6 +119,31 @@ final class CronFunctions {
   }
 
   /**
+   * @method get_node_field_value
+   * @param \Drupal\node\Entity\Node $_node
+   * @param string $_field
+   * @param bool $_stripTags
+   * @return mixed
+   */
+  private static function get_node_field_value(&$_node, $_field, $_stripTags = FALSE){
+
+    $fieldValue = $_node->get($_field)->getValue();
+
+    if( 
+      ! is_array( $fieldValue )
+      || is_null( $fieldValue[0] )
+      || ! array_key_exists('value', $fieldValue[0])
+    ){ 
+      return null; 
+    }
+
+    if( ! $_stripTags ){ return $fieldValue[0]['value']; }
+
+    return strip_tags($fieldValue[0]['value']);
+
+  }
+
+  /**
    * Export all published comments into a csv file
    */
   public static function export_suggested_datasets() {
@@ -153,22 +178,14 @@ final class CronFunctions {
           $status = $node->get('field_sd_status')->getValue()
             ? $node->get('field_sd_status')->getValue()[0]['value']
             : 'department_contacted';
-          $organization = is_array($fv = $node->get('field_organization')->getValue()) && array_key_exists('value', $fv[0])
-            ? $fv[0]['value'] : null;
-          $description_en = is_array($fv = $node_en->get('body')->getValue()) && array_key_exists('value', $fv[0])
-            ? strip_tags($fv[0]['value']) : null;
-          $description_fr = is_array($fv = $node_fr->get('body')->getValue()) && array_key_exists('value', $fv[0])
-            ? strip_tags($fv[0]['value']) : null;
-          $status_link = is_array($fv = $node->get('field_status_link')->getValue()) && array_key_exists('value', $fv[0])
-            ? $fv[0]['value'] : null;
-          $date_published = is_array($fv = $node->get('field_date_published')->getValue()) && array_key_exists('value', $fv[0])
-            ? $fv[0]['value'] : null;
-          $votes = is_array($fv = $node->get('field_vote_up_down')->getValue()) && array_key_exists('value', $fv[0])
-            ? $fv[0]['value'] : null;
-          $additional_comments_and_feedback_en = is_array($fv = $node_en->get('field_feedback')->getValue()) && array_key_exists('value', $fv[0])
-            ? $fv[0]['value'] : null;
-          $additional_comments_and_feedback_fr = is_array($fv = $node_fr->get('field_feedback')->getValue()) && array_key_exists('value', $fv[0])
-            ? $fv[0]['value'] : null;
+          $organization = self::get_node_field_value($node, 'field_organization');
+          $description_en = self::get_node_field_value($node_en, 'body', true);
+          $description_fr = self::get_node_field_value($node_fr, 'body', true);
+          $status_link = self::get_node_field_value($node, 'field_status_link');
+          $date_published = self::get_node_field_value($node, 'field_date_published');
+          $votes = self::get_node_field_value($node, 'field_vote_up_down');
+          $additional_comments_and_feedback_en = self::get_node_field_value($node_en, 'field_feedback');
+          $additional_comments_and_feedback_fr = self::get_node_field_value($node_fr, 'field_feedback');
           $data = [
             'uuid' => $node->uuid(),
             'suggestion_id' => $node->id(),
@@ -190,11 +207,7 @@ final class CronFunctions {
           ];
 
           // get webform submission for suggested datasets
-          if( 
-            is_array($fv = $node->get('field_webform_submission_id')->getValue())
-            && array_key_exists('value', $fv[0])
-          ){
-            $wid = $fv[0]['value'];
+          if( ! is_null( $wid = self::get_node_field_value($node, 'field_webform_submission_id') )){
             if ($webform_submission = WebformSubmission::load($wid)) {
               $webform_data = [
                 'webform_submission_id' => $wid,

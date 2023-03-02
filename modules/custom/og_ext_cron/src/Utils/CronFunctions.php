@@ -2,10 +2,9 @@
 
 namespace Drupal\og_ext_cron\Utils;
 
-use Drupal\Core\Cache\Cache;
+use \Drupal\Core\Cache\Cache;
 use \Drupal\node\Entity\Node;
-use Symfony\Component\Yaml\Parser;
-use Drupal\views\Views;
+use \Drupal\views\Views;
 use \Drupal\webform\Entity\WebformSubmission;
 use \Drush\Drush;
 
@@ -15,6 +14,9 @@ use \Drush\Drush;
 final class CronFunctions {
 
   /**
+   * @method clear_view_caches
+   * @return void
+   * 
    * clear cache of views generated using Solr
    */
   public static function clear_view_caches() {
@@ -48,6 +50,9 @@ final class CronFunctions {
   }
 
   /**
+   * @method export_external_comments
+   * @return void
+   * 
    * Export all published comments into a csv file
    */
   public static function export_external_comments() {
@@ -78,7 +83,7 @@ final class CronFunctions {
         if ($comment->isPublished() && $node->isPublished()) {
           $url_en = ($node->hasTranslation('en') ? 'https://open.canada.ca' . $node->getTranslation('en')->url() : '');
           $url_fr = ($node->hasTranslation('fr') ? 'https://ouvert.canada.ca' . $node->getTranslation('fr')->url() : '');
-	  $uuid = ($node->type->entity->id() === 'external') ? $node->field_uuid->value : '';
+	        $uuid = ($node->type->entity->id() === 'external') ? $node->field_uuid->value : '';
           $comments_data[] = [
             'comment_id' => $comment->id(),
             'page_en' => $url_en,
@@ -87,9 +92,9 @@ final class CronFunctions {
             'comment_body' => $comment->get('comment_body')->getValue()[0]['value'],
             'comment_posted_by' => $comment->getAuthorName(),
             'date_posted' => \Drupal::service('date.formatter')->format($comment->getCreatedTime(), 'html_date'),
-	    'node_id' => $node->id(),
-	    'node_type' => $node->type->entity->label(),
-	    'dataset_uuid' => $uuid,
+            'node_id' => $node->id(),
+            'node_type' => $node->type->entity->label(),
+            'dataset_uuid' => $uuid,
           ];
         }
       }
@@ -125,16 +130,17 @@ final class CronFunctions {
    * @param bool $_stripTags
    * @return mixed
    */
-  private static function get_node_field_value(&$_node, $_field, $_stripTags = FALSE){
+  private static function get_node_field_value(&$_node, $_field, $_stripTags = FALSE, $_default = null){
 
     $fieldValue = $_node->get($_field)->getValue();
 
     if( 
       ! is_array( $fieldValue )
+      || count( $fieldValue ) === 0
       || is_null( $fieldValue[0] )
       || ! array_key_exists('value', $fieldValue[0])
     ){ 
-      return null; 
+      return $_default; 
     }
 
     if( ! $_stripTags ){ return $fieldValue[0]['value']; }
@@ -144,6 +150,9 @@ final class CronFunctions {
   }
 
   /**
+   * @method export_suggested_datasets
+   * @return void
+   * 
    * Export all published comments into a csv file
    */
   public static function export_suggested_datasets() {
@@ -161,10 +170,10 @@ final class CronFunctions {
 
       foreach($nodes as $node) {
         // get translation of node
-	$node_en = $node->hasTranslation('en') ? $node->getTranslation('en') : $node;
-	$node_fr = $node->hasTranslation('fr') ? $node->getTranslation('fr') : null;
+        $node_en = $node->hasTranslation('en') ? $node->getTranslation('en') : $node;
+        $node_fr = $node->hasTranslation('fr') ? $node->getTranslation('fr') : null;
 
-	if ($node_en && $node_fr) {
+        if ($node_en && $node_fr) {
           // set default values
           $subject = $node->get('field_dataset_subject')->getValue()
             ? self::implodeAllValues($node->get('field_dataset_subject')->getValue())
@@ -175,9 +184,7 @@ final class CronFunctions {
           $keywords_fr = $node_fr->get('field_dataset_keywords')->getValue()
             ? self::implodeAllValues($node_fr->get('field_dataset_keywords')->getValue())
             : 'Jeu de données';
-          $status = $node->get('field_sd_status')->getValue()
-            ? $node->get('field_sd_status')->getValue()[0]['value']
-            : 'department_contacted';
+          $status = self::get_node_field_value($node, 'field_sd_status', false, 'department_contacted');
           $organization = self::get_node_field_value($node, 'field_organization');
           $description_en = self::get_node_field_value($node_en, 'body', true);
           $description_fr = self::get_node_field_value($node_fr, 'body', true);
@@ -261,6 +268,9 @@ final class CronFunctions {
   }
 
   /**
+   * @method export_cumulative_dataset_ratings
+   * @return void
+   * 
    * Export dataset ratings as CSV with cumulative ratings and vote count
    */
   public static function export_cumulative_dataset_ratings() {
@@ -289,7 +299,14 @@ final class CronFunctions {
       while (!gzeof($handle)) {
         $line = gzgets($handle);
         $data = json_decode($line, TRUE);
-        $datasets[$data['id']] = ['en' => $data['title_translated']['en'], 'fr' => $data['title_translated']['fr']];
+        if(
+          is_array( $data )
+          && array_key_exists( 'title_translated', $data )
+        ){
+          $englishTitle = array_key_exists( 'en', $data['title_translated'] ) ? $data['title_translated']['en'] : null;
+          $frenchTitle = array_key_exists( 'fr', $data['title_translated'] ) ? $data['title_translated']['fr'] : null;
+          $datasets[$data['id']] = ['en' => $englishTitle, 'fr' => $frenchTitle];
+        }
       }
       gzclose($handle);
 
@@ -307,7 +324,8 @@ final class CronFunctions {
         }
       }
 
-      $header = ['title_en / titre_en',
+      $header = [
+        'title_en / titre_en',
         'title_fr / titre_fr',
         'uuid',
         'avg_user_rating / coter_moyen',
@@ -333,6 +351,9 @@ final class CronFunctions {
   }
 
   /**
+   * @method fetch_orgs_from_ckan
+   * @return void
+   * 
    * Set dynamic allowed values for organization field
    * The options will be same as CKAN
    */
@@ -367,6 +388,11 @@ final class CronFunctions {
   }
 
   /**
+   * @method fetch_from_ckan
+   * @param string $field_name
+   * @param string $field_type
+   * @return array
+   * 
    * Set dynamic allowed values for given field
    * The options will be same as CKAN
    */
@@ -422,9 +448,11 @@ final class CronFunctions {
   }
 
   /**
-   * Helper function to combine all values in a nested array in a string
-   * @param $parentArray
+   * @method implodeAllValues
+   * @param array $parentArray
    * @return string
+   * 
+   * Helper function to combine all values in a nested array in a string
    */
   private static function implodeAllValues($parentArray) {
     $values = '';
@@ -445,6 +473,14 @@ final class CronFunctions {
   }
 
   /**
+   * @method write_to_csv
+   * @param string $filename
+   * @param array $data_to_write
+   * @param array $csv_header
+   * @param bool $public
+   * @param bool $_append
+   * @return void
+   * 
    * Generate output file for given data and headers
    */
   private static function write_to_csv($filename, $data_to_write, $csv_header, $public = TRUE, $_append = FALSE) {

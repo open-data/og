@@ -1,6 +1,7 @@
 <?php
 
-use Drupal\og_ext_cron\Utils\CronFunctions;
+use \Drupal\og_ext_cron\Utils\CronFunctions;
+use \Drupal\Core\Queue\QueueWorkerBase;
 
 /**
 * @file
@@ -13,6 +14,24 @@ use Drupal\og_ext_cron\Utils\CronFunctions;
 function og_ext_cron_cron() {
   // clear proactive disclosure view caches
   CronFunctions::clear_view_caches();
+
+  $jobQueue = Drupal::queue('ogp_custom_queue');
+  $jobQueue->createQueue();
+
+  // export dataset comments
+  create_queue_item($jobQueue, ['cron_function' => 'export_external_comments']);
+
+  // export dataset ratings
+  create_queue_item($jobQueue, ['cron_function' => 'export_cumulative_dataset_ratings']);
+
+  // export suggested datasets
+  create_queue_item($jobQueue, ['cron_function' => 'export_suggested_datasets']);
+
+  // generate inventory vote count json file
+  create_queue_item($jobQueue, ['cron_function' => 'generate_vote_count_json_file']);
+
+  // generate ATI informal requests CSV file
+  create_queue_item($jobQueue, ['cron_function' => 'generate_ati_requests_csv_file']);
 
 /*
   // fetch organizations list from CKAN
@@ -34,19 +53,82 @@ function og_ext_cron_cron() {
     CronFunctions::fetch_from_ckan($field, $type);
   }
 */
+}
 
-  // export dataset comments
-  CronFunctions::export_external_comments();
+/**
+ * @method create_queue_item
+ * @param \Drupal\Core\Queue\QueueInterface $_queue
+ * @param array $_data
+ * @return mixed
+ */
+function create_queue_item(&$_queue, &$_data) {
 
-  // export dataset ratings
-  CronFunctions::export_cumulative_dataset_ratings();
+  if(
+    ! is_array( $_data )
+    || ! array_key_exists( 'cron_function', $_data )
+  ){
 
-  // export suggested datasets
-  CronFunctions::export_suggested_datasets();
+    \Drupal::logger('cron')->error('No cron_function supplied to worker queue ogp_custom_queue');
+    return;
 
-  // generate inventory vote count json file
-  CronFunctions::generate_vote_count_json_file();
+  }
 
-  // generate ATI informal requests CSV file
-  CronFunctions::generate_ati_requests_csv_file();
+  if( ! method_exists('\Drupal\og_ext_cron\Utils\CronFunctions', $_data['cron_function'] ) ){
+
+    \Drupal::logger('cron')->error('Method ' . $_data['cron_function'] . ' not found in class \Drupal\og_ext_cron\Utils\CronFunctions');
+    return;
+
+  }
+
+  \Drupal::logger('cron')->notice('Added CronFunctions::' . $_data['cron_function'] . ' to the worker queue ogp_custom_queue');
+
+  return $_queue->createItem($_data);
+
+}
+
+/**
+ * Runs memory intensive functions in a worker queue.
+ * Heavily intensive functions should use the queue
+ * and not the above cron hook.
+ * 
+ * The cron time is the number of seconds that
+ * Drupal should spend on calling this worker.
+ *
+ * @QueueWorker(
+ *   id = "ogp_custom_queue",
+ *   title = @Translation("OGP Custom Queue"),
+ *   cron = {"time" = 60}
+ * )
+ */
+final class OGPCustomQueue extends QueueWorkerBase{
+
+  /**
+   * {@inheritdoc}
+   * 
+   * Double check that the cron_function exists in our class.
+   * It could be possible that createItem was called directly.
+   */
+  public function processItem($data) {
+
+    if(
+      ! is_array( $data )
+      || ! array_key_exists( 'cron_function', $data )
+    ){
+
+      \Drupal::logger('cron')->error('No cron_function supplied to worker queue ogp_custom_queue');
+      return;
+
+    }
+
+    if( ! method_exists('\Drupal\og_ext_cron\Utils\CronFunctions', $data['cron_function'] ) ){
+
+      \Drupal::logger('cron')->error('Method ' . $data['cron_function'] . ' not found in class \Drupal\og_ext_cron\Utils\CronFunctions');
+      return;
+
+    }
+
+    CronFunctions::$data['cron_function']();
+
+  }
+
 }

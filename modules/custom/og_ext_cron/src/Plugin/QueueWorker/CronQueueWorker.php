@@ -6,6 +6,11 @@ use \Drupal\og_ext_cron\Utils\CronFunctions;
 use \Drupal\Core\Queue\QueueWorkerBase;
 
 /**
+ * @file
+ * Contains \Drupal\mymodule\Plugin\QueueWorker\EmailQueue.
+ */
+
+/**
  * Runs memory intensive functions in a worker queue.
  * Heavily intensive functions should use the queue
  * and not the above cron hook.
@@ -19,7 +24,7 @@ use \Drupal\Core\Queue\QueueWorkerBase;
  *   cron = {"time" = 300}
  * )
  */
-final class ogp_custom_queue extends QueueWorkerBase{
+final class CronQueueWorker extends QueueWorkerBase{
 
   /**
    * {@inheritdoc}

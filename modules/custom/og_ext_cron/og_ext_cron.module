@@ -18,19 +18,19 @@ function og_ext_cron_cron() {
   $jobQueue->createQueue();
 
   // export dataset comments
-  create_queue_item($jobQueue, ['cron_function' => 'export_external_comments']);
+  _create_queue_item($jobQueue, ['cron_function' => 'export_external_comments']);
 
   // export dataset ratings
-  create_queue_item($jobQueue, ['cron_function' => 'export_cumulative_dataset_ratings']);
+  _create_queue_item($jobQueue, ['cron_function' => 'export_cumulative_dataset_ratings']);
 
   // export suggested datasets
-  create_queue_item($jobQueue, ['cron_function' => 'export_suggested_datasets']);
+  _create_queue_item($jobQueue, ['cron_function' => 'export_suggested_datasets']);
 
   // generate inventory vote count json file
-  create_queue_item($jobQueue, ['cron_function' => 'generate_vote_count_json_file']);
+  _create_queue_item($jobQueue, ['cron_function' => 'generate_vote_count_json_file']);
 
   // generate ATI informal requests CSV file
-  create_queue_item($jobQueue, ['cron_function' => 'generate_ati_requests_csv_file']);
+  _create_queue_item($jobQueue, ['cron_function' => 'generate_ati_requests_csv_file']);
 
 /*
   // fetch organizations list from CKAN
@@ -60,7 +60,7 @@ function og_ext_cron_cron() {
  * @param array $_data
  * @return mixed
  */
-function create_queue_item(&$_queue, $_data) {
+function _create_queue_item(&$_queue, $_data) {
 
   if(
     ! is_array( $_data )
@@ -79,8 +79,15 @@ function create_queue_item(&$_queue, $_data) {
 
   }
 
-  \Drupal::logger('cron')->notice('Added CronFunctions::' . $_data['cron_function'] . ' to the worker queue ogp_custom_queue');
+  $queueID = $_queue->createItem($_data);
 
-  return $_queue->createItem($_data);
+  if( ! $queueID ){
+
+    \Drupal::logger('cron')->error('Failed to add CronFunctions::' . $_data['cron_function'] . ' to the worker queue ogp_custom_queue');
+
+  }
+
+  \Drupal::logger('cron')->notice('Added CronFunctions::' . $_data['cron_function'] . ' to the worker queue ogp_custom_queue with the ID of: ' . $queueID);
+  return $queueID;
 
 }

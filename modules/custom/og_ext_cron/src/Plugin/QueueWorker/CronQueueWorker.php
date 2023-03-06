@@ -19,8 +19,8 @@ use \Drupal\Core\Queue\QueueWorkerBase;
  * Drupal should spend on calling this worker.
  *
  * @QueueWorker(
- *   id = "ogp_custom_queue",
- *   title = @Translation("OGP Custom Queue"),
+ *   id = "ogp_queue",
+ *   title = @Translation("OGP Queue"),
  *   cron = {"time" = 300}
  * )
  */
@@ -32,6 +32,8 @@ final class CronQueueWorker extends QueueWorkerBase implements ContainerFactoryP
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
+
+  public static string $QUEUE_NAME = 'ogp_queue';
 
   /**
    * Constructs a new class instance.
@@ -54,6 +56,9 @@ final class CronQueueWorker extends QueueWorkerBase implements ContainerFactoryP
    * {@inheritdoc}
    */
   public static function create($container, $configuration, $plugin_id, $plugin_definition) {
+    \Drupal::logger('cron')->notice(get_class($container));
+    \Drupal::logger('cron')->notice(var_export($configuration, true));
+    \Drupal::logger('cron')->notice(var_export($plugin_definition, true));
     return new static(
       $configuration,
       $plugin_id,
@@ -87,7 +92,10 @@ final class CronQueueWorker extends QueueWorkerBase implements ContainerFactoryP
 
     }
 
-    call_user_func(['\Drupal\og_ext_cron\Utils\CronFunctions', $data['cron_function']]);
+    $args = $data;
+    unset($args['cron_function']);
+
+    call_user_func_array(['\Drupal\og_ext_cron\Utils\CronFunctions', $data['cron_function']], $args);
 
   }
 

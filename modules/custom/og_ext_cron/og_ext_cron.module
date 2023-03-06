@@ -17,7 +17,7 @@ function og_ext_cron_cron() {
   $jobQueue = Drupal::queue('ogp_custom_queue');
   $jobQueue->createQueue();
   $currentQueueItemData = _get_current_queue_data('ogp_custom_queue');
-  
+
   // export dataset comments
   _create_queue_item($jobQueue, ['cron_function' => 'export_external_comments'], $currentQueueItemData);
 

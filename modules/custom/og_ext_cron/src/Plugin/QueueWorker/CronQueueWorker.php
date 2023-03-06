@@ -2,7 +2,6 @@
 
 namespace Drupal\og_ext_cron\Plugin\QueueWorker;
 
-use \Drupal\og_ext_cron\Utils\CronFunctions;
 use \Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use \Drupal\Core\Queue\QueueWorkerBase;
 
@@ -88,7 +87,7 @@ final class CronQueueWorker extends QueueWorkerBase implements ContainerFactoryP
 
     }
 
-    CronFunctions::$data['cron_function']();
+    call_user_func(['\Drupal\og_ext_cron\Utils\CronFunctions', $data['cron_function']]);
 
   }
 

@@ -3,18 +3,19 @@
 namespace Drupal\og_ext_cron\Plugin\QueueWorker;
 
 use \Drupal\og_ext_cron\Utils\CronFunctions;
+use \Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use \Drupal\Core\Queue\QueueWorkerBase;
 
 /**
  * @file
- * Contains \Drupal\mymodule\Plugin\QueueWorker\EmailQueue.
+ * Contains \Drupal\og_ext_cron\Plugin\QueueWorker\CronQueueWorker.
  */
 
 /**
  * Runs memory intensive functions in a worker queue.
  * Heavily intensive functions should use the queue
  * and not the above cron hook.
- * 
+ *
  * The cron time is the number of seconds that
  * Drupal should spend on calling this worker.
  *
@@ -24,11 +25,47 @@ use \Drupal\Core\Queue\QueueWorkerBase;
  *   cron = {"time" = 300}
  * )
  */
-final class CronQueueWorker extends QueueWorkerBase{
+final class CronQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface{
+
+  /**
+   * The entity type manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Constructs a new class instance.
+   *
+   * @param array $_configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $_pluginID
+   *   The plugin_id for the plugin instance.
+   * @param mixed $_pluginDefinition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $_entityTypeManager
+   *   Entity type manager service.
+   */
+  public function __construct($_configuration, $_pluginID, $_pluginDefinition, $_entityTypeManager) {
+    parent::__construct($_configuration, $_pluginID, $_pluginDefinition);
+    $this->entityTypeManager = $_entityTypeManager;
+  }
 
   /**
    * {@inheritdoc}
-   * 
+   */
+  public static function create($container, $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('entity_type.manager')
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   *
    * Double check that the cron_function exists in our class.
    * It could be possible that createItem was called directly.
    */

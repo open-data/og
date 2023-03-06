@@ -16,21 +16,22 @@ function og_ext_cron_cron() {
 
   $jobQueue = Drupal::queue('ogp_custom_queue');
   $jobQueue->createQueue();
-
+  $currentQueueItemData = _get_current_queue_data('ogp_custom_queue');
+  
   // export dataset comments
-  _create_queue_item($jobQueue, ['cron_function' => 'export_external_comments']);
+  _create_queue_item($jobQueue, ['cron_function' => 'export_external_comments'], $currentQueueItemData);
 
   // export dataset ratings
-  _create_queue_item($jobQueue, ['cron_function' => 'export_cumulative_dataset_ratings']);
+  _create_queue_item($jobQueue, ['cron_function' => 'export_cumulative_dataset_ratings'], $currentQueueItemData);
 
   // export suggested datasets
-  _create_queue_item($jobQueue, ['cron_function' => 'export_suggested_datasets']);
+  _create_queue_item($jobQueue, ['cron_function' => 'export_suggested_datasets'], $currentQueueItemData);
 
   // generate inventory vote count json file
-  _create_queue_item($jobQueue, ['cron_function' => 'generate_vote_count_json_file']);
+  _create_queue_item($jobQueue, ['cron_function' => 'generate_vote_count_json_file'], $currentQueueItemData);
 
   // generate ATI informal requests CSV file
-  _create_queue_item($jobQueue, ['cron_function' => 'generate_ati_requests_csv_file']);
+  _create_queue_item($jobQueue, ['cron_function' => 'generate_ati_requests_csv_file'], $currentQueueItemData);
 
 /*
   // fetch organizations list from CKAN
@@ -55,12 +56,47 @@ function og_ext_cron_cron() {
 }
 
 /**
- * @method create_queue_item
+ * @method _get_current_queue_data
+ * @param string $_queueName
+ * @return array
+ */
+function _get_current_queue_data($_queueName){
+
+  $currentQueueItemData = \Drupal::database()->select( 'queue', 't' )
+                                             ->fields( 't', ['data'] )
+                                             ->condition( 't.name', $_queueName )
+                                             ->execute()->fetchAll();
+
+  $return = [];
+
+  foreach( $currentQueueItemData as $_itemData ){
+
+    if( ! is_object( $_itemData ) || ! isset( $_itemData->data ) ){ continue; }
+
+    $data = unserialize($_itemData->data);
+
+    if( ! $data ){
+
+      \Drupal::logger('cron')->warning('Failed to unserialize string ' . $_itemData->data);
+      continue;
+
+    }
+
+    $return[] = $data;
+
+  }
+
+  return $return;
+
+}
+
+/**
+ * @method _create_queue_item
  * @param \Drupal\Core\Queue\QueueInterface $_queue
  * @param array $_data
  * @return mixed
  */
-function _create_queue_item(&$_queue, $_data) {
+function _create_queue_item(&$_queue, $_data, &$_currentData) {
 
   if(
     ! is_array( $_data )
@@ -75,6 +111,13 @@ function _create_queue_item(&$_queue, $_data) {
   if( ! method_exists('\Drupal\og_ext_cron\Utils\CronFunctions', $_data['cron_function'] ) ){
 
     \Drupal::logger('cron')->error('Method ' . $_data['cron_function'] . ' not found in class \Drupal\og_ext_cron\Utils\CronFunctions');
+    return;
+
+  }
+
+  if( in_array( $_data, $_currentData ) ){
+
+    \Drupal::logger('cron')->warning('Method ' . $_data['cron_function'] . ' already in worker queue ogp_custom_queue, skipping.');
     return;
 
   }

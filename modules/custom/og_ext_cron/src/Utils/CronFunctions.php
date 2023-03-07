@@ -2,21 +2,24 @@
 
 namespace Drupal\og_ext_cron\Utils;
 
-use Drupal\Core\Cache\Cache;
+use \Drupal\Core\Cache\Cache;
 use \Drupal\node\Entity\Node;
-use Symfony\Component\Yaml\Parser;
-use Drupal\views\Views;
+use \Drupal\views\Views;
 use \Drupal\webform\Entity\WebformSubmission;
+use \Drush\Drush;
 
 /**
  * Class CronFunctions.
  */
-class CronFunctions {
+final class CronFunctions {
 
   /**
+   * @method clear_view_caches
+   * @return void
+   * 
    * clear cache of views generated using Solr
    */
-  public function clear_view_caches() {
+  public static function clear_view_caches() {
     $pd_views = [
       'pd_core_ati',
       'pd_core_contracts',
@@ -41,15 +44,18 @@ class CronFunctions {
       if ($view) {
         $tags = $view->getCacheTags();
         Cache::invalidateTags($tags);
-        \Drupal::logger('cron')->notice('Cache cleared for ' . $view->getTitle());
+        \Drupal::logger('cron')->notice('Cache cleared for ' . ( \strlen($view->getTitle()) > 0 ? $view->getTitle() : $view_name));
       }
     }
   }
 
   /**
+   * @method export_external_comments
+   * @return void
+   * 
    * Export all published comments into a csv file
    */
-  public function export_external_comments() {
+  public static function export_external_comments() {
     // fetch comments
     $comment_ids = \Drupal::entityQuery('comment')
       ->condition('entity_type', 'node')
@@ -64,14 +70,20 @@ class CronFunctions {
         ->getStorage('comment')
         ->loadMultiple($comment_ids);
 
+      /**
+       * @var \Drupal\comment\CommentInterface $comment
+       */
       foreach($comments as $comment) {
         $node = $comment->getCommentedEntity();
 
         // Loop over and get fields for published comments
-        if ($comment->getStatus() == 1 && $node->isPublished()) {
+        /**
+         * @var \Drupal\node\Entity\Node $node
+         */
+        if ($comment->isPublished() && $node->isPublished()) {
           $url_en = ($node->hasTranslation('en') ? 'https://open.canada.ca' . $node->getTranslation('en')->url() : '');
           $url_fr = ($node->hasTranslation('fr') ? 'https://ouvert.canada.ca' . $node->getTranslation('fr')->url() : '');
-	  $uuid = ($node->type->entity->id() === 'external') ? $node->field_uuid->value : '';
+	        $uuid = ($node->type->entity->id() === 'external') ? $node->field_uuid->value : '';
           $comments_data[] = [
             'comment_id' => $comment->id(),
             'page_en' => $url_en,
@@ -80,9 +92,9 @@ class CronFunctions {
             'comment_body' => $comment->get('comment_body')->getValue()[0]['value'],
             'comment_posted_by' => $comment->getAuthorName(),
             'date_posted' => \Drupal::service('date.formatter')->format($comment->getCreatedTime(), 'html_date'),
-	    'node_id' => $node->id(),
-	    'node_type' => $node->type->entity->label(),
-	    'dataset_uuid' => $uuid,
+            'node_id' => $node->id(),
+            'node_type' => $node->type->entity->label(),
+            'dataset_uuid' => $uuid,
           ];
         }
       }
@@ -102,16 +114,48 @@ class CronFunctions {
     ];
 
     // export as csv
-    $this->write_to_csv('export_comments.csv', $comments_data, $header);
+    self::write_to_csv('export_comments.csv', $comments_data, $header);
 
     // log results
     \Drupal::logger('cron')->notice('Comments export to csv file completed');
+
+    $comment_ids = null;
+    $comments_data = null;
   }
 
   /**
+   * @method get_node_field_value
+   * @param \Drupal\node\Entity\Node $_node
+   * @param string $_field
+   * @param bool $_stripTags
+   * @return mixed
+   */
+  private static function get_node_field_value(&$_node, $_field, $_stripTags = FALSE, $_default = null){
+
+    $fieldValue = $_node->get($_field)->getValue();
+
+    if( 
+      ! is_array( $fieldValue )
+      || count( $fieldValue ) === 0
+      || is_null( $fieldValue[0] )
+      || ! array_key_exists('value', $fieldValue[0])
+    ){ 
+      return $_default; 
+    }
+
+    if( ! $_stripTags ){ return $fieldValue[0]['value']; }
+
+    return strip_tags($fieldValue[0]['value']);
+
+  }
+
+  /**
+   * @method export_suggested_datasets
+   * @return void
+   * 
    * Export all published comments into a csv file
    */
-  public function export_suggested_datasets() {
+  public static function export_suggested_datasets() {
     // fetch suggested dataset nodes
     $nids = \Drupal::entityQuery('node')
       ->condition('status', 1)
@@ -126,46 +170,51 @@ class CronFunctions {
 
       foreach($nodes as $node) {
         // get translation of node
-	$node_en = $node->hasTranslation('en') ? $node->getTranslation('en') : $node;
-	$node_fr = $node->hasTranslation('fr') ? $node->getTranslation('fr') : null;
+        $node_en = $node->hasTranslation('en') ? $node->getTranslation('en') : $node;
+        $node_fr = $node->hasTranslation('fr') ? $node->getTranslation('fr') : null;
 
-	if ($node_en && $node_fr) {
+        if ($node_en && $node_fr) {
           // set default values
           $subject = $node->get('field_dataset_subject')->getValue()
-            ? $this->implodeAllValues($node->get('field_dataset_subject')->getValue())
+            ? self::implodeAllValues($node->get('field_dataset_subject')->getValue())
             : 'information_and_communications';
           $keywords_en = $node_en->get('field_dataset_keywords')->getValue()
-            ? $this->implodeAllValues($node_en->get('field_dataset_keywords')->getValue())
+            ? self::implodeAllValues($node_en->get('field_dataset_keywords')->getValue())
             : 'dataset';
           $keywords_fr = $node_fr->get('field_dataset_keywords')->getValue()
-            ? $this->implodeAllValues($node_fr->get('field_dataset_keywords')->getValue())
+            ? self::implodeAllValues($node_fr->get('field_dataset_keywords')->getValue())
             : 'Jeu de données';
-          $status = $node->get('field_sd_status')->getValue()
-            ? $node->get('field_sd_status')->getValue()[0]['value']
-            : 'department_contacted';
-
+          $status = self::get_node_field_value($node, 'field_sd_status', false, 'department_contacted');
+          $organization = self::get_node_field_value($node, 'field_organization');
+          $description_en = self::get_node_field_value($node_en, 'body', true);
+          $description_fr = self::get_node_field_value($node_fr, 'body', true);
+          $status_link = self::get_node_field_value($node, 'field_status_link');
+          $date_published = self::get_node_field_value($node, 'field_date_published');
+          $votes = self::get_node_field_value($node, 'field_vote_up_down');
+          $additional_comments_and_feedback_en = self::get_node_field_value($node_en, 'field_feedback');
+          $additional_comments_and_feedback_fr = self::get_node_field_value($node_fr, 'field_feedback');
           $data = [
             'uuid' => $node->uuid(),
             'suggestion_id' => $node->id(),
             'date_created' => date('Y-m-d', $node->getCreatedTime()),
             'title_en' => $node_en->getTitle(),
             'title_fr' => $node_fr->getTitle(),
-            'organization' => $node->get('field_organization')->getValue()[0]['value'],
-            'description_en' => strip_tags($node_en->get('body')->getValue()[0]['value']),
-            'description_fr' => strip_tags($node_fr->get('body')->getValue()[0]['value']),
+            'organization' => $organization,
+            'description_en' => $description_en,
+            'description_fr' => $description_fr,
             'dataset_suggestion_status' => $status,
-            'dataset_suggestion_status_link' => $node->get('field_status_link')->getValue()[0]['value'],
-            'dataset_released_date' => $node->get('field_date_published')->getValue()[0]['value'],
-            'votes' => $node->get('field_vote_up_down')->getValue()[0]['value'],
+            'dataset_suggestion_status_link' => $status_link,
+            'dataset_released_date' => $date_published,
+            'votes' => $votes,
             'subject' => $subject,
             'keywords_en' => $keywords_en,
             'keywords_fr' => $keywords_fr,
-            'additional_comments_and_feedback_en' =>  $node_en->get('field_feedback')->getValue()[0]['value'],
-            'additional_comments_and_feedback_fr' =>  $node_fr->get('field_feedback')->getValue()[0]['value'],
+            'additional_comments_and_feedback_en' =>  $additional_comments_and_feedback_en,
+            'additional_comments_and_feedback_fr' =>  $additional_comments_and_feedback_fr,
           ];
 
           // get webform submission for suggested datasets
-          if ($wid = $node->get('field_webform_submission_id')->getValue()[0]['value']) {
+          if( ! is_null( $wid = self::get_node_field_value($node, 'field_webform_submission_id') )){
             if ($webform_submission = WebformSubmission::load($wid)) {
               $webform_data = [
                 'webform_submission_id' => $wid,
@@ -177,7 +226,12 @@ class CronFunctions {
           }
           $export_data[] = $data;
         }
+
+        $node_en = null;
+        $node_fr = null;
       }
+
+      $nodes = null;
     }
 
     $header = [
@@ -204,16 +258,22 @@ class CronFunctions {
     ];
 
     // export as csv
-    $this->write_to_csv('suggested-dataset.csv', $export_data, $header, FALSE);
+    self::write_to_csv('suggested-dataset.csv', $export_data, $header, FALSE);
 
     // log results
     \Drupal::logger('cron')->notice('Suggested datasets exported');
+
+    $nids = null;
+    $export_data = null;
   }
 
   /**
+   * @method export_cumulative_dataset_ratings
+   * @return void
+   * 
    * Export dataset ratings as CSV with cumulative ratings and vote count
    */
-  public function export_cumulative_dataset_ratings() {
+  public static function export_cumulative_dataset_ratings() {
     try {
       // fetch ratings from database
       $database = \Drupal::database();
@@ -239,7 +299,14 @@ class CronFunctions {
       while (!gzeof($handle)) {
         $line = gzgets($handle);
         $data = json_decode($line, TRUE);
-        $datasets[$data['id']] = ['en' => $data['title_translated']['en'], 'fr' => $data['title_translated']['fr']];
+        if(
+          is_array( $data )
+          && array_key_exists( 'title_translated', $data )
+        ){
+          $englishTitle = array_key_exists( 'en', $data['title_translated'] ) ? $data['title_translated']['en'] : null;
+          $frenchTitle = array_key_exists( 'fr', $data['title_translated'] ) ? $data['title_translated']['fr'] : null;
+          $datasets[$data['id']] = ['en' => $englishTitle, 'fr' => $frenchTitle];
+        }
       }
       gzclose($handle);
 
@@ -257,7 +324,8 @@ class CronFunctions {
         }
       }
 
-      $header = ['title_en / titre_en',
+      $header = [
+        'title_en / titre_en',
         'title_fr / titre_fr',
         'uuid',
         'avg_user_rating / coter_moyen',
@@ -267,10 +335,14 @@ class CronFunctions {
       ];
 
       // export as csv
-      $this->write_to_csv('dataset-ratings.csv', $output_data, $header);
+      self::write_to_csv('dataset-ratings.csv', $output_data, $header);
 
       // log results
       \Drupal::logger('cron')->notice('Dataset ratings exported');
+
+      $result = null;
+      $datasets = null;
+      $output_data = null;
     }
 
     catch (\Exception $e) {
@@ -279,10 +351,13 @@ class CronFunctions {
   }
 
   /**
+   * @method fetch_orgs_from_ckan
+   * @return void
+   * 
    * Set dynamic allowed values for organization field
    * The options will be same as CKAN
    */
-  public function fetch_orgs_from_ckan() {
+  public static function fetch_orgs_from_ckan() {
     $options = [];
     $filename = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/od-do-orgs.jsonl';
     if (file_exists($filename) && $contents = file($filename)) {
@@ -313,10 +388,15 @@ class CronFunctions {
   }
 
   /**
+   * @method fetch_from_ckan
+   * @param string $field_name
+   * @param string $field_type
+   * @return array
+   * 
    * Set dynamic allowed values for given field
    * The options will be same as CKAN
    */
-  public function fetch_from_ckan($field_name, $field_type) {
+  public static function fetch_from_ckan($field_name, $field_type) {
 //    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     $options = [];
     $url = 'https://open.canada.ca/data/api/action/scheming_dataset_schema_show?type=dataset';
@@ -368,11 +448,13 @@ class CronFunctions {
   }
 
   /**
-   * Helper function to combine all values in a nested array in a string
-   * @param $parentArray
+   * @method implodeAllValues
+   * @param array $parentArray
    * @return string
+   * 
+   * Helper function to combine all values in a nested array in a string
    */
-  private function implodeAllValues($parentArray) {
+  private static function implodeAllValues($parentArray) {
     $values = '';
     $size = sizeof($parentArray);
     $i=0;
@@ -391,23 +473,38 @@ class CronFunctions {
   }
 
   /**
+   * @method write_to_csv
+   * @param string $filename
+   * @param array $data_to_write
+   * @param array $csv_header
+   * @param bool $public
+   * @param bool $_append
+   * @return void
+   * 
    * Generate output file for given data and headers
    */
-  private function write_to_csv($filename, $data_to_write, $csv_header, $public = TRUE) {
+  private static function write_to_csv($filename, $data_to_write, $csv_header, $public = TRUE, $_append = FALSE) {
     try {
       // create output csv
       $path = $public
-        ? \Drupal::service('file_system')->realpath(\file_default_scheme() . "://")
+        ? \Drupal::service('file_system')->realpath(\Drupal::config('system.file')->get('default_scheme') . "://")
         : \Drupal\Core\Site\Settings::get('file_private_path');
-      $output = fopen($path . '/' . $filename, 'w');
+      $fileMode = $_append ? 'a' : 'w';
+      $output = fopen($path . '/' . $filename, $fileMode);
       if (!$output) {
         throw new \Exception('Failed to create export file.');
       }
 
-      // add BOM to fix UTF-8 in Excel
-      fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
-      // add csv header columns
-      fputcsv($output, $csv_header, ',', '"');
+      if( ! $_append ){
+        // add BOM to fix UTF-8 in Excel
+        fputs($output, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+        // add csv header columns
+        fputcsv($output, $csv_header, ',', '"');
+      }
+
+      if( Drush::verbose() ){
+        \Drupal::logger('cron')->notice('Writing ' . count($data_to_write) . ' rows with mode ' . $fileMode);
+      }
 
       // write to csv
       foreach($data_to_write as $row) {
@@ -427,8 +524,10 @@ class CronFunctions {
    * @return void
    * Generate vote count JSON file
    */
-  public function generate_vote_count_json_file()
+  public static function generate_vote_count_json_file()
   {
+
+    #FIXME: uses a lot of memory...make an output stream for json files??
 
     try{
 
@@ -524,6 +623,11 @@ class CronFunctions {
 
       }
 
+      $output = null;
+      $inventroyIndexCount = null;
+      $inventroyIndexItems = null;
+      $localVoteCounts = null;
+
     }catch( \Exception $_exception ){
 
       \Drupal::logger('cron')->error( 'Unable to create vote count json file:' . $_exception->getMessage() );
@@ -538,7 +642,7 @@ class CronFunctions {
    * @param string $_field
    * @return mixed
    */
-  private function get_item_interface_field_value( $_itemInterface, $_field, $_singleValue = True ){
+  private static function get_item_interface_field_value( &$_itemInterface, $_field, $_singleValue = True ){
 
     if( $_field == 'id' ){
 
@@ -575,169 +679,235 @@ class CronFunctions {
   }
 
   /**
+   * @method get_ati_request_submission_counts_by_date
+   * @return array
+   */
+  private static function get_ati_request_submission_counts_by_date(){
+
+    //get webform submissions from `ati_records` form
+    $atiSubmissionsQuery = \Drupal::database()->select( 'webform_submission', 'n' );
+    $atiSubmissionsQuery->innerJoin( 'webform_submission_data', 'nt', 'nt.sid = n.sid' );
+    $atiSubmissions = $atiSubmissionsQuery
+      ->fields( 'n', ['sid', 'completed'] )
+      ->fields( 'nt', ['value'] )
+      ->condition( 'n.webform_id', 'ati_records' )
+      ->condition( 'nt.name', 'entity_id' )
+      ->execute()->fetchAllAssoc( 'sid' );
+
+    \Drupal::logger('cron')->notice('Collected ' . count($atiSubmissions) . ' Informal ATI Request submissions.');
+
+    $atiSubmissionCounts = [];
+    foreach( $atiSubmissions as $_sid => $_atiSubmission ){
+
+      $year = gmdate("Y", $_atiSubmission->completed);
+      $month = gmdate("n", $_atiSubmission->completed);
+      // value is `entity_id`
+      $atiSubmissionCounts[$_atiSubmission->value][$year][$month] = isset( $atiSubmissionCounts[$_atiSubmission->value][$year][$month] ) ? intval($atiSubmissionCounts[$_atiSubmission->value][$year][$month]) + 1 : 1;
+
+    }
+
+    $atiSubmissionsQuery = null;
+    $atiSubmissions = null;
+
+    return $atiSubmissionCounts;
+
+  }
+
+  /**
+   * @method get_ati_index_record_count
+   * @return int|null
+   */
+  private static function get_ati_index_record_count(){
+
+    //get solr index data for `core_ati`
+    $atiIndexCount = \Drupal\search_api\Entity\Index::load('pd_core_ati')
+    ->query()
+    ->execute()
+    ->getResultCount();
+
+    \Drupal::logger('cron')->notice("Found $atiIndexCount ATI Summaries in the pd_core_ati solr index.");
+
+    return $atiIndexCount;
+
+  }
+
+  /**
+   * @method get_ati_index_records
+   * @param int $_offset
+   * @param int $_limit
+   * @return array
+   */
+  private static function get_ati_index_records(&$_offset, &$_limit){
+
+    $atiIndexItems = \Drupal\search_api\Entity\Index::load('pd_core_ati')
+      ->query()
+      ->range($_offset, $_limit)
+      ->execute()
+      ->getResultItems();
+
+    $parsedAtiIndexItems = [];
+    foreach( $atiIndexItems as $_uuid => $_atiIndexItem ){
+      /**
+       * @var \Drupal\search_api\Item\ItemInterface $_atiIndexItem
+       */
+
+      $id = self::get_item_interface_field_value( $_atiIndexItem, 'id' );
+      $requestNumber = self::get_item_interface_field_value( $_atiIndexItem, 'request_number' );
+      $summaryEn = self::get_item_interface_field_value( $_atiIndexItem, 'summary_en' );
+      $summaryFr = self::get_item_interface_field_value( $_atiIndexItem, 'summary_fr' );
+      $ownerOrgCode = self::get_item_interface_field_value( $_atiIndexItem, 'org_name_code' );
+      $ownerOrgNameEn = self::get_item_interface_field_value( $_atiIndexItem, 'org_name_en' );
+      $ownerOrgNameFr = self::get_item_interface_field_value( $_atiIndexItem, 'org_name_fr' );
+
+      if(
+        is_null($id) ||
+        is_null($requestNumber) ||
+        is_null($summaryEn) ||
+        is_null($summaryFr) ||
+        is_null($ownerOrgCode) ||
+        is_null($ownerOrgNameEn) ||
+        is_null($ownerOrgNameFr)
+      ){
+
+        continue;
+
+      }
+
+      $parsedAtiIndexItems[$id] = [
+        'request_number'    => $requestNumber,
+        'summary_en'        => $summaryEn,
+        'summary_fr'        => $summaryFr,
+        'owner_org_code'    => $ownerOrgCode,
+        'owner_org_name_en' => $ownerOrgNameEn,
+        'owner_org_name_fr' => $ownerOrgNameFr
+      ];
+
+    }
+
+    $atiIndexItems = null;
+
+    return $parsedAtiIndexItems;
+
+  }
+
+  /**
+   * @method parse_ati_submission_counts_and_index_records_to_rows
+   * @param array $_submissions
+   * @param array $_records
+   * @return array
+   */
+  private static function parse_ati_submission_counts_and_index_records_to_rows(&$_submissionCounts, &$_indexRecords){
+
+    $rows = [];
+    $missingIndexItemsCounter = 0;
+    foreach( $_indexRecords as $_id => $_data ){
+
+      if( ! array_key_exists( $_id, $_submissionCounts ) ){
+        $missingIndexItemsCounter++;
+        continue;
+      }
+
+      foreach( $_submissionCounts[$_id] as $_year => $_months ){
+
+        foreach( $_months as $_month => $_count ){
+
+          $rows[] = [
+            'year'              => $_year,
+            'month'             => $_month,
+            'id'                => $_id,
+            'request_number'    => $_data['request_number'],
+            'summary_en'        => $_data['summary_en'],
+            'summary_fr'        => $_data['summary_fr'],
+            'owner_org_code'    => $_data['owner_org_code'],
+            'owner_org_name_en' => $_data['owner_org_name_en'],
+            'owner_org_name_fr' => $_data['owner_org_name_fr'],
+            'request_count'     => $_count,
+          ];
+
+        }
+
+      }
+
+    }
+
+    if( Drush::verbose() && $missingIndexItemsCounter > 0 ){
+      \Drupal::logger('cron')->notice("$missingIndexItemsCounter requests not matched. ATI Summaries not found in the pd_core_ati solr index...");
+    }
+
+    return $rows;
+
+  }
+
+  /**
    * @method generate_ati_requests_csv_file()
    * @return void
    * Generate ATI informal requests CSV file
    */
-  public function generate_ati_requests_csv_file(){
+  public static function generate_ati_requests_csv_file(){
+    # Due to the 40k+ records, we have to append to a csv file
+    # similar to an output stream. This prevents us from being
+    # able to sort the csv rows before writing them.
 
     try{
 
-      //get webform submissions from `ati_records` form
-      $localAtiRequestsQuery = \Drupal::database()->select( 'webform_submission', 'n' );
-      $localAtiRequestsQuery->innerJoin( 'webform_submission_data', 'nt', 'nt.sid = n.sid' );
-      $localAtiRequests = $localAtiRequestsQuery
-        ->fields( 'n', ['sid', 'completed'] )
-        ->fields( 'nt', ['value'] )
-        ->condition( 'n.webform_id', 'ati_records' )
-        ->condition( 'nt.name', 'entity_id' )
-        ->execute()->fetchAllAssoc( 'sid' );
+      $filename = 'ati-informal-requests-analytics.csv';
+      $headers = [
+        'Year',
+        'Month',
+        'Unique Identifier',
+        'Request Number',
+        'Summary - EN',
+        'Summary - FR',
+        'owner_org',
+        'Organization Name - EN',
+        'Organization Name - FR',
+        'Number of Informal Requests'
+      ];
 
-      $localAtiRequestCounts = [];
-      foreach( $localAtiRequests as $_sid => $_localAtiRequest ){
+      $atiSubmissionCounts = self::get_ati_request_submission_counts_by_date();
+      $atiIndexCount = self::get_ati_index_record_count();
 
-        $year = gmdate("Y", $_localAtiRequest->completed);
-        $month = gmdate("n", $_localAtiRequest->completed);
-        // value is `entity_id`
-        $localAtiRequestCounts[$_localAtiRequest->value][$year][$month] = isset( $localAtiRequestCounts[$_localAtiRequest->value][$year][$month] ) ? intval($localAtiRequestCounts[$_localAtiRequest->value][$year][$month]) + 1 : 1;
-
-      }
-
-      //get solr index data for `core_ati`
-      $atiIndexCount = \Drupal\search_api\Entity\Index::load('pd_core_ati')
-        ->query()
-        ->execute()
-        ->getResultCount();
-
-      $interval = 500;
       $offset = 0;
-      $atiIndexItems = [];
-      while($offset <= $atiIndexCount){
-        $return = \Drupal\search_api\Entity\Index::load('pd_core_ati')
-          ->query()
-          ->range($offset, $offset + $interval)
-          ->execute()
-          ->getResultItems();
-        array_push($atiIndexItems, $return);
-        $offset += count($return);
-      }
+      $limit = 500;
+      while($offset < $atiIndexCount){
 
-      $parsedAtiIndexItems = [];
-      foreach( $atiIndexItems as $_uuid => $_atiIndexItem ){
-        /**
-         * @var \Drupal\search_api\Item\ItemInterface $_atiIndexItem
-         */
+        $atiIndexItems = self::get_ati_index_records($offset, $limit);
 
-        $id = $this->get_item_interface_field_value( $_atiIndexItem, 'id' );
-        $requestNumber = $this->get_item_interface_field_value( $_atiIndexItem, 'request_number' );
-        $summaryEn = $this->get_item_interface_field_value( $_atiIndexItem, 'summary_en' );
-        $summaryFr = $this->get_item_interface_field_value( $_atiIndexItem, 'summary_fr' );
-        $ownerOrgCode = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_code' );
-        $ownerOrgNameEn = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_en' );
-        $ownerOrgNameFr = $this->get_item_interface_field_value( $_atiIndexItem, 'org_name_fr' );
-
-        if(
-          is_null($id) ||
-          is_null($requestNumber) ||
-          is_null($summaryEn) ||
-          is_null($summaryFr) ||
-          is_null($ownerOrgCode) ||
-          is_null($ownerOrgNameEn) ||
-          is_null($ownerOrgNameFr)
-        ){
-
-          continue;
-
+        if( count($atiIndexItems) === 0 ){
+          \Drupal::logger('cron')->notice('Collected zero(0) ATI Summaries from the pd_core_ati solr index...finishing up...');
+          break;
         }
 
-        $parsedAtiIndexItems[$id] = [
-          'request_number'    => $requestNumber,
-          'summary_en'        => $summaryEn,
-          'summary_fr'        => $summaryFr,
-          'owner_org_code'    => $ownerOrgCode,
-          'owner_org_name_en' => $ownerOrgNameEn,
-          'owner_org_name_fr' => $ownerOrgNameFr
-        ];
-
-      }
-
-      $rows = [];
-      $missingIndexItemsCounter = 0;
-      foreach( $localAtiRequestCounts as $_id => $_years ){
-
-        if( ! array_key_exists( $_id, $parsedAtiIndexItems ) ){
-          $missingIndexItemsCounter++;
-          continue;
+        if( Drush::verbose() ){
+          \Drupal::logger('cron')->notice('Collected ' . count($atiIndexItems) . ' ATI Summaries from the pd_core_ati solr index. (' . $offset . '-' . ( $offset + $limit ) . ' of ' . $atiIndexCount . ')');
         }
 
-        foreach( $_years as $_year => $_months ){
+        $rows = self::parse_ati_submission_counts_and_index_records_to_rows($atiSubmissionCounts, $atiIndexItems);
+        $append = $offset === 0 ? false : true;
+        self::write_to_csv(
+          $filename,
+          $rows,
+          $headers,
+          true,
+          $append
+        );
 
-          foreach( $_months as $_month => $_count ){
-
-            $rows[] = [
-              'year'              => $_year,
-              'month'             => $_month,
-              'id'                => $_id,
-              'request_number'    => $parsedAtiIndexItems[$_id]['request_number'],
-              'summary_en'        => $parsedAtiIndexItems[$_id]['summary_en'],
-              'summary_fr'        => $parsedAtiIndexItems[$_id]['summary_fr'],
-              'owner_org_code'    => $parsedAtiIndexItems[$_id]['owner_org_code'],
-              'owner_org_name_en' => $parsedAtiIndexItems[$_id]['owner_org_name_en'],
-              'owner_org_name_fr' => $parsedAtiIndexItems[$_id]['owner_org_name_fr'],
-              'request_count'     => $_count,
-            ];
-
-          }
-
-        }
+        $offset += count($atiIndexItems);
+        $atiIndexItems = null;
+        $rows = null;
 
       }
 
-      if( $missingIndexItemsCounter > 0 ){
-        \Drupal::logger('cron')->notice("$missingIndexItemsCounter requests not matched. ATI Summaries not found in the core_ati index...");
-      }
+      $atiSubmissionCounts = null;
+      $atiIndexCount = null;
 
-      usort($rows, function($a, $b){
-        return -1 * ([$a['year'], $a['month']] <=> [$b['year'], $b['month']]);
-      });
-
-      $this->write_to_csv(
-        'ati-informal-requests-analytics.csv',
-        $rows,
-        [
-          'Year',
-          'Month',
-          'Unique Identifier',
-          'Request Number',
-          'Summary - EN',
-          'Summary - FR',
-          'owner_org',
-          'Organization Name - EN',
-          'Organization Name - FR',
-          'Number of Informal Requests'
-        ],
-        true
-      );
-
-      $filePath = \Drupal::service('file_system')->realpath(\file_default_scheme() . "://") . '/ati-informal-requests-analytics.csv';
-      $ckanFilePath = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/ati-informal-requests-analytics.csv';
-
-      $success = chmod($filePath, 0664);
-
-      if( ! $success ){
-      	\Drupal::logger('cron')->notice("Failed to set permissions for $filePath");
-      }
+      $filePath = \Drupal::service('file_system')->realpath(\Drupal::config('system.file')->get('default_scheme') . "://") . '/' . $filename;
+      $ckanFilePath = \Drupal\Core\Site\Settings::get('ckan_public_path') . '/' . $filename;
 
       $success = copy($filePath, $ckanFilePath);
 
       if( ! $success ){
       	\Drupal::logger('cron')->notice("Failed to copy $filePath to $ckanFilePath");
-      }
-
-      $success = chmod($ckanFilePath, 0664);
-
-      if( ! $success ){
-      	\Drupal::logger('cron')->notice("Failed to set permissions for $ckanFilePath");
       }
 
       // log results

@@ -15,39 +15,39 @@ function og_ext_cron_cron() {
   $currentHour = date('G', time());
   switch( $currentHour ){
 
-    case ( 24 || 0 ):
+    case ( 10 || 11 ):
       // clear proactive disclosure view caches
       CronFunctions::clear_view_caches();
-      return; break;
+      break;
 
-    case ( 1 || 2 ):
+    case ( 12 || 0 ):
       // export dataset comments
       CronFunctions::export_external_comments();
-      return; break;
+      break;
 
-    case ( 3 || 4 ):
+    case ( 1 || 2 ):
       // export dataset ratings
       CronFunctions::export_cumulative_dataset_ratings();
-      return; break;
+      break;
 
-    case ( 5 || 6 ):
+    case ( 3 || 4 ):
       // export suggested datasets
       CronFunctions::export_suggested_datasets();
-      return; break;
+      break;
 
-    case ( 7 || 8 ):
+    case ( 5 || 6 ):
       // generate inventory vote count json file
       CronFunctions::generate_vote_count_json_file();
-      return; break;
+      break;
 
-    case ( 9 || 10 ):
+    case ( 7 || 8 ):
       // generate ATI informal requests CSV file
       CronFunctions::generate_ati_requests_csv_file();
-      return; break;
+      break;
 
     default:
       \Drupal::logger('cron')->notice('Nothing to run right now.');
-      return; break;
+      break;
 
   }
 

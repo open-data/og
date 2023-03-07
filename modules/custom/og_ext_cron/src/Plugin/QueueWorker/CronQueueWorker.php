@@ -33,7 +33,12 @@ final class CronQueueWorker extends QueueWorkerBase implements ContainerFactoryP
    */
   protected $entityTypeManager;
 
-  public static string $QUEUE_NAME = 'ogp_queue';
+  /**
+   * The QueueWorker ID
+   * 
+   * @var string $QUEUE_NAME
+   */
+  public static $QUEUE_NAME = 'ogp_queue';
 
   /**
    * Constructs a new class instance.

@@ -56,9 +56,6 @@ final class CronQueueWorker extends QueueWorkerBase implements ContainerFactoryP
    * {@inheritdoc}
    */
   public static function create($container, $configuration, $plugin_id, $plugin_definition) {
-    \Drupal::logger('cron')->notice(get_class($container));
-    \Drupal::logger('cron')->notice(var_export($configuration, true));
-    \Drupal::logger('cron')->notice(var_export($plugin_definition, true));
     return new static(
       $configuration,
       $plugin_id,
@@ -94,6 +91,7 @@ final class CronQueueWorker extends QueueWorkerBase implements ContainerFactoryP
 
     $args = $data;
     unset($args['cron_function']);
+    if( array_key_exists( 'be_unique', $args ) ){ unset($args['be_unique']); }
 
     call_user_func_array(['\Drupal\og_ext_cron\Utils\CronFunctions', $data['cron_function']], $args);
 

@@ -1,7 +1,6 @@
 <?php
 
 use \Drupal\og_ext_cron\Utils\CronFunctions;
-use \Drupal\og_ext_cron\Plugin\QueueWorker\CronQueueWorker;
 
 /**
 * @file
@@ -12,22 +11,50 @@ use \Drupal\og_ext_cron\Plugin\QueueWorker\CronQueueWorker;
  * Implements hook_cron().
  */
 function og_ext_cron_cron() {
-  // clear proactive disclosure view caches
-  CronFunctions::clear_view_caches();
 
-  $jobQueue = Drupal::queue(CronQueueWorker::$QUEUE_NAME);
-  $jobQueue->createQueue();
-  // export dataset comments
-  $jobQueue->createItem(['cron_function' => 'export_external_comments']);
-  // export dataset ratings
-  $jobQueue->createItem(['cron_function' => 'export_cumulative_dataset_ratings']);
-  // export suggested datasets
-  $jobQueue->createItem(['cron_function' => 'export_suggested_datasets']);
-  // generate inventory vote count json file
-  $jobQueue->createItem(['cron_function' => 'generate_vote_count_json_file']);
-  // generate ATI informal requests CSV file
-  $jobQueue->createItem(['cron_function' => 'generate_ati_requests_csv_file']);
+  $currentHour = date('G', time());
+  switch( $currentHour ){
 
+    case ( 24 || 0 ):
+      // clear proactive disclosure view caches
+      CronFunctions::clear_view_caches();
+      return; break;
+
+    case ( 1 || 2 ):
+      // export dataset comments
+      CronFunctions::export_external_comments();
+      return; break;
+
+    case ( 3 || 4 ):
+      // export dataset ratings
+      CronFunctions::export_cumulative_dataset_ratings();
+      return; break;
+
+    case ( 5 || 6 ):
+      // export suggested datasets
+      CronFunctions::export_suggested_datasets();
+      return; break;
+
+    case ( 7 || 8 ):
+      // generate inventory vote count json file
+      CronFunctions::generate_vote_count_json_file();
+      return; break;
+
+    case ( 9 || 10 ):
+      // generate ATI informal requests CSV file
+      CronFunctions::generate_ati_requests_csv_file();
+      return; break;
+
+    default:
+      \Drupal::logger('cron')->notice('Nothing to run right now.');
+      return; break;
+
+  }
+
+/**
+ * Development Code
+ * Keep commented out for development purposes only
+ */
 /*
   // fetch organizations list from CKAN
   CronFunctions::fetch_orgs_from_ckan();

@@ -58,8 +58,10 @@ class CronQueue extends DatabaseQueue{
       return;
   
     }
+
+    $unique = array_key_exists( 'be_unique', $data ) ? $data['be_unique'] : false;
   
-    if( in_array( $data, $this->currentQueueItemData ) ){
+    if( $unique && in_array( $data, $this->currentQueueItemData ) ){
   
       \Drupal::logger('cron')->warning('Method ' . $data['cron_function'] . ' already in worker queue ' . CronQueueWorker::$QUEUE_NAME . ', skipping.');
       return;

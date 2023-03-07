@@ -14,7 +14,12 @@ use \Drupal\og_ext_cron\Plugin\QueueWorker\CronQueueWorker;
  */
 class CronQueue extends DatabaseQueue{
 
-  private array $currentQueueItemData = [];
+  /**
+   * The current queue data in the queue table
+   * 
+   * @var array $currentQueueItemData
+   */
+  private $currentQueueItemData = [];
 
   /**
    * {@inheritdoc}

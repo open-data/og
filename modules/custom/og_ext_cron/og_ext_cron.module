@@ -15,32 +15,32 @@ function og_ext_cron_cron() {
   $currentHour = date('G', time());
   switch( $currentHour ){
 
-    case ( 10 || 11 ):
+    case ( 20 || 21 ):
       // clear proactive disclosure view caches
       CronFunctions::clear_view_caches();
       break;
 
-    case ( 12 || 0 ):
+    case ( 22 || 23 ):
       // export dataset comments
       CronFunctions::export_external_comments();
       break;
 
-    case ( 1 || 2 ):
+    case ( 0 || 1 ):
       // export dataset ratings
       CronFunctions::export_cumulative_dataset_ratings();
       break;
 
-    case ( 3 || 4 ):
+    case ( 2 || 3 ):
       // export suggested datasets
       CronFunctions::export_suggested_datasets();
       break;
 
-    case ( 5 || 6 ):
+    case ( 4 || 5 ):
       // generate inventory vote count json file
       CronFunctions::generate_vote_count_json_file();
       break;
 
-    case ( 7 || 8 ):
+    case ( 6 || 7 ):
       // generate ATI informal requests CSV file
       CronFunctions::generate_ati_requests_csv_file();
       break;

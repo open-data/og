@@ -18,32 +18,38 @@ function og_ext_cron_cron() {
      * Hours are in UTC 0 time.
      */
 
-    case ( 1 || 2 ): # 8 pm || 9 pm EST
+    case 1:  # 8 pm EST
+    case 2:  # 9 pm EST
       // clear proactive disclosure view caches
       CronFunctions::clear_view_caches();
       break;
 
-    case ( 3 || 4 ): # 10 pm || 11 pm EST
+    case 3:  # 10 pm EST
+    case 4:  # 11 pm EST
       // export dataset comments
       CronFunctions::export_external_comments();
       break;
 
-    case ( 5 || 6 ): # 12 am || 1 am EST
+    case 5:  # 12 am EST
+    case 6:  # 1 am EST
       // export dataset ratings
       CronFunctions::export_cumulative_dataset_ratings();
       break;
 
-    case ( 7 || 8 ): # 2 am || 3 am EST
+    case 7:  # 2 am EST
+    case 8:  # 3 am EST
       // export suggested datasets
       CronFunctions::export_suggested_datasets();
       break;
 
-    case ( 9 || 10 ): # 4 am || 5 am EST
+    case 9:  # 4 am EST
+    case 10:  # 5 am EST
       // generate inventory vote count json file
       CronFunctions::generate_vote_count_json_file();
       break;
 
-    case ( 11 || 12 ): # 6 am || 7 am EST
+    case 11:  # 6 am EST
+    case 12:  # 7 am EST
       // generate ATI informal requests CSV file
       CronFunctions::generate_ati_requests_csv_file();
       break;

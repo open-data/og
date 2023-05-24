@@ -25,6 +25,7 @@ class GCNotifyEmailHandler extends WebformHandlerBase {
 
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {
 
+    $webform_id = $webform_submission->getWebform()->id();
     $is_default_mail = false;
     $notify = new NotificationAPIHandler();
     $personalisation = $this->getRequestOptions($webform_submission);
@@ -32,19 +33,26 @@ class GCNotifyEmailHandler extends WebformHandlerBase {
     // 1. send notification email to department
 
     $dept_email = $webform_submission->getElementData('ati_email');
-    $dept_response = $notify->sendGCNotifyEmail($dept_email, 'ati_email', $personalisation);
+    if ($dept_email) {
+      $dept_response = $notify->sendGCNotifyEmail($dept_email, $webform_id, $personalisation);
 
-    if ($dept_response === False || in_array($dept_response->getStatusCode(), ['200', '201']) === False )
-      $is_default_mail = $this->sendDefaultEmail('notifications');
-
+      if ($dept_response === False || in_array($dept_response->getStatusCode(), ['200', '201']) === False )
+        $is_default_mail = $this->sendDefaultEmail('notifications');
+    }
+    else
+      $dept_response = '';
 
     // 2. send confirmation email to user
 
     $user_email = $webform_submission->getElementData('your_e_mail_address');
-    $user_response = $notify->sendGCNotifyEmail($user_email, 'ati_email', $personalisation);
+    if ($user_email) {
+      $user_response = $notify->sendGCNotifyEmail($user_email, $webform_id, $personalisation);
 
-    if ($user_response === False || in_array($user_response->getStatusCode(), ['200', '201']) === False )
-      $is_default_mail = $this->sendDefaultEmail('confirmation');
+      if ($user_response === False || in_array($user_response->getStatusCode(), ['200', '201']) === False )
+        $is_default_mail = $this->sendDefaultEmail('confirmation');
+    }
+    else
+      $user_response = '';
 
     // 3. add response to webform submission notes
 
@@ -96,8 +104,8 @@ class GCNotifyEmailHandler extends WebformHandlerBase {
           $ati_data .= "\r\n" . $value['country'] . "\r\n";
         }
 
-        elseif ($element['#type'] == 'select' )
-          $ati_data .= $element['#options'][$value];
+	elseif ($element['#type'] == 'select' )
+	  $ati_data .= empty($value) ? '' : $element['#options'][$value];
 
         else
           $ati_data .= $value;

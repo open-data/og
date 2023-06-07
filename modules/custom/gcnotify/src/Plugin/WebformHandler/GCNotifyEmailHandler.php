@@ -24,6 +24,15 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class GCNotifyEmailHandler extends WebformHandlerBase {
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getSummary() {
+      return [
+          '#markup' => $this->t("Settings for GC Notify to be completed in notification.canada.ca"),
+        ];
+  }
+
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {
 
     $webform_id = $webform_submission->getWebform()->id();

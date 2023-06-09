@@ -87,7 +87,7 @@ class GCNotifyEmailHandler extends WebformHandlerBase {
          ( array_key_exists('#access', $element) === false || $element['#access'] === true )) {
 
         // get translated label of form element
-        $element_label = (in_array($key, $translation, false))
+        $element_label = (array_key_exists($key, $translation))
           ? $translation[$key]['#title']
           : $webform->getElement($key)['#title'];
 
@@ -101,9 +101,11 @@ class GCNotifyEmailHandler extends WebformHandlerBase {
           $data .= ", " . $value['state_province'];
           $data .= ". " . $value['postal_code'];
           $data .= "\r\n" . $value['country'] . "\r\n";
-        } elseif ($element['#type'] == 'select')
-          $data .= $element['#options'][$value];
-
+        } elseif ($element['#type'] == 'select') {
+          $data .= (array_key_exists($key, $translation))
+            ? $translation[$key]['#options'][$value]
+            : $element['#options'][$value];
+        }
         else
           $data .= $value;
 

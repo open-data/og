@@ -78,7 +78,7 @@ class NotificationAPIHandler {
   /**
    * use GC Notify API to send notification
    */
-  public function sendGCNotifyEmail($recipient, $template, $personalisation) {
+  public function sendGCNotifyEmail($recipient, $template, $personalisation, $langcode) {
 
     $gcnotify_settings = \Drupal\Core\Site\Settings::get('gcnotify');
     if (!isset($gcnotify_settings)) {
@@ -92,7 +92,6 @@ class NotificationAPIHandler {
 
     $api_endpoint = $gcnotify_settings['base_uri'] . '/notifications/email';
     $authorization = $gcnotify_settings['authorization'];
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     $template_id = $gcnotify_settings['template_id'][$template][$langcode];
 
     $options = [

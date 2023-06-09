@@ -36,6 +36,7 @@ class GCNotifyEmailHandler extends WebformHandlerBase {
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {
 
     $webform_id = $webform_submission->getWebform()->id();
+    $langcode = $webform_submission->getLangcode();
     $notify = new NotificationAPIHandler();
     $personalisation = $this->getRequestOptions($webform_submission);
 
@@ -50,7 +51,7 @@ class GCNotifyEmailHandler extends WebformHandlerBase {
         $message = $handler->getMessage($webform_submission);
         $to = $message['to_mail'];
 
-        $response = $notify->sendGCNotifyEmail($to, $webform_id, $personalisation);
+        $response = $notify->sendGCNotifyEmail($to, $webform_id, $personalisation, $langcode);
 
         if ($response === False || in_array($response->getStatusCode(), ['200', '201']) === False )
           $is_default_mail = $this->sendDefaultEmail($handler_id);

@@ -64,7 +64,7 @@ class GCNotifyEmailHandler extends WebformHandlerBase {
 
   protected function getRequestOptions($webform_submission) {
 
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $langcode = $webform_submission->getLangcode();
     $webform_translation_manager = \Drupal::service('webform.translation_manager');
     $webform = $webform_submission->getWebform();
     $webform_values = $webform_submission->getData();

@@ -102,7 +102,7 @@ class GCNotifyEmailHandler extends WebformHandlerBase {
           $data .= ". " . $value['postal_code'];
           $data .= "\r\n" . $value['country'] . "\r\n";
         } elseif ($element['#type'] == 'select') {
-          $data .= (array_key_exists($key, $translation))
+          $data .= (array_key_exists($key, $translation) && array_key_exists('#options', $translation[$key]))
             ? $translation[$key]['#options'][$value]
             : $element['#options'][$value];
         }

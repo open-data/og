@@ -70,7 +70,7 @@ install:
   - fontawesome
   - google_analytics
   - honeypot
-  - memcache
+  - redis
   - menu_breadcrumb
   - metatag
   - metatag_dc

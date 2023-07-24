@@ -16,7 +16,7 @@ If skipping, you may need to replace `composer` with `php composer.phar` for you
 composer create-project opengov/opengov-project:dev-master MYPROJECT --no-interaction
 ```
 
-3. Install using interactive installer, choose `Open Government` as your installation profile. 
+3. Install using interactive installer, choose `Open Government` as your installation profile.
 
 
 ## Scope
@@ -35,7 +35,7 @@ The following contributed modules are installed as part of the profile
 - fontawesome
 - google_analytics
 - honeypot
-- memcache
+- redis
 - menu_breadcrumb
 - metatag
 - pathauto

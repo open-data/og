@@ -1,0 +1,7 @@
+gcnotify.status_callback:
+  path: '/api/gcnotify-callback'
+  defaults:
+    _controller: '\Drupal\gcnotify\Controller\GCNotifyRestController::postNotificationStatus'
+  methods: [POST]
+  requirements:
+    _permission: 'access content'

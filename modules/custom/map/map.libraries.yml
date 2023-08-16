@@ -4,7 +4,6 @@ fgpv:
     base:
       /profiles/og/modules/custom/map/css/rv-styles.css: { type: external, minified: true, preprocess: false }
       /profiles/og/modules/custom/map/css/chart.css: { type: external, minified: true, preprocess: false }
-      /profiles/og/modules/custom/map/css/rv-styles.css: { type: external, minified: true, preprocess: false }
   js:
     /profiles/og/modules/custom/map/js/polyfill.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }
     /profiles/og/modules/custom/map/js/legacy-api.js: { type: external, minified: true, preprocess: false, attributes: { defer: true } }

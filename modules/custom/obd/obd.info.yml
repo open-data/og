@@ -1,0 +1,8 @@
+name: 'Open by Default'
+type: module
+description: 'Archived files for the Open by Default pilot project'
+package: 'Open Government'
+version: 1.0
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:node

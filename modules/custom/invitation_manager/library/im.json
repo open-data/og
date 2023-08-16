@@ -24,7 +24,7 @@
     "link-en" : "https://www.surveymonkey.com/r/KMH8JWN?site=OpenMaps",
     "link-fr" : "https://www.surveymonkey.com/r/KMH8JWN?site=OpenMaps&lang=fr",
     "start-on" : "2022-09-28T00:00:00",
-    "end-on" : "2050-09-28T23:59:00",
+    "end-on" : "2023-02-22T23:59:00",
     "type" : "Page",
     "probability" : 0.25,
     "yes-en" : "<strong>Yes, <span class='wb-inv'>I will take the exit survey </span> after my visit.</strong>",

@@ -1,0 +1,109 @@
+<section class="alert alert-warning wb-inview" data-inview="archived-bnr" id="archived">
+<h2 class="h4">Archived information</h2>
+
+<p>This page has been archived and will no longer receive updates. Please contact <a href="mailto:open-ouvert@tbs-sct.gc.ca">open-ouvert@tbs-sct.gc.ca</a> for additional information.</p>
+</section>
+
+<section class="wb-overlay modal-content overlay-def wb-bar-t" id="archived-bnr">
+<header>
+<h2 class="wb-inv">Archived</h2>
+</header>
+
+<p><a href="#archived">This page has been archived.</a></p>
+</section>
+
+<section class="mrgn-tp-xl">
+<div class="row">
+<div class="col-md-3">
+<h2 class="h3 mrgn-tp-0">Search Filters <small><a href="[site:url]/obd">Clear All</a></small></h2>
+
+<div class="panel panel-primary">
+<div class="panel-heading"><span class="glyphicon glyphicon-filter"></span> Organization</div>
+
+<div class="panel-body">
+<ul class="list-unstyled">
+	<li class="checkbox"><label for="dt_department1"><input data-column="6" id="dt_department1" name="dt_department" type="checkbox" value="pch" /> Canadian Heritage</label></li>
+	<li class="checkbox"><label for="dt_department2"><input data-column="6" id="dt_department2" name="dt_department" type="checkbox" value="ec" /> Environment and Climate Change Canada</label></li>
+	<li class="checkbox"><label for="dt_department3"><input data-column="6" id="dt_department3" name="dt_department" type="checkbox" value="nrcan-rncan" /> Natural Resources Canada</label></li>
+	<li class="checkbox"><label for="dt_department4"><input data-column="6" id="dt_department4" name="dt_department" type="checkbox" value="tbs-sct" /> Treasury Board of Canada Secretariat</label></li>
+</ul>
+</div>
+</div>
+
+<div class="panel panel-primary">
+<div class="panel-heading"><span class="glyphicon glyphicon-filter"></span> Format</div>
+
+<div class="panel-body">
+<ul class="list-unstyled">
+	<li class="checkbox"><label for="dt_format1"><input data-column="3" id="dt_format1" name="dt_format" type="checkbox" value="DOC" /> DOC</label></li>
+	<li class="checkbox"><label for="dt_format2"><input data-column="3" id="dt_format2" name="dt_format" type="checkbox" value="DOCX" /> DOCX</label></li>
+	<li class="checkbox"><label for="dt_format3"><input data-column="3" id="dt_format3" name="dt_format" type="checkbox" value="PDF" /> PDF</label></li>
+	<li class="checkbox"><label for="dt_format4"><input data-column="3" id="dt_format4" name="dt_format" type="checkbox" value="PNG" /> PNG</label></li>
+	<li class="checkbox"><label for="dt_format5"><input data-column="3" id="dt_format5" name="dt_format" type="checkbox" value="PPTX" /> PPTX</label></li>
+	<li class="checkbox"><label for="dt_format6"><input data-column="3" id="dt_format6" name="dt_format" type="checkbox" value="XLS" /> XLS</label></li>
+	<li class="checkbox"><label for="dt_format7"><input data-column="3" id="dt_format7" name="dt_format" type="checkbox" value="XLSX" /> XLSX</label></li>
+	<li class="checkbox"><label for="dt_format8"><input data-column="3" id="dt_format8" name="dt_format" type="checkbox" value="other" /> Other</label></li>
+</ul>
+</div>
+</div>
+
+<div class="panel panel-primary">
+<div class="panel-heading"><span class="glyphicon glyphicon-filter"></span> Resource Type</div>
+
+<div class="panel-body">
+<ul class="list-unstyled">
+	<li class="checkbox"><label for="dt_resource_type1"><input data-column="7" id="dt_resource_type1" name="dt_resource_type" type="checkbox" value="application" /> Application</label></li>
+	<li class="checkbox"><label for="dt_resource_type2"><input data-column="7" id="dt_resource_type2" name="dt_resource_type" type="checkbox" value="assessment" /> Assessment</label></li>
+	<li class="checkbox"><label for="dt_resource_type3"><input data-column="7" id="dt_resource_type3" name="dt_resource_type" type="checkbox" value="briefing_material" /> Briefing Material</label></li>
+	<li class="checkbox"><label for="dt_resource_type4"><input data-column="7" id="dt_resource_type4" name="dt_resource_type" type="checkbox" value="framework" /> Framework</label></li>
+	<li class="checkbox"><label for="dt_resource_type5"><input data-column="7" id="dt_resource_type5" name="dt_resource_type" type="checkbox" value="guide" /> Guide</label></li>
+	<li class="checkbox"><label for="dt_resource_type6"><input data-column="7" id="dt_resource_type6" name="dt_resource_type" type="checkbox" value="meeting_material" /> Meeting Material</label></li>
+	<li class="checkbox"><label for="dt_resource_type7"><input data-column="7" id="dt_resource_type7" name="dt_resource_type" type="checkbox" value="agenda" /> Meeting Material - Agenda</label></li>
+	<li class="checkbox"><label for="dt_resource_type8"><input data-column="7" id="dt_resource_type8" name="dt_resource_type" type="checkbox" value="minutes" /> Meeting Material - Minutes</label></li>
+	<li class="checkbox"><label for="dt_resource_type9"><input data-column="7" id="dt_resource_type9" name="dt_resource_type" type="checkbox" value="multimedia_resource" /> Multimedia Resource</label></li>
+	<li class="checkbox"><label for="dt_resource_type10"><input data-column="7" id="dt_resource_type10" name="dt_resource_type" type="checkbox" value="plan" /> Plan</label></li>
+	<li class="checkbox"><label for="dt_resource_type11"><input data-column="7" id="dt_resource_type11" name="dt_resource_type" type="checkbox" value="policy" /> Policy</label></li>
+	<li class="checkbox"><label for="dt_resource_type12"><input data-column="7" id="dt_resource_type12" name="dt_resource_type" type="checkbox" value="Presentation" /> Presentation</label></li>
+	<li class="checkbox"><label for="dt_resource_type13"><input data-column="7" id="dt_resource_type13" name="dt_resource_type" type="checkbox" value="project_material" /> Project Material</label></li>
+	<li class="checkbox"><label for="dt_resource_type14"><input data-column="7" id="dt_resource_type14" name="dt_resource_type" type="checkbox" value="promotional_material" /> Promotional Material</label></li>
+	<li class="checkbox"><label for="dt_resource_type15"><input data-column="7" id="dt_resource_type15" name="dt_resource_type" type="checkbox" value="report" /> Report</label></li>
+	<li class="checkbox"><label for="dt_resource_type16"><input data-column="7" id="dt_resource_type16" name="dt_resource_type" type="checkbox" value="blog_entry" /> Social Media Resource - Blog Entry</label></li>
+	<li class="checkbox"><label for="dt_resource_type17"><input data-column="7" id="dt_resource_type17" name="dt_resource_type" type="checkbox" value="specification" /> Specification</label></li>
+	<li class="checkbox"><label for="dt_resource_type18"><input data-column="7" id="dt_resource_type18" name="dt_resource_type" type="checkbox" value="statistics" /> Statistics</label></li>
+	<li class="checkbox"><label for="dt_resource_type19"><input data-column="7" id="dt_resource_type19" name="dt_resource_type" type="checkbox" value="still_image" /> Still Image</label></li>
+	<li class="checkbox"><label for="dt_resource_type20"><input data-column="7" id="dt_resource_type20" name="dt_resource_type" type="checkbox" value="terms_of_reference" /> Terms of Reference</label></li>
+	<li class="checkbox"><label for="dt_resource_type21"><input data-column="7" id="dt_resource_type21" name="dt_resource_type" type="checkbox" value="tool" /> Tool</label></li>
+</ul>
+</div>
+</div>
+
+<div class="panel panel-primary">
+<div class="panel-heading"><span class="glyphicon glyphicon-filter"></span> Resource Language</div>
+
+<div class="panel-body">
+<ul class="list-unstyled">
+	<li class="checkbox"><label for="dt_language1"><input data-column="8" id="dt_language1" name="dt_language" type="checkbox" value="en" /> English</label></li>
+	<li class="checkbox"><label for="dt_language2"><input data-column="8" id="dt_language2" name="dt_language" type="checkbox" value="fr" /> French</label></li>
+</ul>
+</div>
+</div>
+
+<div class="well well-sm"><a href="[site:url]/open-government-licence-canada">View the Open Government Licence - Canada</a></div>
+</div>
+
+<div class="col-md-9">
+<table class="table table-hover" id="dataset-filter1">
+	<thead>
+		<tr>
+			<th data-priority="1">Title</th>
+			<th data-priority="2">Description</th>
+			<th data-priority="3">Organization</th>
+			<th data-priority="4">Resource Formats</th>
+			<th>Resources</th>
+			<th>Record Modified</th>
+		</tr>
+	</thead>
+</table>
+</div>
+</div>
+</section>

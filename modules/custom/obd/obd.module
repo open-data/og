@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Contains obd.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function obd_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the obd module.
+    case 'help.page.obd':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Archived files for the Open by Default pilot project') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter()
+ */
+function obd_page_attachments_alter(&$page) {
+
+  // Load obd library only for the Open by Default page
+  $path = \Drupal::service('path.current')->getPath();
+  if (strpos($path, '/node/') === 0) {
+      $alias = \Drupal::service('path_alias.manager')->getAliasByPath($path);
+      if ($alias == '/obd') {
+          $page['#attached']['library'][] = 'obd/obd';
+    }
+  } 
+}
+

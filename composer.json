@@ -101,7 +101,8 @@
                 "Submitting a comment in the non default language redirects you to the default language": "https://www.drupal.org/files/issues/2021-11-29/2751269-106.patch",
                 "Comments created in translation are displayed only for admin role": "https://www.drupal.org/files/issues/2020-10-27/2958935-31.patch",
                 "Error: Call to a member function getLabel() after enable layout_builder": "https://www.drupal.org/files/issues/2020-04-08/2985882-field-85.patch",
-                "Views exposed sort filters does not sort with facets": "https://www.drupal.org/files/issues/2018-10-30/views-exposed-sort-filters-2992672-10.patch"
+                "Views exposed sort filters does not sort with facets": "https://www.drupal.org/files/issues/2018-10-30/views-exposed-sort-filters-2992672-10.patch",
+		"Dynamically provide action plugins for every moderation state change":"https://www.drupal.org/files/issues/2023-03-10/2797583-218.patch"
             }
         },
         "installer-types": [

@@ -2,6 +2,8 @@
 
 use \Drupal\node\Entity\Node;
 use \Drupal\Component\Serialization\Json;
+use \Drupal\Core\File\Exception\FileException;
+use \Drupal\Core\File\FileSystemInterface;
 
 /**
 * @file
@@ -138,7 +140,7 @@ function alter_field_update_8001() {
   // 3. fetch the file with clean data
   $module_handler = \Drupal::service('module_handler');
   $module_path = $module_handler->getModule(basename(__FILE__, '.module'))->getPath();
-  $files = file_scan_directory($module_path, '/.csv$/');
+  $files = $this->fileSystem->scanDirectory($module_path, '/.csv$/');
 
   foreach($files as $file) {
     $csv = fopen($file->uri, 'r');
@@ -274,7 +276,7 @@ function alter_field_update_8006()
 
   $module_handler = \Drupal::service('module_handler');
   $module_path = $module_handler->getModule(basename(__FILE__, '.module'))->getPath();
-  $files = file_scan_directory($module_path, '/.csv$/');
+  $files = $this->fileSystem->scanDirectory($module_path, '/.csv$/');
 
   foreach ($files as $file) {
     $csv = fopen($file->uri, 'r');

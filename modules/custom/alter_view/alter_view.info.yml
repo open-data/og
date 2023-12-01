@@ -1,5 +1,5 @@
 name: 'Alter View'
 description: 'Alter the content of custom views'
 type: module
-core: 8.x
 package: 'Open Government'
+core_version_requirement: ^8 || ^9

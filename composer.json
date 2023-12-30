@@ -54,7 +54,7 @@
         "drupal/bootstrap_layouts": "5.3.0",
         "drupal/ckeditor_codemirror": "2.4.0",
         "drupal/console": "1.9.10",
-        "drupal/core": "9.5.0",
+        "drupal/core": "10.2.0",
         "drupal/csv_serialization": "2.1.0",
         "drupal/facets": "2.0.6",
         "drupal/fontawesome": "2.26.0",

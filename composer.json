@@ -77,7 +77,6 @@
         "oomphinc/composer-installers-extender": "^2.0.0",
         "opengov/gcweb": "dev-drupal-10",
         "symfony/event-dispatcher": "^6.2",
-        "webmozart/path-util": "^2.3",
         "wikimedia/composer-merge-plugin": "^2.0.0"
     },
     "require-dev": {

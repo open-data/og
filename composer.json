@@ -48,7 +48,7 @@
         "ext-json": "*",
         "composer/installers": "^1.9.0",
         "cweagans/composer-patches": "^1.7.0",
-        "drupal/core-composer-scaffold": "^9.4.0",
+        "drupal/core-composer-scaffold": "^10.0.0",
         "drupal/admin_toolbar": "3.4.1",
         "drupal/autologout": "1.4.0",
         "drupal/bootstrap_layouts": "5.3.0",
@@ -73,11 +73,11 @@
         "drupal/token_filter": "2.0.0",
         "drupal/views_bootstrap": "4.4.0",
         "drupal/webform": "6.1.5",
-        "drush/drush": "^11.0.0",
+        "drush/drush": "^11.4.0",
         "fortawesome/font-awesome": "6.4.2",
         "oomphinc/composer-installers-extender": "^2.0.0",
         "opengov/gcweb": "dev-drupal9-compatibility",
-        "symfony/event-dispatcher": "^4.4",
+        "symfony/event-dispatcher": "^6.2",
         "webmozart/path-util": "^2.3",
         "wikimedia/composer-merge-plugin": "^2.0.0"
     },
@@ -86,7 +86,6 @@
     },
     "conflict": {
         "drupal/drupal": "*",
-        "symfony/http-foundation": "3.4.35",
         "drush/drush": "<8.1.10"
     },
     "minimum-stability": "dev",

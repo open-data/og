@@ -72,7 +72,7 @@
         "drupal/token_filter": "2.1.0",
         "drupal/views_bootstrap": "4.4.0",
         "drupal/webform": "6.2.2",
-        "drush/drush": "^11.4.0",
+        "drush/drush": "^12.4.3",
         "fortawesome/font-awesome": "6.4.2",
         "oomphinc/composer-installers-extender": "^2.0.0",
         "opengov/gcweb": "dev-drupal-10",
@@ -84,8 +84,7 @@
         "drupal/core-dev": "^10"
     },
     "conflict": {
-        "drupal/drupal": "*",
-        "drush/drush": "<8.1.10"
+        "drupal/drupal": "*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

@@ -52,7 +52,7 @@
         "drupal/admin_toolbar": "3.4.1",
         "drupal/autologout": "1.4.0",
         "drupal/bootstrap_layouts": "5.3.0",
-        "drupal/ckeditor_codemirror": "2.4.0",
+        "drupal/ckeditor_codemirror": "^3.0@beta",
         "drupal/console": "1.9.10",
         "drupal/core": "10.2.0",
         "drupal/csv_serialization": "2.1.0",

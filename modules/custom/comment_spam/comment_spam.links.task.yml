@@ -1,6 +1,0 @@
-comment_spam.admin_comment_spam:
-  title: 'Spam comments'
-  route_name: comment_spam.admin_comment_spam
-  class: Drupal\comment_spam\Plugin\Menu\LocalTask\SpamComments
-  parent_id: comment.admin
-  weight: 10

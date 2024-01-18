@@ -22,163 +22,217 @@ use Symfony\Component\HttpFoundation\Response;
  *   results = \Drupal\webform\Plugin\WebformHandlerInterface::RESULTS_PROCESSED,
  * )
  */
-class GCNotifyEmailHandler extends WebformHandlerBase {
+class GCNotifyEmailHandler extends WebformHandlerBase
+{
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getSummary() {
-      return [
-          '#markup' => $this->t("Settings for GC Notify to be completed in notification.canada.ca"),
+    /**
+     * {@inheritdoc}
+     */
+    public function getSummary()
+    {
+        return [
+          '#markup' => $this
+            ->t("Settings for GC Notify to be completed in notification.canada.ca"),
         ];
-  }
-
-  public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {
-
-    $webform_id = $webform_submission->getWebform()->id();
-    $langcode = $webform_submission->getLangcode();
-    $notify = new NotificationAPIHandler();
-    $personalisation = $this->getRequestOptions($webform_submission);
-
-    $webform = $this->getWebform();
-    $handlers = $webform->getHandlers();
-
-    foreach ($handlers as $handler_id => $handler) {
-
-      if ($handler instanceof EmailWebformHandler) {
-
-        $is_default_mail = false;
-        $message = $handler->getMessage($webform_submission);
-        $to = $message['to_mail'];
-
-        $response = $notify->sendGCNotifyEmail($to, $webform_id, $personalisation, $langcode);
-
-        if ($response === False || in_array($response->getStatusCode(), ['200', '201']) === False )
-          $is_default_mail = $this->sendDefaultEmail($handler_id);
-
-        $this->addNotesToWebformSubmission($webform_submission, $is_default_mail, $handler_id, $response);
-
-      }
     }
 
-  }
+    public function postSave(WebformSubmissionInterface $webform_submission, $update = true)
+    {
 
-  protected function getRequestOptions($webform_submission) {
+        $webform_id = $webform_submission->getWebform()->id();
+        $langcode = $webform_submission->getLangcode();
+        $notify = new NotificationAPIHandler();
+        $personalisation = $this->getRequestOptions($webform_submission);
 
-    $langcode = $webform_submission->getLangcode();
-    $webform_translation_manager = \Drupal::service('webform.translation_manager');
-    $webform = $webform_submission->getWebform();
-    $webform_values = $webform_submission->getData();
-    $translation = $webform_translation_manager->getTranslationElements($webform, $langcode);
+        $webform = $this->getWebform();
+        $handlers = $webform->getHandlers();
 
-    $created = $webform_submission->get('created')->value;
+        foreach ($handlers as $handler_id => $handler) {
 
-    // hide deprecated fields from ATI template update
-    // https://github.com/open-data/ckanext-canada/blob/master/ckanext/canada/tables/ati.yaml
-    $hidden_fields = ['solr_core', 'organization', 'request_summary', 'number_of_pages', 'e_mail_ati_recipient', ];
+            if ($handler instanceof EmailWebformHandler) {
 
-    $data = '';
+                $is_default_mail = false;
+                $message = $handler->getMessage($webform_submission);
+                $to = $message['to_mail'];
 
-    foreach($webform_values as $key => $value) {
-      $element = $webform->getElement($key);
+                $response = $notify
+                  ->sendGCNotifyEmail($to, $webform_id, $personalisation, $langcode);
 
-      // check if not hidden or private
-      if (!in_array($key, $hidden_fields) &&
-         ( array_key_exists('#access', $element) === false || $element['#access'] === true )) {
+                if ($response === false
+                    || in_array(
+                        $response->getStatusCode(),
+                        ['200', '201']
+                    ) === false
+                ) {
+                    $is_default_mail = $this
+                      ->sendDefaultEmail($handler_id);
+                }
 
-        // get translated label of form element
-        $element_label = (array_key_exists($key, $translation))
-          ? $translation[$key]['#title']
-          : $webform->getElement($key)['#title'];
+                $this->addNotesToWebformSubmission(
+                    $webform_submission,
+                    $is_default_mail,
+                    $handler_id,
+                    $response
+                );
 
-        // generate element in pattern [key]: value
-        $data .= '**' . $element_label . '**' . "\r\n";
-        if ($element['#type'] == 'webform_address') {
-          $data .= $value['address'];
-          if (!empty($value['address_2']))
-            $data .= "\r\n" . $value['address_2'];
-          $data .= "\r\n" . $value['city'];
-          $data .= ", " . $value['state_province'];
-          $data .= ". " . $value['postal_code'];
-          $data .= "\r\n" . $value['country'] . "\r\n";
-        } elseif ($element['#type'] == 'select') {
-          $data .= (array_key_exists($key, $translation) && array_key_exists('#options', $translation[$key]))
-            ? $translation[$key]['#options'][$value]
-            : $element['#options'][$value];
+            }
         }
-        else
-          $data .= $value;
 
-        $data .= "\r\n \r\n";
-
-      }
     }
 
-    $personalisation = [
-      'webform_submission_sid' => $webform_submission->id(),
-      'webform_submission_created' => \Drupal::service('date.formatter')->format($created, 'medium'),
-      'webform_submission_values' => $data,
-    ];
+    protected function getRequestOptions($webform_submission)
+    {
 
-    return $personalisation;
-  }
+        $langcode = $webform_submission->getLangcode();
+        $webform_translation_manager = \Drupal::service('webform.translation_manager');
+        $webform = $webform_submission->getWebform();
+        $webform_values = $webform_submission->getData();
+        $translation = $webform_translation_manager
+          ->getTranslationElements($webform, $langcode);
 
-  protected function addNotesToWebformSubmission($webform_submission, $default_mail, $handler_id, $response) {
+        $created = $webform_submission->get('created')->value;
 
-    // add GC Notify response as Administrative notes to the webform submission
+        // hide deprecated fields from ATI template update
+        // https://github.com/open-data/ckanext-canada/blob/master/ckanext/canada/tables/ati.yaml
+        $hidden_fields = [
+          'solr_core',
+          'organization',
+          'request_summary',
+          'number_of_pages',
+          'e_mail_ati_recipient',
+          ];
 
-    $notes = ($webform_submission->hasNotes()) ? $webform_submission->getNotes() : '';
+        $data = '';
 
-    if ($default_mail)
-      $notes .= "\r\n" . 'Unable to send ' . $handler_id . ' email using GC Notify. Email sent using PHP mail.';
+        foreach($webform_values as $key => $value) {
+            $element = $webform->getElement($key);
 
-    if ($response) {
+            // check if not hidden or private
+            if (!in_array($key, $hidden_fields) 
+                
+                && ( array_key_exists('#access', $element) === false
+                || $element['#access'] === true )
+            ) {
 
-      if ($response->getStatusCode() == '200' || $response->getStatusCode() == '201') {
+                // get translated label of form element
+                $element_label = (array_key_exists($key, $translation))
+                ? $translation[$key]['#title']
+                : $webform->getElement($key)['#title'];
 
-        $response_data = json_decode($response->getBody()->getContents(), TRUE);
-        $note = "\r\n" . ucfirst($handler_id) . " email sent using GCNotify. Details:\r\n";
-        $note .= json_encode([
-          'handler_id' => $handler_id,
-          'status_code' => $response->getStatusCode(),
-          'gcnotify_response' => $response_data,
-        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-      }
+                // generate element in pattern [key]: value
+                $data .= '**' . $element_label . '**' . "\r\n";
+                if ($element['#type'] == 'webform_address') {
+                    $data .= $value['address'];
+                    if (!empty($value['address_2'])) {
+                          $data .= "\r\n" . $value['address_2'];
+                    }
+                    $data .= "\r\n" . $value['city'];
+                    $data .= ", " . $value['state_province'];
+                    $data .= ". " . $value['postal_code'];
+                    $data .= "\r\n" . $value['country'] . "\r\n";
+                } elseif ($element['#type'] == 'select') {
+                    $data .= (array_key_exists($key, $translation)
+                      && array_key_exists('#options', $translation[$key]))
+                    ? $translation[$key]['#options'][$value]
+                    : $element['#options'][$value];
+                } else {
+                      $data .= $value;
+                }
 
-      else {
+                $data .= "\r\n \r\n";
 
-        $note = "\r\n" . ucfirst($handler_id) . " email failed to send using GCNotify. Details:\r\n";
-        $response_data = json_decode($response->getBody(), TRUE);
-        $note .= json_encode([
-          'handler_id' => $handler_id,
-          'status_code' => $response->getStatusCode(),
-          'gcnotify_response' => $response_data,
-        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-      }
+            }
+        }
 
-      $notes .= "\r\n" . $note;
+        $personalisation = [
+        'webform_submission_sid' => $webform_submission->id(),
+        'webform_submission_created' => \Drupal::service('date.formatter')
+          ->format($created, 'medium'),
+        'webform_submission_values' => $data,
+        ];
+
+        return $personalisation;
     }
 
-    else
-      $notes .= "\r\n" . 'Unable to send email using GC Notify. GC Notify Settings not available.';
+    protected function addNotesToWebformSubmission($webform_submission, $default_mail, $handler_id, $response)
+    {
 
-    $webform_submission->setNotes($notes);
-    $webform_submission->resave();
+        // add GC Notify response as Administrative notes to the webform submission
 
-  }
+        $notes = ($webform_submission->hasNotes())
+          ? $webform_submission->getNotes()
+          : '';
 
-  protected function sendDefaultEmail($handler_id) {
+        if ($default_mail) {
+            $notes .= "\r\n"
+              . 'Unable to send '
+              . $handler_id
+              . ' email using GC Notify. Email sent using PHP mail.';
+        }
 
-    // if GC Notify service fails, default to email handler
+        if ($response) {
 
-    $webform = $this->getWebform();
-    $handler = $webform->getHandler($handler_id);
-    $webform_submission = $handler->getWebformSubmission();
-    $message = $handler->getMessage($webform_submission);
-    $handler->sendMessage($webform_submission, $message);
+            if ($response->getStatusCode() == '200'
+                || $response->getStatusCode() == '201'
+            ) {
 
-    return true;
+                $response_data = json_decode(
+                    $response
+                        ->getBody()
+                        ->getContents(),
+                    true
+                );
+                $note = "\r\n"
+                  . ucfirst($handler_id)
+                  . " email sent using GCNotify. Details:\r\n";
+                $note .= json_encode(
+                    [
+                    'handler_id' => $handler_id,
+                    'status_code' => $response->getStatusCode(),
+                    'gcnotify_response' => $response_data,
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
+                );
 
-  }
+            } else {
+
+                $note = "\r\n"
+                  . ucfirst($handler_id)
+                  . " email failed to send using GCNotify. Details:\r\n";
+                $response_data = json_decode($response->getBody(), true);
+                $note .= json_encode(
+                    [
+                    'handler_id' => $handler_id,
+                    'status_code' => $response->getStatusCode(),
+                    'gcnotify_response' => $response_data,
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
+                );
+            }
+
+            $notes .= "\r\n" . $note;
+
+        } else {
+            $notes .= "\r\n"
+              . 'Unable to send email using GC Notify. GC Notify Settings not available.';
+        }
+
+        $webform_submission->setNotes($notes);
+        $webform_submission->resave();
+
+    }
+
+    protected function sendDefaultEmail($handler_id)
+    {
+
+        // if GC Notify service fails, default to email handler
+
+        $webform = $this->getWebform();
+        $handler = $webform->getHandler($handler_id);
+        $webform_submission = $handler->getWebformSubmission();
+        $message = $handler->getMessage($webform_submission);
+        $handler->sendMessage($webform_submission, $message);
+
+        return true;
+
+    }
 
 }

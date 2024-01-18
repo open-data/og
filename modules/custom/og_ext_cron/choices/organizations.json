@@ -1,1310 +1,1394 @@
 {
     "2canl": {
-        "en": "2875039 Canada Limited ",
-        "fr": " 2875039 Canada Limited"
+        "en": "2875039 Canada Limited",
+        "fr": "2875039 Canada Limited"
     },
     "3can": {
-        "en": "3906949 Canada Inc. ",
-        "fr": " 3906949 Canada Inc."
+        "en": "3906949 Canada Inc.",
+        "fr": "3906949 Canada Inc."
     },
     "3nih": {
-        "en": "3Net Indy Holdings ",
-        "fr": " 3Net Indy Holdings"
+        "en": "3Net Indy Holdings",
+        "fr": "3Net Indy Holdings"
     },
     "3nii": {
-        "en": "3Net Indy Investments Inc. ",
-        "fr": " 3Net Indy Investments Inc."
+        "en": "3Net Indy Investments Inc.",
+        "fr": "3Net Indy Investments Inc."
     },
     "7can": {
-        "en": "7986386 Canada Inc. ",
-        "fr": " 7986386 Canada Inc."
+        "en": "7986386 Canada Inc.",
+        "fr": "7986386 Canada Inc."
     },
     "8can": {
-        "en": "8599963 Canada Inc. ",
-        "fr": " 8599963 Canada Inc."
-    },
-    "aac": {
-        "en": "AviAlliance Canada Inc. ",
-        "fr": " AviAlliance Canada Inc."
-    },
-    "aafc-aac": {
-        "en": "Agriculture and Agri-Food Canada ",
-        "fr": " Agriculture et Agroalimentaire Canada"
-    },
-    "aandc-aadnc": {
-        "en": "Crown-Indigenous Relations and Northern Affairs Canada ",
-        "fr": " Relations Couronne-Autochtones et Affaires du Nord Canada"
-    },
-    "acoa-apeca": {
-        "en": "Atlantic Canada Opportunities Agency ",
-        "fr": " Agence de promotion \u00e9conomique du Canada atlantique"
-    },
-    "aecl-eacl": {
-        "en": "Atomic Energy of Canada Limited ",
-        "fr": " \u00c9nergie atomique du Canada, Limit\u00e9e"
-    },
-    "ahrc-pac": {
-        "en": "Assisted Human Reproduction Canada ",
-        "fr": " Procr\u00e9ation Assist\u00e9e Canada"
-    },
-    "apa": {
-        "en": "Atlantic Pilotage Authority Canada ",
-        "fr": " Administration de pilotage de l'Atlantique Canada"
-    },
-    "apfc-fapc": {
-        "en": "Asia-Pacific Foundation of Canada ",
-        "fr": " Fondation Asie Pacifique du Canada"
-    },
-    "api": {
-        "en": "Argentia Private Investments Inc. ",
-        "fr": " Argentia Private Investments Inc."
-    },
-    "atm": {
-        "en": "AviAlliance Terminal Management Inc. ",
-        "fr": " AviAlliance Terminal Management Inc."
-    },
-    "atssc-scdata": {
-        "en": "Administrative Tribunals Support Service of Canada ",
-        "fr": " Service canadien d'appui aux tribunaux administratifs"
-    },
-    "bbpi": {
-        "en": "Belle Bay Private Investments Inc. ",
-        "fr": " Belle Bay Private Investments Inc."
-    },
-    "bc": {
-        "en": "Bank of Canada ",
-        "fr": " Banque du Canada"
-    },
-    "bc-cb": {
-        "en": "Government of British Columbia ",
-        "fr": " Gouvernment de la Colombie-Britannique"
-    },
-    "bci": {
-        "en": "BDC Capital Inc. ",
-        "fr": " BDC Capital Inc."
-    },
-    "bctc-ctcb": {
-        "en": "British Columbia Treaty Commission ",
-        "fr": " Commission des Trait\u00e9s de la Colombie-Britannique"
-    },
-    "bdc": {
-        "en": "Business Development Bank of Canada ",
-        "fr": " Banque de d\u00e9veloppement du Canada"
-    },
-    "bgpi": {
-        "en": "Blue & Gold Private Investments Inc. ",
-        "fr": " Blue & Gold Private Investments Inc."
-    },
-    "bwbc-pbwc": {
-        "en": "Blue Water Bridge Canada ",
-        "fr": " Pont Blue Water Canada"
-    },
-    "caf-facdnd": {
-        "en": "Canadian Forces ",
-        "fr": " Forces canadiennes"
-    },
-    "cannor": {
-        "en": "Canadian Northern Economic Development Agency ",
-        "fr": " Agence canadienne de d\u00e9veloppement \u00e9conomique du Nord"
-    },
-    "capprt-tcrpap": {
-        "en": "Canadian Artists and Producers Professional Relations Tribunal ",
-        "fr": " Tribunal canadien des relations professionnelles artistes-producteurs"
-    },
-    "cart-crac": {
-        "en": "Canada Agricultural Review Tribunal ",
-        "fr": " Commission de r\u00e9vision agricole du Canada"
+        "en": "8599963 Canada Inc.",
+        "fr": "8599963 Canada Inc."
     },
     "casdo-ocena": {
-        "en": "Canadian Accessibility Standards Development Organization ",
-        "fr": " Organisation canadienne d'\u00e9laboration de normes d'accessibilit\u00e9"
+        "en": "Accessibility Standards Canada",
+        "fr": "Normes d\u2019accessibilit\u00e9 Canada"
     },
-    "cas-satj": {
-        "en": "Courts Administration Service ",
-        "fr": " Service administratif des tribunaux judiciaires"
+    "atssc-scdata": {
+        "en": "Administrative Tribunals Support Service of Canada",
+        "fr": "Service canadien d'appui aux tribunaux administratifs"
     },
-    "catsa-acsta": {
-        "en": "Canadian Air Transport Security Authority ",
-        "fr": " Administration canadienne de la s\u00fbret\u00e9 du transport a\u00e9rien"
+    "aafc-aac": {
+        "en": "Agriculture and Agri-Food Canada",
+        "fr": "Agriculture et Agroalimentaire Canada"
     },
-    "cb-cda": {
-        "en": "Copyright Board Canada ",
-        "fr": " Commission du droit d'auteur du Canada"
+    "api": {
+        "en": "Argentia Private Investments Inc.",
+        "fr": "Argentia Private Investments Inc."
     },
-    "cbc-radio-canada": {
-        "en": "Canadian Broadcasting Company ",
-        "fr": " Radio-Canada"
+    "apfc-fapc": {
+        "en": "Asia-Pacific Foundation of Canada",
+        "fr": "Fondation Asie Pacifique du Canada"
+    },
+    "ahrc-pac": {
+        "en": "Assisted Human Reproduction Canada",
+        "fr": "Procr\u00e9ation Assist\u00e9e Canada"
+    },
+    "acoa-apeca": {
+        "en": "Atlantic Canada Opportunities Agency",
+        "fr": "Agence de promotion \u00e9conomique du Canada atlantique"
+    },
+    "apa": {
+        "en": "Atlantic Pilotage Authority Canada",
+        "fr": "Administration de pilotage de l'Atlantique Canada"
+    },
+    "aecl-eacl": {
+        "en": "Atomic Energy of Canada Limited",
+        "fr": "\u00c9nergie atomique du Canada, Limit\u00e9e"
+    },
+    "aac": {
+        "en": "AviAlliance Canada Inc.",
+        "fr": "AviAlliance Canada Inc."
+    },
+    "atm": {
+        "en": "AviAlliance Terminal Management Inc.",
+        "fr": "AviAlliance Terminal Management Inc."
+    },
+    "bc": {
+        "en": "Bank of Canada",
+        "fr": "Banque du Canada"
+    },
+    "bci": {
+        "en": "BDC Capital Inc.",
+        "fr": "BDC Capital Inc."
+    },
+    "bbpi": {
+        "en": "Belle Bay Private Investments Inc.",
+        "fr": "Belle Bay Private Investments Inc."
+    },
+    "bpa-apd": {
+        "en": "Belledune Port Authority",
+        "fr": "Administration portuaire de Belledune"
+    },
+    "bgpi": {
+        "en": "Blue & Gold Private Investments Inc.",
+        "fr": "Blue & Gold Private Investments Inc."
+    },
+    "bwbc-pbwc": {
+        "en": "Blue Water Bridge Canada",
+        "fr": "Pont Blue Water Canada"
+    },
+    "bctc-ctcb": {
+        "en": "British Columbia Treaty Commission",
+        "fr": "Commission des Trait\u00e9s de la Colombie-Britannique"
+    },
+    "bdc": {
+        "en": "Business Development Bank of Canada",
+        "fr": "Banque de d\u00e9veloppement du Canada"
+    },
+    "cart-crac": {
+        "en": "Canada Agricultural Review Tribunal",
+        "fr": "Commission de r\u00e9vision agricole du Canada"
     },
     "cbsa-asfc": {
-        "en": "Canada Border Services Agency ",
-        "fr": " Agence des services frontaliers du Canada"
+        "en": "Canada Border Services Agency",
+        "fr": "Agence des services frontaliers du Canada"
     },
     "cca-cac": {
-        "en": "Canada Council for the Arts ",
-        "fr": " Conseil des arts du Canada"
-    },
-    "ccc": {
-        "en": "Canadian Commercial Corporation ",
-        "fr": " Corporation commerciale canadienne"
-    },
-    "ccohs-cchst": {
-        "en": "Canadian Centre for Occupational Health and Safety ",
-        "fr": " Centre canadien d'hygi\u00e8ne et de s\u00e9curit\u00e9 au travail"
-    },
-    "ccperb-cceebc": {
-        "en": "Canadian Cultural Property Export Review Board ",
-        "fr": " Commission canadienne d'examen des exportations de biens culturels"
-    },
-    "cdc-ccl": {
-        "en": "Canadian Dairy Commission ",
-        "fr": " Commission canadienne du lait"
-    },
-    "cdev": {
-        "en": "Canada Development Investment Corporation ",
-        "fr": " Corporation de d\u00e9veloppement des investissements du Canada"
+        "en": "Canada Council for the Arts",
+        "fr": "Conseil des arts du Canada"
     },
     "cdic-sadc": {
-        "en": "Canada Deposit Insurance Corporation ",
-        "fr": " Soci\u00e9t\u00e9 d'assurance-d\u00e9p\u00f4ts du Canada"
+        "en": "Canada Deposit Insurance Corporation",
+        "fr": "Soci\u00e9t\u00e9 d'assurance-d\u00e9p\u00f4ts du Canada"
+    },
+    "cdev": {
+        "en": "Canada Development Investment Corporation",
+        "fr": "Corporation de d\u00e9veloppement des investissements du Canada"
     },
     "ced-dec": {
-        "en": "Canada Economic Development for Quebec Regions ",
-        "fr": " D\u00e9veloppement \u00e9conomique Canada pour les r\u00e9gions du Qu\u00e9bec"
-    },
-    "ceic-caec": {
-        "en": "Canada Employment Insurance Commission ",
-        "fr": " Commission de l\u2019assurance-emploi du Canada"
-    },
-    "ceifb-ofaec": {
-        "en": "Canada Employment Insurance Financing Board ",
-        "fr": " Office de financement de l'assurance-emploi du Canada"
+        "en": "Canada Economic Development for Quebec Regions",
+        "fr": "D\u00e9veloppement \u00e9conomique Canada pour les r\u00e9gions du Qu\u00e9bec"
     },
     "celd": {
-        "en": "Canada Eldor Inc. ",
-        "fr": " Canada Eldor Inc."
+        "en": "Canada Eldor Inc.",
+        "fr": "Canada Eldor Inc."
     },
     "ceria-acire": {
-        "en": "Canada Emission Reduction Incentives Agency ",
-        "fr": " Agence canadienne pour l'incitation \u00e0 la r\u00e9duction des \u00e9missions"
+        "en": "Canada Emission Reduction Incentives Agency",
+        "fr": "Agence canadienne pour l'incitation \u00e0 la r\u00e9duction des \u00e9missions"
+    },
+    "ceic-caec": {
+        "en": "Canada Employment Insurance Commission",
+        "fr": "Commission de l\u2019assurance-emploi du Canada"
+    },
+    "ceifb-ofaec": {
+        "en": "Canada Employment Insurance Financing Board",
+        "fr": "Office de financement de l'assurance-emploi du Canada"
     },
     "cer-rec": {
-        "en": "Canada Energy Regulator ",
-        "fr": " La R\u00e9gie de l\u2019\u00e9nergie du Canada"
-    },
-    "cfia-acia": {
-        "en": "Canadian Food Inspection Agency ",
-        "fr": " Agence canadienne d'inspection des aliments"
-    },
-    "cfmws-sbmfc": {
-        "en": "Canadian Forces Morale and Welfare Services ",
-        "fr": " Services de bien-\u00eatre et moral des Forces canadiennes"
-    },
-    "cgc-ccg": {
-        "en": "Canadian Grain Commission ",
-        "fr": " Commission canadienne des grains"
-    },
-    "cgic-cgc": {
-        "en": "Canada GEN Investment Corporation ",
-        "fr": " Corporation d'investissements GEN du Canada"
-    },
-    "cgsb-ongc": {
-        "en": "Canadian Government Specifications Board ",
-        "fr": " Office des normes g\u00e9n\u00e9rales du Canada"
-    },
-    "chhc-sgch": {
-        "en": "Canada Hibernia Holding Corporation ",
-        "fr": " Soci\u00e9t\u00e9 de gestion Canada Hibernia"
-    },
-    "chrc-ccdp": {
-        "en": "Canadian Human Rights Commission ",
-        "fr": " Commission canadienne des droits de la personne"
-    },
-    "chrt-tcdp": {
-        "en": "Human Rights Tribunal ",
-        "fr": " Tribunal des droits de la personne"
-    },
-    "cht-fcpl": {
-        "en": "Canada Housing Trust ",
-        "fr": " Fiducie du Canada pour l'habitation"
-    },
-    "cib-bic": {
-        "en": "Canada Infrastructure Bank ",
-        "fr": " La Banque de l\u2019infrastructure du Canada"
-    },
-    "cic": {
-        "en": "Immigration, Refugees and Citizenship Canada ",
-        "fr": " Immigration, R\u00e9fugi\u00e9s et Citoyennet\u00e9 Canada"
-    },
-    "cics-scic": {
-        "en": "Canadian Intergovernmental Conference Secretariat ",
-        "fr": " Secr\u00e9tariat des conf\u00e9rences intergouvernementales canadiennes"
-    },
-    "cihi-icis": {
-        "en": "Canadian Institute of Health Information ",
-        "fr": " Institut canadien d'information sur la sant\u00e9"
-    },
-    "cihr-irsc": {
-        "en": "Canadian Institutes of Health Research ",
-        "fr": " Instituts de recherche en sant\u00e9 du Canada"
-    },
-    "cirb-ccri": {
-        "en": "Canada Industrial Relations Board ",
-        "fr": " Conseil canadien des relations industrielles"
-    },
-    "citt-tcce": {
-        "en": "Canadian International Trade Tribunal ",
-        "fr": " Tribunal canadien du commerce ext\u00e9rieur"
-    },
-    "clccl-siccl": {
-        "en": "Canada Lands Company CLC Limited ",
-        "fr": " Soci\u00e9t\u00e9 immobili\u00e8re du Canada CLC limit\u00e9e"
-    },
-    "clcl-sicl": {
-        "en": "Canada Lands Company Limited ",
-        "fr": " Soci\u00e9t\u00e9 immobili\u00e8re du Canada Limit\u00e9e"
-    },
-    "cmc-mcc": {
-        "en": "Canadian Museum of History ",
-        "fr": " Mus\u00e9e canadien de l'histoire"
-    },
-    "cmhc-schl": {
-        "en": "Canada Mortgage and Housing Corporation ",
-        "fr": " Soci\u00e9t\u00e9 canadienne d'hypoth\u00e8ques et de logement"
-    },
-    "cmhr-mcdp": {
-        "en": "Canadian Museum for Human Rights ",
-        "fr": " Mus\u00e9e canadien pour les droits de la personne"
-    },
-    "cmip-mciq": {
-        "en": "Canadian Museum of Immigration at Pier 21 ",
-        "fr": " Mus\u00e9e canadien de l'immigration du Quai 21"
-    },
-    "cmmgpi-sarpgm": {
-        "en": "Corporation for the Mitigation of Mackenzie Gas Project Impacts ",
-        "fr": " Soci\u00e9t\u00e9 d'att\u00e9nuation des r\u00e9percussions du projet gazier Mackenzie"
-    },
-    "cmn-mcn": {
-        "en": "Canadian Museum of Nature ",
-        "fr": " Mus\u00e9e canadien de la nature"
-    },
-    "cnlopb": {
-        "en": "Canada-Newfoundland and Labrador Offshore Petroleum Board ",
-        "fr": " Office Canada\u2013Terre-Neuve-et Labrador des hydrocarbures extrac\u00f4tiers"
-    },
-    "cnsc-ccsn": {
-        "en": "Canadian Nuclear Safety Commission ",
-        "fr": " Commission canadienne de s\u00fbret\u00e9 nucl\u00e9aire"
-    },
-    "cnsopb": {
-        "en": "Canada-Nova Scotia Offshore-Petroleum Board ",
-        "fr": " Office Canada-Nouvelle-\u00c9cosse des hydrocarbures extrac\u00f4tiers"
-    },
-    "cpc-cpp": {
-        "en": "Civilian Review and Complaints Commission for the RCMP ",
-        "fr": " Commission civile d'examen et de traitement des plaintes relatives \u00e0 la Gendarmerie royale du Canada"
-    },
-    "cpc-scp": {
-        "en": "Canada Post ",
-        "fr": " Postes Canada"
-    },
-    "cppib-oirpc": {
-        "en": "Canada Pension Plan Investment Board ",
-        "fr": " L\u2019Office d\u2019investment du R\u00e9gime de pensions du Canada"
-    },
-    "cra-arc": {
-        "en": "Canada Revenue Agency ",
-        "fr": " Agence du revenu du Canada"
-    },
-    "crrf-fcrr": {
-        "en": "Canadian Race Relations Foundation ",
-        "fr": " La Fondation Canadienne des relations raciales "
-    },
-    "crtc": {
-        "en": "Canadian Radio-television and Telecommunications Commission ",
-        "fr": " Conseil de la radiodiffusion et des t\u00e9l\u00e9communications canadiennes"
-    },
-    "csa-asc": {
-        "en": "Canadian Space Agency ",
-        "fr": " Agence spatiale canadienne"
-    },
-    "csc-scc": {
-        "en": "Correctional Service of Canada ",
-        "fr": " Service correctionnel du Canada"
-    },
-    "csec-cstc": {
-        "en": "Communications Security Establishment Canada ",
-        "fr": " Centre de la s\u00e9curit\u00e9 des t\u00e9l\u00e9communications Canada"
-    },
-    "csis-scrs": {
-        "en": "Canadian Security Intelligence Service ",
-        "fr": " Service canadien du renseignement de s\u00e9curit\u00e9"
-    },
-    "csps-efpc": {
-        "en": "Canada School of Public Service ",
-        "fr": " \u00c9cole de la fonction publique du Canada"
-    },
-    "cstm-mstc": {
-        "en": "Canada Science and Technology Museum ",
-        "fr": " Mus\u00e9e des sciences et de la technologie du Canada"
-    },
-    "cta-otc": {
-        "en": "Canadian Transportation Agency ",
-        "fr": " Office des transports du Canada"
-    },
-    "ctc-cct": {
-        "en": "Destination Canada ",
-        "fr": " Destination Canada"
-    },
-    "ct-tc": {
-        "en": "Competition Tribunal ",
-        "fr": " Tribunal de la concurrence"
-    },
-    "dcc-cdc": {
-        "en": "Defence Construction Canada ",
-        "fr": " Construction de D\u00e9fense Canada"
-    },
-    "dfatd-maecd": {
-        "en": "Global Affairs Canada ",
-        "fr": " Affaires mondiales Canada"
-    },
-    "dfo-mpo": {
-        "en": "Fisheries and Oceans Canada ",
-        "fr": " P\u00eaches et Oc\u00e9ans Canada"
-    },
-    "dnd-mdn": {
-        "en": "National Defence ",
-        "fr": " D\u00e9fense nationale"
-    },
-    "dpi": {
-        "en": "Datura Private Investments Inc. ",
-        "fr": " Datura Private Investments Inc."
-    },
-    "drdc-rddc": {
-        "en": "Defence Research and Development Canada ",
-        "fr": " Recherche et d\u00e9veloppement pour la D\u00e9fense Canada"
-    },
-    "ec": {
-        "en": "Environment and Climate Change Canada ",
-        "fr": " Environnement et Changement climatique Canada"
-    },
-    "ecbc-secb": {
-        "en": "Enterprise Cape Breton Corporation ",
-        "fr": " Soci\u00e9t\u00e9 d'expansion du Cap-Breton"
-    },
-    "edc": {
-        "en": "Export Development Canada ",
-        "fr": " Exportation et d\u00e9veloppement Canada"
-    },
-    "elections": {
-        "en": "Elections Canada ",
-        "fr": " \u00c9lections Canada"
-    },
-    "erc-cee": {
-        "en": "RCMP External Review Committee ",
-        "fr": " Comit\u00e9 externe d'examen de la GRC"
-    },
-    "esab-orad": {
-        "en": "Energy Supplies Allocation Board ",
-        "fr": " Office de r\u00e9partition des approvisionnements d\u2019\u00e9nergie"
-    },
-    "esdc-edsc": {
-        "en": "Employment and Social Development Canada ",
-        "fr": " Emploi et D\u00e9veloppement social Canada"
-    },
-    "exi": {
-        "en": "Exinvest Inc. ",
-        "fr": " Exinvest Inc."
-    },
-    "fbcl-spfl": {
-        "en": "Federal Bridge Corporation ",
-        "fr": " Soci\u00e9t\u00e9 des ponts f\u00e9d\u00e9raux"
-    },
-    "fcac-acfc": {
-        "en": "Financial Consumer Agency of Canada ",
-        "fr": " Agence de la consommation en mati\u00e8re financi\u00e8re du Canada"
-    },
-    "fcc-fac": {
-        "en": "Farm Credit Canada ",
-        "fr": " Financement agricole Canada"
-    },
-    "feddevontario": {
-        "en": "Federal Economic Development Agency for Southern Ontario ",
-        "fr": " Agence f\u00e9d\u00e9rale de d\u00e9veloppement \u00e9conomique pour le Sud de l'Ontario"
-    },
-    "ffmc-ocped": {
-        "en": "Freshwater Fish Marketing Corporation ",
-        "fr": " Office de commercialisation du poisson d'eau douce"
-    },
-    "fin": {
-        "en": "Department of Finance Canada ",
-        "fr": " Minist\u00e8re des Finances Canada"
-    },
-    "fintrac-canafe": {
-        "en": "Financial Transactions and Reports Analysis Centre of Canada ",
-        "fr": " Centre d'analyse des op\u00e9rations et d\u00e9clarations financi\u00e8res du Canada"
-    },
-    "fja-cmf": {
-        "en": "Office of the Commissioner for Federal Judicial Affairs Canada ",
-        "fr": " Commissariat \u00e0 la magistrature f\u00e9d\u00e9rale Canada"
-    },
-    "fnfmb-cgfpn": {
-        "en": "First Nations Financial Management Board ",
-        "fr": " Conseil de gestion financi\u00e8re des premi\u00e8res nations"
-    },
-    "fnsi-ispn": {
-        "en": "First Nations Statistical Institute ",
-        "fr": " Institut de la statistique des premi\u00e8res nations"
-    },
-    "fntc-cfpn": {
-        "en": "First Nations Tax Commission ",
-        "fr": " Commission de la fiscalit\u00e9 des premi\u00e8res nations"
-    },
-    "fpcc-cpac": {
-        "en": "Farm Products Council of Canada ",
-        "fr": " Conseil des produits agricoles du Canada"
-    },
-    "fpslreb-crtespf": {
-        "en": "Federal Public Sector Labour Relations and Employment Board ",
-        "fr": " Commission des relations de travail et de l\u2019emploi dans le secteur public f\u00e9d\u00e9ral"
-    },
-    "fraidg-ciafimd": {
-        "en": "Office of the Administrator of the Fund for Railway Accidents Involving Designated Goods ",
-        "fr": " Caisse d\u2019indemnisation pour les accidents ferroviaires impliquant des marchandises d\u00e9sign\u00e9es"
-    },
-    "ghl-lgc": {
-        "en": "Office of the Leader of the Government in the House of Commons ",
-        "fr": " Cabinet du Leader du gouvernement \u00e0 la Chambre des communes"
-    },
-    "glpa-apgl": {
-        "en": "Great Lakes Pilotage Authority Canada ",
-        "fr": " Administration de pilotage des Grands Lacs Canada"
-    },
-    "glupb-ogat": {
-        "en": "Gwich\u2019in Land Use Planning Board ",
-        "fr": " Office Gwich\u2019in d\u2019am\u00e9nagement territorial"
-    },
-    "glwb-ogte": {
-        "en": "Gwich\u2019in Land and Water Board ",
-        "fr": " Office Gwich\u2019in des terres et des eaux"
-    },
-    "gpi": {
-        "en": "Galvaude Private Investments Inc. ",
-        "fr": " Galvaude Private Investments Inc."
-    },
-    "halpa-aphal": {
-        "en": "Halifax Port Authority ",
-        "fr": " Administration portuaire de Halifax"
-    },
-    "hampa-apham": {
-        "en": "Hamilton Port Authority ",
-        "fr": " Administration portuaire de Hamilton"
-    },
-    "hc-sc": {
-        "en": "Health Canada ",
-        "fr": " Sant\u00e9 Canada"
-    },
-    "hmirc-ccrmd": {
-        "en": "Hazardous Materials Information Review Commission Canada ",
-        "fr": " Conseil de contr\u00f4le des renseignements relatifs aux mati\u00e8res dangereuses Canada"
-    },
-    "hoc-cdc": {
-        "en": "House of Commons ",
-        "fr": " Chambre des communes"
-    },
-    "hrtc-tdpc": {
-        "en": "Human Rights Tribunal of Canada ",
-        "fr": " Tribunal des droits de la personne du Canada"
-    },
-    "hsmbc-clmhc": {
-        "en": "Historic Sites and Monuments Board of Canada ",
-        "fr": " Commission des lieux et monuments historiques du Canada"
-    },
-    "iaac-aeic": {
-        "en": "Impact Assessment Agency of Canada ",
-        "fr": " Agence d'\u00e9valuation d'impact du Canada"
-    },
-    "ic": {
-        "en": "Innovation, Science and Economic Development Canada ",
-        "fr": " Innovation, Sciences et D\u00e9veloppement \u00e9conomique Canada"
-    },
-    "idrc-crdi": {
-        "en": "International Development Research Centre ",
-        "fr": " Centre de recherches pour le d\u00e9veloppement international"
-    },
-    "ihgp": {
-        "en": "Infra H20 GP Partners Inc. ",
-        "fr": " Infra H20 GP Partners Inc."
-    },
-    "ihlp": {
-        "en": "Infra H20 LP Partners Inc. ",
-        "fr": " Infra H20 LP Partners Inc."
-    },
-    "iinfra": {
-        "en": "Indo-Infra Inc. ",
-        "fr": " Indo-Infra Inc."
-    },
-    "ijc-cmi": {
-        "en": "International Joint Commission ",
-        "fr": " Commission mixte internationale"
-    },
-    "infc": {
-        "en": "Infrastructure Canada ",
-        "fr": " Infrastructure Canada"
+        "en": "Canada Energy Regulator",
+        "fr": "La R\u00e9gie de l\u2019\u00e9nergie du Canada"
+    },
+    "ceefc-cfuec": {
+        "en": "Canada Enterprise Emergency Funding Corporation",
+        "fr": "La Corporation de financement d\u2019urgence d\u2019entreprises du Canada"
     },
     "innovation": {
-        "en": "Canada Foundation for Innovation ",
-        "fr": " Fondation canadienne pour l\u2019innovation"
-    },
-    "ipcan": {
-        "en": "Infra-PSP Canada Inc. ",
-        "fr": " Infra-PSP Canada Inc."
-    },
-    "ipcred": {
-        "en": "Infra-PSP Credit Inc. ",
-        "fr": " Infra-PSP Credit Inc."
-    },
-    "ipe": {
-        "en": "Infra-PSP ECEF Inc. ",
-        "fr": " Infra-PSP ECEF Inc."
-    },
-    "ipi": {
-        "en": "Ivory Private Investments Inc. ",
-        "fr": " Ivory Private Investments Inc."
-    },
-    "ipp": {
-        "en": "Infra-PSP Partners Inc. ",
-        "fr": " Infra-PSP Partners Inc."
-    },
-    "irb-cisr": {
-        "en": "Immigration and Refugee Board of Canada ",
-        "fr": " Commission de l'immigration et du statut de r\u00e9fugi\u00e9 du Canada"
-    },
-    "irstrc-cvrrpi": {
-        "en": "Indian Residential Schools Truth and Reconciliation Commission ",
-        "fr": " Commission de v\u00e9rit\u00e9 et de r\u00e9conciliation relative aux pensionnats indiens"
-    },
-    "isc-sac": {
-        "en": "Indigenous Services Canada ",
-        "fr": " Services aux Autochtones Canada"
-    },
-    "iti": {
-        "en": "Infra TM Investments Inc. ",
-        "fr": " Infra TM Investments Inc."
-    },
-    "jccbi-pjcci": {
-        "en": "Jacques Cartier and Champlain Bridges Incorporated ",
-        "fr": " Ponts Jacques Cartier et Champlain Incorpor\u00e9e"
-    },
-    "jus": {
-        "en": "Department of Justice Canada ",
-        "fr": " Minist\u00e8re de la Justice Canada"
-    },
-    "kipi": {
-        "en": "Kings Island Private Investments Inc. ",
-        "fr": " Kings Island Private Investments Inc."
-    },
-    "lac-bac": {
-        "en": "Library and Archives Canada ",
-        "fr": " Biblioth\u00e8que et Archives Canada"
-    },
-    "lpa-apl": {
-        "en": "Laurentian Pilotage Authority Canada ",
-        "fr": " Administration de pilotage des Laurentides Canada"
-    },
-    "lp-bp": {
-        "en": "Library of Parliament ",
-        "fr": " Biblioth\u00e8que du Parlement"
-    },
-    "mai": {
-        "en": "Marine Atlantic Inc. ",
-        "fr": " Marine Atlantique S.C.C."
-    },
-    "mdi-mid": {
-        "en": "Office of the Minister of Democratic Institutions ",
-        "fr": " Cabinet du Ministre des Institutions d\u00e9mocratiques"
-    },
-    "mgerc-ceegm": {
-        "en": "Military Grievances External Review Committee ",
-        "fr": " Comit\u00e9 externe d\u2019examen des griefs militaires"
-    },
-    "miga-maig": {
-        "en": "Office of the Minister of Intergovernmental and Northern Affairs and Internal Trade ",
-        "fr": " Cabinet du Ministre des Affaires intergouvernementales et du Nord et du Commerce int\u00e9rieur"
-    },
-    "mint-monnaie": {
-        "en": "Royal Canadian Mint ",
-        "fr": " Monnaie royale canadienne"
-    },
-    "mlvwb-otevm": {
-        "en": "Mackenzie Valley Land and Water Board ",
-        "fr": " Office des terres et des eaux de la vall\u00e9e du Mackenzie Valley"
-    },
-    "mmiwg-ffada": {
-        "en": "National Inquiry into Missing and Murdered Indigenous Women and Girls ",
-        "fr": " Enqu\u00eate nationale sur les femmes et les filles autochtones disparues et assassin\u00e9es"
-    },
-    "mpa-apm": {
-        "en": "Montreal Port Authority ",
-        "fr": " Administration portuaire de Montr\u00e9al"
-    },
-    "mpcc-cppm": {
-        "en": "Military Police Complaints Commission of Canada ",
-        "fr": " Commission d'examen des plaintes concernant la police militaire du Canada"
-    },
-    "mveirb-oervm": {
-        "en": "Mackenzie Valley Environmental Impact Review Board ",
-        "fr": " Office d\u2019examen des r\u00e9percussions environnementales de la vall\u00e9e du Mackenzie"
-    },
-    "nac-cna": {
-        "en": "National Arts Centre ",
-        "fr": " Centre national des Arts"
-    },
-    "nbc-ccbn": {
-        "en": "The National Battlefields Commission ",
-        "fr": " Commission des champs de bataille nationaux"
-    },
-    "ncc-ccn": {
-        "en": "National Capital Commission ",
-        "fr": " Commission de la capitale nationale"
-    },
-    "ndcfo-odnfc": {
-        "en": "National Defence and Canadian Forces Ombudsman ",
-        "fr": " Ombudsman de la D\u00e9fense nationale et des Forces canadiennes"
-    },
-    "nfb-onf": {
-        "en": "National Film Board ",
-        "fr": " Office national du film"
-    },
-    "nfh": {
-        "en": "Northern Fjord Holdings Inc. ",
-        "fr": " Northern Fjord Holdings Inc."
-    },
-    "ngc-mbac": {
-        "en": "National Gallery of Canada ",
-        "fr": " Mus\u00e9e des beaux-arts du Canada"
-    },
-    "nirb-cner": {
-        "en": "Nunavut Impact Review Board ",
-        "fr": " La Commission du Nunavut charg\u00e9e de l\u2019examen des r\u00e9percussions"
-    },
-    "nl-tnl": {
-        "en": "Government of Newfoundland and Labrador ",
-        "fr": " Gouvernment de Terre-Neuve-et-Labrador"
-    },
-    "nnpa-apn": {
-        "en": "Nanaimo Port Authority ",
-        "fr": " Administration portuaire de Nana\u00efmo"
-    },
-    "npa-apn": {
-        "en": "Northern Pipeline Agency Canada ",
-        "fr": " Administration du pipe-line du Nord Canada"
-    },
-    "npc-can": {
-        "en": "Nunavut Planning Commission ",
-        "fr": " Commission d\u2019am\u00e9nagement du Nunavut"
-    },
-    "nrcan-rncan": {
-        "en": "Natural Resources Canada ",
-        "fr": " Ressources naturelles Canada"
-    },
-    "nrc-cnrc": {
-        "en": "National Research Council Canada ",
-        "fr": " Conseil national de recherches Canada"
-    },
-    "nrtee-trnee": {
-        "en": "National Round Table on the Environment and the Economy ",
-        "fr": " Table ronde nationale sur l'environnement et l'\u00e9conomie"
-    },
-    "nserc-crsng": {
-        "en": "Natural Sciences and Engineering Research Council of Canada ",
-        "fr": " Conseil de recherches en sciences naturelles et en g\u00e9nie du Canada"
-    },
-    "ns-ne": {
-        "en": "Government of Nova Scotia ",
-        "fr": " Gouvernment de la Nouvelle-\u00c9cosse"
-    },
-    "nsrt-tdsn": {
-        "en": "Nunavut Surface Rights Tribunal ",
-        "fr": " Le Tribunal des droits de surface du Nunavut"
-    },
-    "nwb-oen": {
-        "en": "Nunavut Water Board ",
-        "fr": " l\u2019Office des Eaux du Nunavut"
-    },
-    "oag-bvg": {
-        "en": "Office of the Auditor General of Canada ",
-        "fr": " Bureau du v\u00e9rificateur g\u00e9n\u00e9ral du Canada"
-    },
-    "oci-bec": {
-        "en": "The Correctional Investigator Canada ",
-        "fr": " L'Enqu\u00eateur correctionnel Canada"
-    },
-    "ocl-cal": {
-        "en": "Office of the Commissioner of Lobbying of Canada ",
-        "fr": " Commissariat au lobbying du Canada"
-    },
-    "ocol-clo": {
-        "en": "Office of the Commissioner of Official Languages ",
-        "fr": " Commissariat aux langues officielles"
-    },
-    "ocsa-bcsc": {
-        "en": "Office of the Chief Science Advisor of Canada ",
-        "fr": " Bureau du conseiller scientifique en chef du Canada "
-    },
-    "ocsec-bccst": {
-        "en": "Office of the Intelligence Commissioner ",
-        "fr": " Bureau du commissaire au renseignement"
-    },
-    "oic-ci": {
-        "en": "Office of the Information Commissioner of Canada ",
-        "fr": " Commissariat \u00e0 l'information du Canada"
-    },
-    "on": {
-        "en": "Government of Ontario ",
-        "fr": " gouvernement de lOntario"
-    },
-    "opa-apd": {
-        "en": "Oshawa Port Authority ",
-        "fr": " Administration portuaire d\u2019Oshawa"
-    },
-    "opc-cpvp": {
-        "en": "Office of the Privacy Commissioner of Canada ",
-        "fr": " Commissariats \u00e0 l\u2019information et \u00e0 la protection de la vie priv\u00e9e au Canada"
-    },
-    "opmc-svpm": {
-        "en": "Old Port of Montreal Corporation Inc. ",
-        "fr": " Soci\u00e9t\u00e9 du Vieux-Port de Montr\u00e9al Inc."
-    },
-    "org231": {
-        "en": "Law Commission of Canada ",
-        "fr": " Commission du droit du Canada"
-    },
-    "osfi-bsif": {
-        "en": "Office of the Superintendent of Financial Institutions Canada ",
-        "fr": " Bureau du surintendant des institutions financi\u00e8res Canada"
-    },
-    "osgg-bsgg": {
-        "en": "Office of the Secretary to the Governor General ",
-        "fr": " Bureau du secr\u00e9taire du gouverneur g\u00e9n\u00e9ral"
-    },
-    "oto-boc": {
-        "en": "Office of the Taxpayers' Ombudsman ",
-        "fr": " Bureau de l'ombudsman des contribuables"
-    },
-    "ovo-bov": {
-        "en": "Office of the Veterans Ombudsman ",
-        "fr": " Bureau de l'ombudsman des v\u00e9t\u00e9rans"
-    },
-    "pab-cap": {
-        "en": "Pension Appeals Board ",
-        "fr": " Commission d'appel des pensions"
-    },
-    "pacpi": {
-        "en": "Port-aux-Choix Private Investments Inc. ",
-        "fr": " Port-aux-Choix Private Investments Inc."
-    },
-    "pacs-scnp": {
-        "en": "Public Appointments Commission Secretariat ",
-        "fr": " Secr\u00e9tariat de la Commission des nominations publiques"
-    },
-    "pande": {
-        "en": "PSPIB-Andes Inc. ",
-        "fr": " PSPIB-Andes Inc."
-    },
-    "papa-appa": {
-        "en": "Port Alberni Port Authority ",
-        "fr": " Administration portuaire de Port Alberni"
-    },
-    "pb": {
-        "en": "Port of Belledune ",
-        "fr": " Port de Belledune"
-    },
-    "pbc-clcc": {
-        "en": "Parole Board of Canada ",
-        "fr": " Commission des lib\u00e9rations conditionnelles du Canada"
-    },
-    "pbgp": {
-        "en": "PSPIB Baltimore G.P. Inc. ",
-        "fr": " PSPIB Baltimore G.P. Inc."
-    },
-    "pbi": {
-        "en": "PSPIB Bromont Investments Inc. ",
-        "fr": " PSPIB Bromont Investments Inc."
-    },
-    "pc": {
-        "en": "Parks Canada ",
-        "fr": " Parcs Canada"
-    },
-    "pcap": {
-        "en": "PSP Capital Inc. ",
-        "fr": " PSP Capital Inc."
-    },
-    "pccr": {
-        "en": "PSPIB-CCR Inc. ",
-        "fr": " PSPIB-CCR Inc."
-    },
-    "pch": {
-        "en": "Canadian Heritage ",
-        "fr": " Patrimoine canadien"
-    },
-    "pco-bcp": {
-        "en": "Privy Council Office ",
-        "fr": " Bureau du Conseil priv\u00e9"
-    },
-    "pcon": {
-        "en": "PSPIB-Condor Inc. ",
-        "fr": " PSPIB-Condor Inc."
-    },
-    "pdev": {
-        "en": "PSPIB DevCol Inc. ",
-        "fr": " PSPIB DevCol Inc."
-    },
-    "pdp": {
-        "en": "Parc Downsview Park Inc. ",
-        "fr": " Parc Downsview Park Inc"
-    },
-    "pds": {
-        "en": "PSPIB Deep South Inc. ",
-        "fr": " PSPIB Deep South Inc."
-    },
-    "pei-ipe": {
-        "en": "Government of Prince Edward Island ",
-        "fr": " gouvernement de l\u00cele-du-Prince-\u00c9douard"
-    },
-    "peld": {
-        "en": "PSPIB-Eldorado Inc. ",
-        "fr": " PSPIB-Eldorado Inc."
-    },
-    "pemer": {
-        "en": "PSPIB Emerald Inc. ",
-        "fr": " PSPIB Emerald Inc."
-    },
-    "petf-fpet": {
-        "en": "Pierre Elliott Trudeau Foundation ",
-        "fr": " Fondation Pierre Elliott Trudeau"
-    },
-    "pfinc": {
-        "en": "PSP Finco Inc. ",
-        "fr": " PSP Finco Inc."
-    },
-    "pgp": {
-        "en": "PSPIB G.P. Inc. ",
-        "fr": " PSPIB G.P. Inc."
-    },
-    "pgpf": {
-        "en": "PSPIB G.P. Finance Inc. ",
-        "fr": " PSPIB G.P. Finance Inc."
-    },
-    "pgpp": {
-        "en": "PSPIB G.P. Partners Inc. ",
-        "fr": " PSPIB G.P. Partners Inc."
-    },
-    "pgrc": {
-        "en": "PSPIB Golden Range Cattle Inc. ",
-        "fr": " PSPIB Golden Range Cattle Inc."
-    },
-    "pgrci": {
-        "en": "PSPIB Golden Range Cattle II Inc. ",
-        "fr": " PSPIB Golden Range Cattle II Inc."
-    },
-    "phac-aspc": {
-        "en": "Public Health Agency of Canada ",
-        "fr": " Agence de la sant\u00e9 publique du Canada"
-    },
-    "phfgi": {
-        "en": "PSP H2O FL GP INC. ",
-        "fr": " PSP H2O FL GP INC."
-    },
-    "phold": {
-        "en": "Potton Holdings Inc. ",
-        "fr": " Potton Holdings Inc."
-    },
-    "phomes": {
-        "en": "PSPIB Homes Inc. ",
-        "fr": " PSPIB Homes Inc."
-    },
-    "picpc": {
-        "en": "PSP Investments Canada Inc.\/Investissements PSP Canada Inc. ",
-        "fr": " PSP Investments Canada Inc.\/Investissements PSP Canada Inc."
-    },
-    "pirp": {
-        "en": "PSPIB IRP60 Inc. ",
-        "fr": " PSPIB IRP60 Inc."
-    },
-    "plii": {
-        "en": "PSPIB LUNAR INVESTMENTS INC. ",
-        "fr": " PSPIB LUNAR INVESTMENTS INC."
-    },
-    "plsf": {
-        "en": "PSPIB-LSF Inc. ",
-        "fr": " PSPIB-LSF Inc."
-    },
-    "pmgi": {
-        "en": "PSPIB MEXICO GP INC. ",
-        "fr": " PSPIB MEXICO GP INC."
-    },
-    "pmgp": {
-        "en": "PSPIB Michigan G.P. Inc. ",
-        "fr": " PSPIB Michigan G.P. Inc."
-    },
-    "pmo-cpm": {
-        "en": "Office of the Prime Minister ",
-        "fr": " Cabinet du premier ministre "
-    },
-    "pmprb-cepmb": {
-        "en": "Patented Medicine Prices Review Board Canada ",
-        "fr": " Conseil d'examen du prix des m\u00e9dicaments brevet\u00e9s Canada"
-    },
-    "pmsr": {
-        "en": "PSPIB-MSR Inc. ",
-        "fr": " PSPIB-MSR Inc."
-    },
-    "pngp": {
-        "en": "PSPIB-Newbury G.P. Inc. ",
-        "fr": " PSPIB-Newbury G.P. Inc."
-    },
-    "polar-polaire": {
-        "en": "Polar Knowledge Canada ",
-        "fr": " Savoir polaire Canada"
-    },
-    "porch": {
-        "en": "PSPIB Orchid Inc. ",
-        "fr": " PSPIB Orchid Inc."
-    },
-    "ppa-app": {
-        "en": "Pacific Pilotage Authority Canada ",
-        "fr": " Administration de pilotage du Pacifique Canada"
-    },
-    "ppais": {
-        "en": "PSPIB Paisas Inc. ",
-        "fr": " PSPIB Paisas Inc."
-    },
-    "ppci": {
-        "en": "PSP Public Credit I Inc. ",
-        "fr": " PSP Public Credit I Inc."
-    },
-    "ppco": {
-        "en": "PSP Public Credit Opportunities Inc. ",
-        "fr": " PSP Public Credit Opportunities Inc."
-    },
-    "ppi": {
-        "en": "PSPIB Pennsylvania Investments Inc. ",
-        "fr": " PSPIB Pennsylvania Investments Inc."
-    },
-    "ppm": {
-        "en": "PSP Public Markets Inc. ",
-        "fr": " PSP Public Markets Inc."
-    },
-    "ppp": {
-        "en": "PPP Canada Inc. ",
-        "fr": " PPP Canada Inc."
-    },
-    "ppsc-sppc": {
-        "en": "Public Prosecution Service of Canada ",
-        "fr": " Service des poursuites p\u00e9nales du Canada"
-    },
-    "pptc": {
-        "en": "Passport Canada ",
-        "fr": " Passeport Canada"
-    },
-    "prf": {
-        "en": "PSPIB-RE Finance Inc. ",
-        "fr": " PSPIB-RE Finance Inc."
-    },
-    "prfp": {
-        "en": "PSPIB-RE Finance Partners Inc. ",
-        "fr": " PSPIB-RE Finance Partners Inc."
-    },
-    "prfpi": {
-        "en": "PSPIB-RE Finance Partners II Inc. ",
-        "fr": " PSPIB-RE Finance Partners II Inc."
-    },
-    "pripii": {
-        "en": "PSPIB Realty International Inc. \/ PSPIB Immobilier International Inc. ",
-        "fr": " PSPIB Realty International Inc. \/ PSPIB Immobilier International Inc."
-    },
-    "prmi": {
-        "en": "PSPIB-RE MANCHESTER INC. ",
-        "fr": " PSPIB-RE MANCHESTER INC."
-    },
-    "prp": {
-        "en": "PSPIB-RE Partners Inc. ",
-        "fr": " PSPIB-RE Partners Inc."
-    },
-    "prpa-appr": {
-        "en": "Prince Rupert Port Authority ",
-        "fr": " L\u2019Administration portuaire de Prince Rupert"
-    },
-    "prpi": {
-        "en": "PSPIB-RE Partners II Inc. ",
-        "fr": " PSPIB-RE Partners II Inc."
-    },
-    "pru": {
-        "en": "PSPIB-RE UK Inc. ",
-        "fr": " PSPIB-RE UK Inc."
-    },
-    "psc-cfp": {
-        "en": "Public Service Commission of Canada ",
-        "fr": " Commission de la fonction publique du Canada"
-    },
-    "psdl": {
-        "en": "PSPIB-SDL Inc. ",
-        "fr": " PSPIB-SDL Inc."
-    },
-    "psdptc-tpfdc": {
-        "en": "Public Servants Disclosure Protection Tribunal Canada ",
-        "fr": " Tribunal de la protection des fonctionnaires divulgateurs Canada"
-    },
-    "psdpt-tpfd": {
-        "en": "Public Servants Disclosure Protection Tribunal Canada ",
-        "fr": " Le Tribunal de la protection des fonctionnaires divulgateurs Canada"
-    },
-    "pshcp-rssfp": {
-        "en": "Federal Public Service Health Care Plan Administration Authority ",
-        "fr": " Administration du R\u00e9gime de soins de sant\u00e9 de la fonction publique f\u00e9d\u00e9rale"
-    },
-    "psi": {
-        "en": "Port of Sept-Iles ",
-        "fr": " Port de Sept-\u00celes"
-    },
-    "psic-ispc": {
-        "en": "Office of the Public Sector Integrity Commissioner of Canada ",
-        "fr": " Commissariat \u00e0 l'int\u00e9grit\u00e9 du secteur public du Canada"
-    },
-    "pslrb-crtfp": {
-        "en": "Public Service Labour Relations Board ",
-        "fr": " Commission des relations de travail dans la fonction publique"
-    },
-    "pspib-oirpsp": {
-        "en": "Public Sector Pension Investment Board ",
-        "fr": " Office d\u2019investissement des r\u00e9gimes de pensions du secteur public"
-    },
-    "ps-sp": {
-        "en": "Public Safety Canada ",
-        "fr": " S\u00e9curit\u00e9 publique Canada"
-    },
-    "psst-tdfp": {
-        "en": "Public Service Staffing Tribunal ",
-        "fr": " Tribunal de la dotation de la fonction publique"
-    },
-    "pstar-psstar": {
-        "en": "PSPIB-Star Inc. ",
-        "fr": " PSPIB-Star Inc."
-    },
-    "ptr": {
-        "en": "Port of Trois-Rivi\u00e8res ",
-        "fr": " Port de Trois-Rivi\u00e8res"
-    },
-    "pwaih": {
-        "en": "PSPIB Waiheke Inc. ",
-        "fr": " PSPIB Waiheke Inc."
-    },
-    "pwgsc-tpsgc": {
-        "en": "Public Services and Procurement Canada ",
-        "fr": " Services publics et Approvisionnement Canada"
-    },
-    "pwii": {
-        "en": "PSPIB WEXFORD INVESTMENTS INC. ",
-        "fr": " PSPIB WEXFORD INVESTMENTS INC."
-    },
-    "qpa-apq": {
-        "en": "Quebec Port Authority ",
-        "fr": " Administration portuaire de Qu\u00e9bec"
-    },
-    "rcmp-grc": {
-        "en": "Royal Canadian Mounted Police ",
-        "fr": " Gendarmerie royale du Canada"
-    },
-    "rct-gtc": {
-        "en": "Registry of the Competition Tribunal ",
-        "fr": " Greffe du Tribunal de la concurrence"
-    },
-    "ri": {
-        "en": "Revera Inc. ",
-        "fr": " Revera Inc."
-    },
-    "ripi": {
-        "en": "Red Isle Private Investments Inc. ",
-        "fr": " Red Isle Private Investments Inc."
-    },
-    "rmrcf": {
-        "en": "RCMH-MRCF Inc. ",
-        "fr": " RCMH-MRCF Inc."
-    },
-    "rti-tri": {
-        "en": "Ridley Terminals Inc. ",
-        "fr": " Ridley Terminals Inc."
-    },
-    "scc-ccn": {
-        "en": "Standards Council of Canada ",
-        "fr": " Conseil canadien des normes"
-    },
-    "scc-csc": {
-        "en": "Registrar of the Supreme Court of Canada and that portion of the federal public administration appointed under subsection 12(2) of the Supreme Court Act ",
-        "fr": " Registraire de la Cour supr\u00eame du Canada et le secteur de l'administration publique f\u00e9d\u00e9rale nomm\u00e9 en vertu du paragraphe 12(2) de la Loi sur la Cour supr\u00eame"
-    },
-    "sct-trp": {
-        "en": "Specific Claims Tribunal ",
-        "fr": " Tribunal des revendications particuli\u00e8res"
-    },
-    "sdtc-tddc": {
-        "en": "Sustainable Development Technology Canada ",
-        "fr": " Technologies du d\u00e9veloppement durable Canada"
-    },
-    "sibc-cpivml": {
-        "en": "The Seaway International Bridge Corporation ",
-        "fr": " Corporation du pont international de la voie maritime, Lt\u00e9e"
-    },
-    "sinv": {
-        "en": "Sooke Investments Inc. ",
-        "fr": " Sooke Investments Inc."
-    },
-    "sirc-csars": {
-        "en": "Security Intelligence Review Committee ",
-        "fr": " Comit\u00e9 de surveillance des activit\u00e9s de renseignement de s\u00e9curit\u00e9"
-    },
-    "sjpa-apsj": {
-        "en": "St. John's Port Authority ",
-        "fr": " Administration portuaire de St. John's"
-    },
-    "slupb-cats": {
-        "en": "Sahtu Land Use Planning Board ",
-        "fr": " Conseil de l\u2019am\u00e9nagement du territoire du Sahtu"
-    },
-    "slwb-otes": {
-        "en": "Sahtu Land and Water Board ",
-        "fr": " Office des terres et des eaux du Sahtu"
-    },
-    "smrbc-sprsm": {
-        "en": "The St. Mary's River Bridge Company ",
-        "fr": " Soci\u00e9t\u00e9 du pont de la Rivi\u00e8re Ste Marie"
-    },
-    "snsicp-scpssnr": {
-        "en": "Secretariat of the National Security and Intelligence Committee of Parliamentarians ",
-        "fr": " Secr\u00e9tariat du Comit\u00e9 des parlementaires sur la s\u00e9curit\u00e9 nationale et le renseignement"
-    },
-    "sopf-cidp": {
-        "en": "Ship-source Oil Pollution Fund ",
-        "fr": " Caisse d'indemnisation des dommages dus \u00e0 la pollution par les hydrocarbures caus\u00e9e par les navires"
-    },
-    "spa-aps": {
-        "en": "Saguenay Port Authority ",
-        "fr": " Administration portuaire du Saguenay"
-    },
-    "ssc-spc": {
-        "en": "Shared Services Canada ",
-        "fr": " Services partag\u00e9s Canada"
-    },
-    "sshrc-crsh": {
-        "en": "Social Sciences and Humanities Research Council of Canada ",
-        "fr": " Conseil de recherches en sciences humaines du Canada"
-    },
-    "sst-tss": {
-        "en": "Social Security Tribunal of Canada ",
-        "fr": " Tribunal de la S\u00e9curit\u00e9 Sociale du Canada"
-    },
-    "statcan": {
-        "en": "Statistics Canada ",
-        "fr": " Statistique Canada"
-    },
-    "stjpa-apstj": {
-        "en": "Saint John Port Authority ",
-        "fr": " Administration portuaire de Saint John"
-    },
-    "swc-cfc": {
-        "en": "Status of Women Canada ",
-        "fr": " Condition f\u00e9minine Canada"
-    },
-    "tatc": {
-        "en": "Transportation Appeal Tribunal of Canada ",
-        "fr": " Tribunal d'appel des transports du Canada"
-    },
-    "tatc-tatc": {
-        "en": "Transportation Appeal Tribunal of Canada ",
-        "fr": " Tribunal d'appel des transports du Canada"
-    },
-    "tb-ct": {
-        "en": "Treasury Board ",
-        "fr": " Conseil du Tr\u00e9sor"
-    },
-    "tbpa-aptb": {
-        "en": "Thunder Bay Port Authority ",
-        "fr": " Administration portuaire de Thunder Bay"
-    },
-    "tbpi": {
-        "en": "Trinity Bay Private Investments Inc. ",
-        "fr": " Trinity Bay Private Investments Inc."
-    },
-    "tbs-sct": {
-        "en": "Treasury Board of Canada Secretariat ",
-        "fr": " Secr\u00e9tariat du Conseil du Tr\u00e9sor du Canada"
-    },
-    "tc": {
-        "en": "Transport Canada ",
-        "fr": " Transports Canada"
-    },
-    "tf": {
-        "en": "Telefilm Canada ",
-        "fr": " T\u00e9l\u00e9film Canada"
-    },
-    "tmc": {
-        "en": "Trans Mountain Corporation ",
-        "fr": " Trans Mountain Corporation"
+        "en": "Canada Foundation for Innovation",
+        "fr": "Fondation canadienne pour l\u2019innovation"
+    },
+    "cgic-cgc": {
+        "en": "Canada GEN Investment Corporation",
+        "fr": "Corporation d'investissements GEN du Canada"
+    },
+    "cgfimi-gafcc": {
+        "en": "Canada Growth Fund Investment Management Inc.",
+        "fr": "Gestion d\u2019actifs Fonds de croissance du Canada Inc"
+    },
+    "chhc-sgch": {
+        "en": "Canada Hibernia Holding Corporation",
+        "fr": "Soci\u00e9t\u00e9 de gestion Canada Hibernia"
+    },
+    "cht-fcpl": {
+        "en": "Canada Housing Trust",
+        "fr": "Fiducie du Canada pour l'habitation"
+    },
+    "cirb-ccri": {
+        "en": "Canada Industrial Relations Board",
+        "fr": "Conseil canadien des relations industrielles"
+    },
+    "cib-bic": {
+        "en": "Canada Infrastructure Bank",
+        "fr": "La Banque de l\u2019infrastructure du Canada"
+    },
+    "clccl-siccl": {
+        "en": "Canada Lands Company CLC Limited",
+        "fr": "Soci\u00e9t\u00e9 immobili\u00e8re du Canada CLC limit\u00e9e"
+    },
+    "clcl-sicl": {
+        "en": "Canada Lands Company Limited",
+        "fr": "Soci\u00e9t\u00e9 immobili\u00e8re du Canada Limit\u00e9e"
+    },
+    "cmhc-schl": {
+        "en": "Canada Mortgage and Housing Corporation",
+        "fr": "Soci\u00e9t\u00e9 canadienne d'hypoth\u00e8ques et de logement"
+    },
+    "cnlopb": {
+        "en": "Canada-Newfoundland and Labrador Offshore Petroleum Board",
+        "fr": "Office Canada\u2013Terre-Neuve-et Labrador des hydrocarbures extrac\u00f4tiers"
+    },
+    "cnsopb": {
+        "en": "Canada-Nova Scotia Offshore-Petroleum Board",
+        "fr": "Office Canada-Nouvelle-\u00c9cosse des hydrocarbures extrac\u00f4tiers"
+    },
+    "cppib-oirpc": {
+        "en": "Canada Pension Plan Investment Board",
+        "fr": "L\u2019Office d\u2019investment du R\u00e9gime de pensions du Canada"
+    },
+    "cpc-scp": {
+        "en": "Canada Post",
+        "fr": "Postes Canada"
+    },
+    "cra-arc": {
+        "en": "Canada Revenue Agency",
+        "fr": "Agence du revenu du Canada"
+    },
+    "csps-efpc": {
+        "en": "Canada School of Public Service",
+        "fr": "\u00c9cole de la fonction publique du Canada"
+    },
+    "cstm-mstc": {
+        "en": "Canada Science and Technology Museum",
+        "fr": "Mus\u00e9e des sciences et de la technologie du Canada"
     },
     "tmp": {
-        "en": "Canada TMP Finance Ltd. ",
-        "fr": " Financi\u00e8re Canada TMP Lt\u00e9e"
+        "en": "Canada TMP Finance Ltd.",
+        "fr": "Financi\u00e8re Canada TMP Lt\u00e9e"
     },
-    "tpa-apt": {
-        "en": "Toronto Port Authority ",
-        "fr": " Administration portuaire de Toronto"
+    "catsa-acsta": {
+        "en": "Canadian Air Transport Security Authority",
+        "fr": "Administration canadienne de la s\u00fbret\u00e9 du transport a\u00e9rien"
     },
-    "tsb-bst": {
-        "en": "Transportation Safety Board of Canada ",
-        "fr": " Bureau de la s\u00e9curit\u00e9 des transports du Canada"
+    "capprt-tcrpap": {
+        "en": "Canadian Artists and Producers Professional Relations Tribunal",
+        "fr": "Tribunal canadien des relations professionnelles artistes-producteurs"
     },
-    "vac-acc": {
-        "en": "Veterans Affairs Canada ",
-        "fr": " Anciens Combattants Canada"
+    "cbc-radio-canada": {
+        "en": "Canadian Broadcasting Company",
+        "fr": "Radio-Canada"
     },
-    "vfpa-apvf": {
-        "en": "Vancouver Fraser Port Authority ",
-        "fr": " Administration portuaire Vancouver Fraser"
+    "ccohs-cchst": {
+        "en": "Canadian Centre for Occupational Health and Safety",
+        "fr": "Centre canadien d'hygi\u00e8ne et de s\u00e9curit\u00e9 au travail"
     },
-    "viarail": {
-        "en": "VIA Rail Canada Inc. ",
-        "fr": " VIA Rail Canada Inc."
+    "ccc": {
+        "en": "Canadian Commercial Corporation",
+        "fr": "Corporation commerciale canadienne"
     },
-    "vinv": {
-        "en": "VOP Investments Inc. ",
-        "fr": " VOP Investments Inc."
+    "ccperb-cceebc": {
+        "en": "Canadian Cultural Property Export Review Board",
+        "fr": "Commission canadienne d'examen des exportations de biens culturels"
     },
-    "vrab-tacra": {
-        "en": "Veterans Review and Appeal Board ",
-        "fr": " Tribunal des anciens combattants (r\u00e9vision et appel)"
+    "cdc-ccl": {
+        "en": "Canadian Dairy Commission",
+        "fr": "Commission canadienne du lait"
+    },
+    "cfia-acia": {
+        "en": "Canadian Food Inspection Agency",
+        "fr": "Agence canadienne d'inspection des aliments"
+    },
+    "caf-facdnd": {
+        "en": "Canadian Forces",
+        "fr": "Forces canadiennes"
+    },
+    "cfmws-sbmfc": {
+        "en": "Canadian Forces Morale and Welfare Services",
+        "fr": "Services de bien-\u00eatre et moral des Forces canadiennes"
+    },
+    "cgsb-ongc": {
+        "en": "Canadian Government Specifications Board",
+        "fr": "Office des normes g\u00e9n\u00e9rales du Canada"
+    },
+    "cgc-ccg": {
+        "en": "Canadian Grain Commission",
+        "fr": "Commission canadienne des grains"
+    },
+    "pch": {
+        "en": "Canadian Heritage",
+        "fr": "Patrimoine canadien"
+    },
+    "chrc-ccdp": {
+        "en": "Canadian Human Rights Commission",
+        "fr": "Commission canadienne des droits de la personne"
+    },
+    "cihr-irsc": {
+        "en": "Canadian Institutes of Health Research",
+        "fr": "Instituts de recherche en sant\u00e9 du Canada"
+    },
+    "cics-scic": {
+        "en": "Canadian Intergovernmental Conference Secretariat",
+        "fr": "Secr\u00e9tariat des conf\u00e9rences intergouvernementales canadiennes"
+    },
+    "citt-tcce": {
+        "en": "Canadian International Trade Tribunal",
+        "fr": "Tribunal canadien du commerce ext\u00e9rieur"
+    },
+    "cmhr-mcdp": {
+        "en": "Canadian Museum for Human Rights",
+        "fr": "Mus\u00e9e canadien pour les droits de la personne"
+    },
+    "cmc-mcc": {
+        "en": "Canadian Museum of History",
+        "fr": "Mus\u00e9e canadien de l'histoire"
+    },
+    "cmip-mciq": {
+        "en": "Canadian Museum of Immigration at Pier 21",
+        "fr": "Mus\u00e9e canadien de l'immigration du Quai 21"
+    },
+    "cmn-mcn": {
+        "en": "Canadian Museum of Nature",
+        "fr": "Mus\u00e9e canadien de la nature"
+    },
+    "cannor": {
+        "en": "Canadian Northern Economic Development Agency",
+        "fr": "Agence canadienne de d\u00e9veloppement \u00e9conomique du Nord"
+    },
+    "cnsc-ccsn": {
+        "en": "Canadian Nuclear Safety Commission",
+        "fr": "Commission canadienne de s\u00fbret\u00e9 nucl\u00e9aire"
+    },
+    "crrf-fcrr": {
+        "en": "Canadian Race Relations Foundation",
+        "fr": "La Fondation Canadienne des relations raciales"
+    },
+    "crtc": {
+        "en": "Canadian Radio-television and Telecommunications Commission",
+        "fr": "Conseil de la radiodiffusion et des t\u00e9l\u00e9communications canadiennes"
+    },
+    "csis-scrs": {
+        "en": "Canadian Security Intelligence Service",
+        "fr": "Service canadien du renseignement de s\u00e9curit\u00e9"
+    },
+    "csa-asc": {
+        "en": "Canadian Space Agency",
+        "fr": "Agence spatiale canadienne"
+    },
+    "cta-otc": {
+        "en": "Canadian Transportation Agency",
+        "fr": "Office des transports du Canada"
+    },
+    "cpc-cpp": {
+        "en": "Civilian Review and Complaints Commission for the RCMP",
+        "fr": "Commission civile d'examen et de traitement des plaintes relatives \u00e0 la Gendarmerie royale du Canada"
+    },
+    "cicc-ccic": {
+        "en": "College of Immigration and Citizenship Consultants",
+        "fr": "Coll\u00e8ge des Consultants en Immigration et en Citoyennet\u00e9"
+    },
+    "cpata-cabamc": {
+        "en": "College of Patent Agents and Trademark Agents",
+        "fr": "Coll\u00e8ge des agents de brevets et des agents de marques de commerce"
+    },
+    "occe-bcef": {
+        "en": "Commissioner of Canada Elections",
+        "fr": "Commissaire aux \u00e9lections f\u00e9d\u00e9rales"
+    },
+    "csec-cstc": {
+        "en": "Communications Security Establishment Canada",
+        "fr": "Centre de la s\u00e9curit\u00e9 des t\u00e9l\u00e9communications Canada"
+    },
+    "ct-tc": {
+        "en": "Competition Tribunal",
+        "fr": "Tribunal de la concurrence"
+    },
+    "cb-cda": {
+        "en": "Copyright Board Canada",
+        "fr": "Commission du droit d'auteur du Canada"
+    },
+    "cmmgpi-sarpgm": {
+        "en": "Corporation for the Mitigation of Mackenzie Gas Project Impacts",
+        "fr": "Soci\u00e9t\u00e9 d'att\u00e9nuation des r\u00e9percussions du projet gazier Mackenzie"
+    },
+    "csc-scc": {
+        "en": "Correctional Service of Canada",
+        "fr": "Service correctionnel du Canada"
+    },
+    "cas-satj": {
+        "en": "Courts Administration Service",
+        "fr": "Service administratif des tribunaux judiciaires"
+    },
+    "aandc-aadnc": {
+        "en": "Crown-Indigenous Relations and Northern Affairs Canada",
+        "fr": "Relations Couronne-Autochtones et Affaires du Nord Canada"
+    },
+    "dpi": {
+        "en": "Datura Private Investments Inc.",
+        "fr": "Datura Private Investments Inc."
+    },
+    "dcc-cdc": {
+        "en": "Defence Construction Canada",
+        "fr": "Construction de D\u00e9fense Canada"
+    },
+    "drdc-rddc": {
+        "en": "Defence Research and Development Canada",
+        "fr": "Recherche et d\u00e9veloppement pour la D\u00e9fense Canada"
     },
     "wage": {
-        "en": "Department for Women and Gender Equality ",
-        "fr": " Minist\u00e8re des Femmes et de l\u2019\u00c9galit\u00e9 des genres"
+        "en": "Department for Women and Gender Equality",
+        "fr": "Minist\u00e8re des Femmes et de l\u2019\u00c9galit\u00e9 des genres"
     },
-    "wdba-apwd": {
-        "en": "Windsor-Detroit Bridge Authority ",
-        "fr": " Autorit\u00e9 du pont Windsor-D\u00e9troit"
+    "fin": {
+        "en": "Department of Finance Canada",
+        "fr": "Minist\u00e8re des Finances Canada"
+    },
+    "jus": {
+        "en": "Department of Justice Canada",
+        "fr": "Minist\u00e8re de la Justice Canada"
+    },
+    "dpm-vpm": {
+        "en": "Deputy Prime Minister and Minister of Finance",
+        "fr": "Vice-premi\u00e8re ministre et ministre des Finances"
+    },
+    "ctc-cct": {
+        "en": "Destination Canada",
+        "fr": "Destination Canada"
+    },
+    "dfi-ifd": {
+        "en": "Development Finance Institution - FinDev Canada",
+        "fr": "Institution de financement du d\u00e9veloppement - FinDev Canada"
+    },
+    "elections": {
+        "en": "Elections Canada",
+        "fr": "\u00c9lections Canada"
+    },
+    "esdc-edsc": {
+        "en": "Employment and Social Development Canada",
+        "fr": "Emploi et D\u00e9veloppement social Canada"
+    },
+    "esab-orad": {
+        "en": "Energy Supplies Allocation Board",
+        "fr": "Office de r\u00e9partition des approvisionnements d\u2019\u00e9nergie"
+    },
+    "ecbc-secb": {
+        "en": "Enterprise Cape Breton Corporation",
+        "fr": "Soci\u00e9t\u00e9 d'expansion du Cap-Breton"
+    },
+    "ec": {
+        "en": "Environment and Climate Change Canada",
+        "fr": "Environnement et Changement climatique Canada"
+    },
+    "exi": {
+        "en": "Exinvest Inc.",
+        "fr": "Exinvest Inc."
+    },
+    "edc": {
+        "en": "Export Development Canada",
+        "fr": "Exportation et d\u00e9veloppement Canada"
+    },
+    "external-externe": {
+        "en": "External User",
+        "fr": "Utilisateur externe"
+    },
+    "fcc-fac": {
+        "en": "Farm Credit Canada",
+        "fr": "Financement agricole Canada"
+    },
+    "fpcc-cpac": {
+        "en": "Farm Products Council of Canada",
+        "fr": "Conseil des produits agricoles du Canada"
+    },
+    "fbcl-spfl": {
+        "en": "Federal Bridge Corporation",
+        "fr": "Soci\u00e9t\u00e9 des ponts f\u00e9d\u00e9raux"
+    },
+    "fednor": {
+        "en": "Federal Economic Development Agency for Northern Ontario",
+        "fr": "Agence f\u00e9d\u00e9rale de d\u00e9veloppement \u00e9conomique pour le Nord de l\u2019Ontario"
+    },
+    "feddevontario": {
+        "en": "Federal Economic Development Agency for Southern Ontario",
+        "fr": "Agence f\u00e9d\u00e9rale de d\u00e9veloppement \u00e9conomique pour le Sud de l'Ontario"
+    },
+    "fpslreb-crtespf": {
+        "en": "Federal Public Sector Labour Relations and Employment Board",
+        "fr": "Commission des relations de travail et de l\u2019emploi dans le secteur public f\u00e9d\u00e9ral"
+    },
+    "pshcp-rssfp": {
+        "en": "Federal Public Service Health Care Plan Administration Authority",
+        "fr": "Administration du R\u00e9gime de soins de sant\u00e9 de la fonction publique f\u00e9d\u00e9rale"
+    },
+    "fcac-acfc": {
+        "en": "Financial Consumer Agency of Canada",
+        "fr": "Agence de la consommation en mati\u00e8re financi\u00e8re du Canada"
+    },
+    "fintrac-canafe": {
+        "en": "Financial Transactions and Reports Analysis Centre of Canada",
+        "fr": "Centre d'analyse des op\u00e9rations et d\u00e9clarations financi\u00e8res du Canada"
+    },
+    "fnfmb-cgfpn": {
+        "en": "First Nations Financial Management Board",
+        "fr": "Conseil de gestion financi\u00e8re des premi\u00e8res nations"
+    },
+    "fnsi-ispn": {
+        "en": "First Nations Statistical Institute",
+        "fr": "Institut de la statistique des premi\u00e8res nations"
+    },
+    "fntc-cfpn": {
+        "en": "First Nations Tax Commission",
+        "fr": "Commission de la fiscalit\u00e9 des premi\u00e8res nations"
+    },
+    "dfo-mpo": {
+        "en": "Fisheries and Oceans Canada",
+        "fr": "P\u00eaches et Oc\u00e9ans Canada"
+    },
+    "ffmc-ocped": {
+        "en": "Freshwater Fish Marketing Corporation",
+        "fr": "Office de commercialisation du poisson d'eau douce"
+    },
+    "gpi": {
+        "en": "Galvaude Private Investments Inc.",
+        "fr": "Galvaude Private Investments Inc."
+    },
+    "dfatd-maecd": {
+        "en": "Global Affairs Canada",
+        "fr": "Affaires mondiales Canada"
+    },
+    "bc-cb": {
+        "en": "Government of British Columbia",
+        "fr": "Gouvernment de la Colombie-Britannique"
+    },
+    "nl-tnl": {
+        "en": "Government of Newfoundland and Labrador",
+        "fr": "Gouvernment de Terre-Neuve-et-Labrador"
+    },
+    "ns-ne": {
+        "en": "Government of Nova Scotia",
+        "fr": "Gouvernment de la Nouvelle-\u00c9cosse"
+    },
+    "on": {
+        "en": "Government of Ontario",
+        "fr": "Gouvernement de l'Ontario"
+    },
+    "pei-ipe": {
+        "en": "Government of Prince Edward Island",
+        "fr": "Gouvernement de l'\u00cele-du-Prince-\u00c9douard"
+    },
+    "sk": {
+        "en": "Government of Saskatchewan",
+        "fr": "Gouvernement de la Saskatchewan"
+    },
+    "glpa-apgl": {
+        "en": "Great Lakes Pilotage Authority Canada",
+        "fr": "Administration de pilotage des Grands Lacs Canada"
+    },
+    "glwb-ogte": {
+        "en": "Gwich\u2019in Land and Water Board",
+        "fr": "Office Gwich\u2019in des terres et des eaux"
+    },
+    "glupb-ogat": {
+        "en": "Gwich\u2019in Land Use Planning Board",
+        "fr": "Office Gwich\u2019in d\u2019am\u00e9nagement territorial"
+    },
+    "halpa-aphal": {
+        "en": "Halifax Port Authority",
+        "fr": "Administration portuaire de Halifax"
+    },
+    "hampa-apham": {
+        "en": "Hamilton-Oshawa  Port Authority",
+        "fr": "Administration portuaire de Hamilton-Oshawa"
+    },
+    "hmirc-ccrmd": {
+        "en": "Hazardous Materials Information Review Commission Canada",
+        "fr": "Conseil de contr\u00f4le des renseignements relatifs aux mati\u00e8res dangereuses Canada"
+    },
+    "hc-sc": {
+        "en": "Health Canada",
+        "fr": "Sant\u00e9 Canada"
+    },
+    "hsmbc-clmhc": {
+        "en": "Historic Sites and Monuments Board of Canada",
+        "fr": "Commission des lieux et monuments historiques du Canada"
+    },
+    "hoc-cdc": {
+        "en": "House of Commons",
+        "fr": "Chambre des communes"
+    },
+    "hrtc-tdpc": {
+        "en": "Human Rights Tribunal of Canada",
+        "fr": "Tribunal des droits de la personne du Canada"
+    },
+    "chrt-tcdp": {
+        "en": "Human Rights Tribunal",
+        "fr": "Tribunal des droits de la personne"
+    },
+    "irb-cisr": {
+        "en": "Immigration and Refugee Board of Canada",
+        "fr": "Commission de l'immigration et du statut de r\u00e9fugi\u00e9 du Canada"
+    },
+    "cic": {
+        "en": "Immigration, Refugees and Citizenship Canada",
+        "fr": "Immigration, R\u00e9fugi\u00e9s et Citoyennet\u00e9 Canada"
+    },
+    "iaac-aeic": {
+        "en": "Impact Assessment Agency of Canada",
+        "fr": "Agence d'\u00e9valuation d'impact du Canada"
+    },
+    "irstrc-cvrrpi": {
+        "en": "Indian Residential Schools Truth and Reconciliation Commission",
+        "fr": "Commission de v\u00e9rit\u00e9 et de r\u00e9conciliation relative aux pensionnats indiens"
+    },
+    "isc-sac": {
+        "en": "Indigenous Services Canada",
+        "fr": "Services aux Autochtones Canada"
+    },
+    "iinfra": {
+        "en": "Indo-Infra Inc.",
+        "fr": "Indo-Infra Inc."
+    },
+    "ihgp": {
+        "en": "Infra H20 GP Partners Inc.",
+        "fr": "Infra H20 GP Partners Inc."
+    },
+    "ihlp": {
+        "en": "Infra H20 LP Partners Inc.",
+        "fr": "Infra H20 LP Partners Inc."
+    },
+    "ipcan": {
+        "en": "Infra-PSP Canada Inc.",
+        "fr": "Infra-PSP Canada Inc."
+    },
+    "ipcred": {
+        "en": "Infra-PSP Credit Inc.",
+        "fr": "Infra-PSP Credit Inc."
+    },
+    "ipe": {
+        "en": "Infra-PSP ECEF Inc.",
+        "fr": "Infra-PSP ECEF Inc."
+    },
+    "ipp": {
+        "en": "Infra-PSP Partners Inc.",
+        "fr": "Infra-PSP Partners Inc."
+    },
+    "infc": {
+        "en": "Infrastructure Canada",
+        "fr": "Infrastructure Canada"
+    },
+    "iti": {
+        "en": "Infra TM Investments Inc.",
+        "fr": "Infra TM Investments Inc."
+    },
+    "ic": {
+        "en": "Innovation, Science and Economic Development Canada",
+        "fr": "Innovation, Sciences et D\u00e9veloppement \u00e9conomique Canada"
+    },
+    "iga-aig": {
+        "en": "Intergovernmental Affairs",
+        "fr": "Affaires intergouvernementales"
+    },
+    "idrc-crdi": {
+        "en": "International Development Research Centre",
+        "fr": "Centre de recherches pour le d\u00e9veloppement international"
+    },
+    "ijc-cmi": {
+        "en": "International Joint Commission",
+        "fr": "Commission mixte internationale"
+    },
+    "iic-iac": {
+        "en": "Invest in Canada",
+        "fr": "Investir Au Canada"
+    },
+    "ipi": {
+        "en": "Ivory Private Investments Inc.",
+        "fr": "Ivory Private Investments Inc."
+    },
+    "jccbi-pjcci": {
+        "en": "Jacques Cartier and Champlain Bridges Incorporated",
+        "fr": "Ponts Jacques Cartier et Champlain Incorpor\u00e9e"
+    },
+    "kipi": {
+        "en": "Kings Island Private Investments Inc.",
+        "fr": "Kings Island Private Investments Inc."
+    },
+    "lpa-apl": {
+        "en": "Laurentian Pilotage Authority Canada",
+        "fr": "Administration de pilotage des Laurentides Canada"
+    },
+    "org231": {
+        "en": "Law Commission of Canada",
+        "fr": "Commission du droit du Canada"
+    },
+    "lac-bac": {
+        "en": "Library and Archives Canada",
+        "fr": "Biblioth\u00e8que et Archives Canada"
+    },
+    "lp-bp": {
+        "en": "Library of Parliament",
+        "fr": "Biblioth\u00e8que du Parlement"
+    },
+    "mveirb-oervm": {
+        "en": "Mackenzie Valley Environmental Impact Review Board",
+        "fr": "Office d\u2019examen des r\u00e9percussions environnementales de la vall\u00e9e du Mackenzie"
+    },
+    "mlvwb-otevm": {
+        "en": "Mackenzie Valley Land and Water Board",
+        "fr": "Office des terres et des eaux de la vall\u00e9e du Mackenzie Valley"
+    },
+    "mai": {
+        "en": "Marine Atlantic Inc.",
+        "fr": "Marine Atlantique S.C.C."
+    },
+    "mgerc-ceegm": {
+        "en": "Military Grievances External Review Committee",
+        "fr": "Comit\u00e9 externe d\u2019examen des griefs militaires"
+    },
+    "mpcc-cppm": {
+        "en": "Military Police Complaints Commission of Canada",
+        "fr": "Commission d'examen des plaintes concernant la police militaire du Canada"
+    },
+    "miga-maig": {
+        "en": "Minister of Intergovernmental Affairs, Infrastructure and Communities",
+        "fr": "Ministre des Affaires intergouvernementales, de l\u2019Infrastructure et des Collectivite\u0301s"
+    },
+    "mpa-apm": {
+        "en": "Montreal Port Authority",
+        "fr": "Administration portuaire de Montr\u00e9al"
+    },
+    "nnpa-apn": {
+        "en": "Nanaimo Port Authority",
+        "fr": "Administration portuaire de Nana\u00efmo"
+    },
+    "nac-cna": {
+        "en": "National Arts Centre",
+        "fr": "Centre national des Arts"
+    },
+    "ncc-ccn": {
+        "en": "National Capital Commission",
+        "fr": "Commission de la capitale nationale"
+    },
+    "ndcfo-odnfc": {
+        "en": "National Defence and Canadian Forces Ombudsman",
+        "fr": "Ombudsman de la D\u00e9fense nationale et des Forces canadiennes"
+    },
+    "dnd-mdn": {
+        "en": "National Defence",
+        "fr": "D\u00e9fense nationale"
+    },
+    "nfb-onf": {
+        "en": "National Film Board",
+        "fr": "Office national du film"
+    },
+    "ngc-mbac": {
+        "en": "National Gallery of Canada",
+        "fr": "Mus\u00e9e des beaux-arts du Canada"
+    },
+    "mmiwg-ffada": {
+        "en": "National Inquiry into Missing and Murdered Indigenous Women and Girls",
+        "fr": "Enqu\u00eate nationale sur les femmes et les filles autochtones disparues et assassin\u00e9es"
+    },
+    "nrc-cnrc": {
+        "en": "National Research Council Canada",
+        "fr": "Conseil national de recherches Canada"
+    },
+    "nrtee-trnee": {
+        "en": "National Round Table on the Environment and the Economy",
+        "fr": "Table ronde nationale sur l'environnement et l'\u00e9conomie"
+    },
+    "nsira-ossnr": {
+        "en": "National Security and Intelligence Review Agency",
+        "fr": "Office de surveillance des activit\u00e9s en mati\u00e8re de s\u00e9curit\u00e9 nationale et de renseignement"
+    },
+    "nrcan-rncan": {
+        "en": "Natural Resources Canada",
+        "fr": "Ressources naturelles Canada"
+    },
+    "nserc-crsng": {
+        "en": "Natural Sciences and Engineering Research Council of Canada",
+        "fr": "Conseil de recherches en sciences naturelles et en g\u00e9nie du Canada"
+    },
+    "nfh": {
+        "en": "Northern Fjord Holdings Inc.",
+        "fr": "Northern Fjord Holdings Inc."
+    },
+    "npa-apn": {
+        "en": "Northern Pipeline Agency Canada",
+        "fr": "Administration du pipe-line du Nord Canada"
+    },
+    "nirb-cner": {
+        "en": "Nunavut Impact Review Board",
+        "fr": "La Commission du Nunavut charg\u00e9e de l\u2019examen des r\u00e9percussions"
+    },
+    "npc-can": {
+        "en": "Nunavut Planning Commission",
+        "fr": "Commission d\u2019am\u00e9nagement du Nunavut"
+    },
+    "nsrt-tdsn": {
+        "en": "Nunavut Surface Rights Tribunal",
+        "fr": "Le Tribunal des droits de surface du Nunavut"
+    },
+    "nwb-oen": {
+        "en": "Nunavut Water Board",
+        "fr": "l\u2019Office des Eaux du Nunavut"
+    },
+    "fraidg-ciafimd": {
+        "en": "Office of the Administrator of the Fund for Railway Accidents Involving Designated Goods",
+        "fr": "Caisse d\u2019indemnisation pour les accidents ferroviaires impliquant des marchandises d\u00e9sign\u00e9es"
+    },
+    "oag-bvg": {
+        "en": "Office of the Auditor General of Canada",
+        "fr": "Bureau du v\u00e9rificateur g\u00e9n\u00e9ral du Canada"
+    },
+    "ocsa-bcsc": {
+        "en": "Office of the Chief Science Advisor of Canada",
+        "fr": "Bureau du conseiller scientifique en chef du Canada"
+    },
+    "fja-cmf": {
+        "en": "Office of the Commissioner for Federal Judicial Affairs Canada",
+        "fr": "Commissariat \u00e0 la magistrature f\u00e9d\u00e9rale Canada"
+    },
+    "ocl-cal": {
+        "en": "Office of the Commissioner of Lobbying of Canada",
+        "fr": "Commissariat au lobbying du Canada"
+    },
+    "ocol-clo": {
+        "en": "Office of the Commissioner of Official Languages",
+        "fr": "Commissariat aux langues officielles"
+    },
+    "oic-ci": {
+        "en": "Office of the Information Commissioner of Canada",
+        "fr": "Commissariat \u00e0 l'information du Canada"
+    },
+    "ocsec-bccst": {
+        "en": "Office of the Intelligence Commissioner",
+        "fr": "Bureau du commissaire au renseignement"
+    },
+    "ghl-lgc": {
+        "en": "Office of the Leader of the Government in the House of Commons",
+        "fr": "Cabinet du Leader du gouvernement \u00e0 la Chambre des communes"
+    },
+    "mdi-mid": {
+        "en": "Office of the Minister of Democratic Institutions",
+        "fr": "Cabinet du Ministre des Institutions d\u00e9mocratiques"
+    },
+    "pmo-cpm": {
+        "en": "Office of the Prime Minister",
+        "fr": "Cabinet du premier ministre"
+    },
+    "opc-cpvp": {
+        "en": "Office of the Privacy Commissioner of Canada",
+        "fr": "Commissariats \u00e0 l\u2019information et \u00e0 la protection de la vie priv\u00e9e au Canada"
+    },
+    "psic-ispc": {
+        "en": "Office of the Public Sector Integrity Commissioner of Canada",
+        "fr": "Commissariat \u00e0 l'int\u00e9grit\u00e9 du secteur public du Canada"
+    },
+    "osgg-bsgg": {
+        "en": "Office of the Secretary to the Governor General",
+        "fr": "Bureau du secr\u00e9taire du gouverneur g\u00e9n\u00e9ral"
+    },
+    "osfi-bsif": {
+        "en": "Office of the Superintendent of Financial Institutions Canada",
+        "fr": "Bureau du surintendant des institutions financi\u00e8res Canada"
+    },
+    "oto-boc": {
+        "en": "Office of the Taxpayers' Ombudsperson",
+        "fr": "Bureau de l'ombudsman des contribuables"
+    },
+    "ovo-bov": {
+        "en": "Office of the Veterans Ombudsman",
+        "fr": "Bureau de l'ombudsman des v\u00e9t\u00e9rans"
+    },
+    "opmc-svpm": {
+        "en": "Old Port of Montreal Corporation Inc.",
+        "fr": "Soci\u00e9t\u00e9 du Vieux-Port de Montr\u00e9al Inc."
+    },
+    "opa-apd": {
+        "en": "Oshawa Port Authority",
+        "fr": "Administration portuaire d\u2019Oshawa"
+    },
+    "pacifican": {
+        "en": "Pacific Economic Development Canada",
+        "fr": "D\u00e9veloppement \u00e9conomique Canada pour le Pacifique"
+    },
+    "ppa-app": {
+        "en": "Pacific Pilotage Authority Canada",
+        "fr": "Administration de pilotage du Pacifique Canada"
+    },
+    "pdp": {
+        "en": "Parc Downsview Park Inc.",
+        "fr": "Parc Downsview Park Inc"
+    },
+    "pc": {
+        "en": "Parks Canada",
+        "fr": "Parcs Canada"
+    },
+    "pbc-clcc": {
+        "en": "Parole Board of Canada",
+        "fr": "Commission des lib\u00e9rations conditionnelles du Canada"
+    },
+    "pptc": {
+        "en": "Passport Canada",
+        "fr": "Passeport Canada"
+    },
+    "pmprb-cepmb": {
+        "en": "Patented Medicine Prices Review Board Canada",
+        "fr": "Conseil d'examen du prix des m\u00e9dicaments brevet\u00e9s Canada"
+    },
+    "pab-cap": {
+        "en": "Pension Appeals Board",
+        "fr": "Commission d'appel des pensions"
+    },
+    "petf-fpet": {
+        "en": "Pierre Elliott Trudeau Foundation",
+        "fr": "Fondation Pierre Elliott Trudeau"
+    },
+    "polar-polaire": {
+        "en": "Polar Knowledge Canada",
+        "fr": "Savoir polaire Canada"
+    },
+    "papa-appa": {
+        "en": "Port Alberni Port Authority",
+        "fr": "Administration portuaire de Port Alberni"
+    },
+    "pacpi": {
+        "en": "Port-aux-Choix Private Investments Inc.",
+        "fr": "Port-aux-Choix Private Investments Inc."
+    },
+    "pb": {
+        "en": "Port of Belledune",
+        "fr": "Port de Belledune"
+    },
+    "psi": {
+        "en": "Port of Sept-Iles",
+        "fr": "Port de Sept-\u00celes"
+    },
+    "ptr": {
+        "en": "Port of Trois-Rivi\u00e8res",
+        "fr": "Port de Trois-Rivi\u00e8res"
+    },
+    "phold": {
+        "en": "Potton Holdings Inc.",
+        "fr": "Potton Holdings Inc."
+    },
+    "ppp": {
+        "en": "PPP Canada Inc.",
+        "fr": "PPP Canada Inc."
+    },
+    "prairiescan": {
+        "en": "Prairies Economic Development Canada",
+        "fr": "D\u00e9veloppement \u00e9conomique Canada pour les Prairies"
+    },
+    "pkcc-pcprc": {
+        "en": "President of the King\u2019s Privy Council for Canada",
+        "fr": "Pr\u00e9sident du Conseil priv\u00e9 du Roi pour le Canada"
+    },
+    "prpa-appr": {
+        "en": "Prince Rupert Port Authority",
+        "fr": "L\u2019Administration portuaire de Prince Rupert"
+    },
+    "pco-bcp": {
+        "en": "Privy Council Office",
+        "fr": "Bureau du Conseil priv\u00e9"
+    },
+    "pcap": {
+        "en": "PSP Capital Inc.",
+        "fr": "PSP Capital Inc."
+    },
+    "pfinc": {
+        "en": "PSP Finco Inc.",
+        "fr": "PSP Finco Inc."
+    },
+    "phfgi": {
+        "en": "PSP H2O FL GP INC.",
+        "fr": "PSP H2O FL GP INC."
+    },
+    "pande": {
+        "en": "PSPIB-Andes Inc.",
+        "fr": "PSPIB-Andes Inc."
+    },
+    "pbgp": {
+        "en": "PSPIB Baltimore G.P. Inc.",
+        "fr": "PSPIB Baltimore G.P. Inc."
+    },
+    "pbi": {
+        "en": "PSPIB Bromont Investments Inc.",
+        "fr": "PSPIB Bromont Investments Inc."
+    },
+    "pccr": {
+        "en": "PSPIB-CCR Inc.",
+        "fr": "PSPIB-CCR Inc."
+    },
+    "pcon": {
+        "en": "PSPIB-Condor Inc.",
+        "fr": "PSPIB-Condor Inc."
+    },
+    "pds": {
+        "en": "PSPIB Deep South Inc.",
+        "fr": "PSPIB Deep South Inc."
+    },
+    "pdev": {
+        "en": "PSPIB DevCol Inc.",
+        "fr": "PSPIB DevCol Inc."
+    },
+    "peld": {
+        "en": "PSPIB-Eldorado Inc.",
+        "fr": "PSPIB-Eldorado Inc."
+    },
+    "pemer": {
+        "en": "PSPIB Emerald Inc.",
+        "fr": "PSPIB Emerald Inc."
+    },
+    "pgrci": {
+        "en": "PSPIB Golden Range Cattle II Inc.",
+        "fr": "PSPIB Golden Range Cattle II Inc."
+    },
+    "pgrc": {
+        "en": "PSPIB Golden Range Cattle Inc.",
+        "fr": "PSPIB Golden Range Cattle Inc."
+    },
+    "pgpf": {
+        "en": "PSPIB G.P. Finance Inc.",
+        "fr": "PSPIB G.P. Finance Inc."
+    },
+    "pgp": {
+        "en": "PSPIB G.P. Inc.",
+        "fr": "PSPIB G.P. Inc."
+    },
+    "pgpp": {
+        "en": "PSPIB G.P. Partners Inc.",
+        "fr": "PSPIB G.P. Partners Inc."
+    },
+    "phomes": {
+        "en": "PSPIB Homes Inc.",
+        "fr": "PSPIB Homes Inc."
+    },
+    "pirp": {
+        "en": "PSPIB IRP60 Inc.",
+        "fr": "PSPIB IRP60 Inc."
+    },
+    "plsf": {
+        "en": "PSPIB-LSF Inc.",
+        "fr": "PSPIB-LSF Inc."
+    },
+    "plii": {
+        "en": "PSPIB LUNAR INVESTMENTS INC.",
+        "fr": "PSPIB LUNAR INVESTMENTS INC."
+    },
+    "pmgi": {
+        "en": "PSPIB MEXICO GP INC.",
+        "fr": "PSPIB MEXICO GP INC."
+    },
+    "pmgp": {
+        "en": "PSPIB Michigan G.P. Inc.",
+        "fr": "PSPIB Michigan G.P. Inc."
+    },
+    "pmsr": {
+        "en": "PSPIB-MSR Inc.",
+        "fr": "PSPIB-MSR Inc."
+    },
+    "pngp": {
+        "en": "PSPIB-Newbury G.P. Inc.",
+        "fr": "PSPIB-Newbury G.P. Inc."
+    },
+    "porch": {
+        "en": "PSPIB Orchid Inc.",
+        "fr": "PSPIB Orchid Inc."
+    },
+    "ppais": {
+        "en": "PSPIB Paisas Inc.",
+        "fr": "PSPIB Paisas Inc."
+    },
+    "ppi": {
+        "en": "PSPIB Pennsylvania Investments Inc.",
+        "fr": "PSPIB Pennsylvania Investments Inc."
+    },
+    "pripii": {
+        "en": "PSPIB Realty International Inc. \/ PSPIB Immobilier International Inc.",
+        "fr": "PSPIB Realty International Inc. \/ PSPIB Immobilier International Inc."
+    },
+    "prf": {
+        "en": "PSPIB-RE Finance Inc.",
+        "fr": "PSPIB-RE Finance Inc."
+    },
+    "prfpi": {
+        "en": "PSPIB-RE Finance Partners II Inc.",
+        "fr": "PSPIB-RE Finance Partners II Inc."
+    },
+    "prfp": {
+        "en": "PSPIB-RE Finance Partners Inc.",
+        "fr": "PSPIB-RE Finance Partners Inc."
+    },
+    "prmi": {
+        "en": "PSPIB-RE MANCHESTER INC.",
+        "fr": "PSPIB-RE MANCHESTER INC."
+    },
+    "prpi": {
+        "en": "PSPIB-RE Partners II Inc.",
+        "fr": "PSPIB-RE Partners II Inc."
+    },
+    "prp": {
+        "en": "PSPIB-RE Partners Inc.",
+        "fr": "PSPIB-RE Partners Inc."
+    },
+    "pru": {
+        "en": "PSPIB-RE UK Inc.",
+        "fr": "PSPIB-RE UK Inc."
+    },
+    "psdl": {
+        "en": "PSPIB-SDL Inc.",
+        "fr": "PSPIB-SDL Inc."
+    },
+    "pstar-psstar": {
+        "en": "PSPIB-Star Inc.",
+        "fr": "PSPIB-Star Inc."
+    },
+    "pwaih": {
+        "en": "PSPIB Waiheke Inc.",
+        "fr": "PSPIB Waiheke Inc."
+    },
+    "pwii": {
+        "en": "PSPIB WEXFORD INVESTMENTS INC.",
+        "fr": "PSPIB WEXFORD INVESTMENTS INC."
+    },
+    "picpc": {
+        "en": "PSP Investments Canada Inc.\/Investissements PSP Canada Inc.",
+        "fr": "PSP Investments Canada Inc.\/Investissements PSP Canada Inc."
+    },
+    "ppci": {
+        "en": "PSP Public Credit I Inc.",
+        "fr": "PSP Public Credit I Inc."
+    },
+    "ppco": {
+        "en": "PSP Public Credit Opportunities Inc.",
+        "fr": "PSP Public Credit Opportunities Inc."
+    },
+    "ppm": {
+        "en": "PSP Public Markets Inc.",
+        "fr": "PSP Public Markets Inc."
+    },
+    "pacs-scnp": {
+        "en": "Public Appointments Commission Secretariat",
+        "fr": "Secr\u00e9tariat de la Commission des nominations publiques"
+    },
+    "phac-aspc": {
+        "en": "Public Health Agency of Canada",
+        "fr": "Agence de la sant\u00e9 publique du Canada"
+    },
+    "ppsc-sppc": {
+        "en": "Public Prosecution Service of Canada",
+        "fr": "Service des poursuites p\u00e9nales du Canada"
+    },
+    "ps-sp": {
+        "en": "Public Safety Canada",
+        "fr": "S\u00e9curit\u00e9 publique Canada"
+    },
+    "pspib-oirpsp": {
+        "en": "Public Sector Pension Investment Board",
+        "fr": "Office d\u2019investissement des r\u00e9gimes de pensions du secteur public"
+    },
+    "psdpt-tpfd": {
+        "en": "Public Servants Disclosure Protection Tribunal Canada",
+        "fr": "Le Tribunal de la protection des fonctionnaires divulgateurs Canada"
+    },
+    "psdptc-tpfdc": {
+        "en": "Public Servants Disclosure Protection Tribunal Canada",
+        "fr": "Tribunal de la protection des fonctionnaires divulgateurs Canada"
+    },
+    "psc-cfp": {
+        "en": "Public Service Commission of Canada",
+        "fr": "Commission de la fonction publique du Canada"
+    },
+    "pslrb-crtfp": {
+        "en": "Public Service Labour Relations Board",
+        "fr": "Commission des relations de travail dans la fonction publique"
+    },
+    "pwgsc-tpsgc": {
+        "en": "Public Services and Procurement Canada",
+        "fr": "Services publics et Approvisionnement Canada"
+    },
+    "psst-tdfp": {
+        "en": "Public Service Staffing Tribunal",
+        "fr": "Tribunal de la dotation de la fonction publique"
+    },
+    "ql-lq": {
+        "en": "Quebec Lieutenant",
+        "fr": "Lieutenant du Qu\u00e9bec"
+    },
+    "qpa-apq": {
+        "en": "Quebec Port Authority",
+        "fr": "Administration portuaire de Qu\u00e9bec"
+    },
+    "rmrcf": {
+        "en": "RCMH-MRCF Inc.",
+        "fr": "RCMH-MRCF Inc."
+    },
+    "erc-cee": {
+        "en": "RCMP External Review Committee",
+        "fr": "Comit\u00e9 externe d'examen de la GRC"
+    },
+    "ripi": {
+        "en": "Red Isle Private Investments Inc.",
+        "fr": "Red Isle Private Investments Inc."
+    },
+    "scc-csc": {
+        "en": "Registrar of the Supreme Court of Canada and that portion of the federal public administration appointed under subsection 12(2) of the Supreme Court Act",
+        "fr": "Registraire de la Cour supr\u00eame du Canada et le secteur de l'administration publique f\u00e9d\u00e9rale nomm\u00e9 en vertu du paragraphe 12(2) de la Loi sur la Cour supr\u00eame"
+    },
+    "rct-gtc": {
+        "en": "Registry of the Competition Tribunal",
+        "fr": "Greffe du Tribunal de la concurrence"
+    },
+    "ri": {
+        "en": "Revera Inc.",
+        "fr": "Revera Inc."
+    },
+    "rti-tri": {
+        "en": "Ridley Terminals Inc.",
+        "fr": "Ridley Terminals Inc."
+    },
+    "mint-monnaie": {
+        "en": "Royal Canadian Mint",
+        "fr": "Monnaie royale canadienne"
+    },
+    "rcmp-grc": {
+        "en": "Royal Canadian Mounted Police",
+        "fr": "Gendarmerie royale du Canada"
+    },
+    "spa-aps": {
+        "en": "Saguenay Port Authority",
+        "fr": "Administration portuaire du Saguenay"
+    },
+    "slwb-otes": {
+        "en": "Sahtu Land and Water Board",
+        "fr": "Office des terres et des eaux du Sahtu"
+    },
+    "slupb-cats": {
+        "en": "Sahtu Land Use Planning Board",
+        "fr": "Conseil de l\u2019am\u00e9nagement du territoire du Sahtu"
+    },
+    "stjpa-apstj": {
+        "en": "Saint John Port Authority",
+        "fr": "Administration portuaire de Saint John"
+    },
+    "snsicp-scpssnr": {
+        "en": "Secretariat of the National Security and Intelligence Committee of Parliamentarians",
+        "fr": "Secr\u00e9tariat du Comit\u00e9 des parlementaires sur la s\u00e9curit\u00e9 nationale et le renseignement"
+    },
+    "sirc-csars": {
+        "en": "Security Intelligence Review Committee",
+        "fr": "Comit\u00e9 de surveillance des activit\u00e9s de renseignement de s\u00e9curit\u00e9"
+    },
+    "ssc-spc": {
+        "en": "Shared Services Canada",
+        "fr": "Services partag\u00e9s Canada"
+    },
+    "sopf-cidp": {
+        "en": "Ship-source Oil Pollution Fund",
+        "fr": "Caisse d'indemnisation des dommages dus \u00e0 la pollution par les hydrocarbures caus\u00e9e par les navires"
+    },
+    "sshrc-crsh": {
+        "en": "Social Sciences and Humanities Research Council of Canada",
+        "fr": "Conseil de recherches en sciences humaines du Canada"
+    },
+    "sst-tss": {
+        "en": "Social Security Tribunal of Canada",
+        "fr": "Tribunal de la S\u00e9curit\u00e9 Sociale du Canada"
+    },
+    "sinv": {
+        "en": "Sooke Investments Inc.",
+        "fr": "Sooke Investments Inc."
+    },
+    "srp-rsp": {
+        "en": "Special Representative for the Prairies",
+        "fr": "Repr\u00e9sentant sp\u00e9cial pour les Prairies"
+    },
+    "sct-trp": {
+        "en": "Specific Claims Tribunal",
+        "fr": "Tribunal des revendications particuli\u00e8res"
+    },
+    "scc-ccn": {
+        "en": "Standards Council of Canada",
+        "fr": "Conseil canadien des normes"
+    },
+    "statcan": {
+        "en": "Statistics Canada",
+        "fr": "Statistique Canada"
+    },
+    "swc-cfc": {
+        "en": "Status of Women Canada",
+        "fr": "Condition f\u00e9minine Canada"
+    },
+    "sjpa-apsj": {
+        "en": "St. John's Port Authority",
+        "fr": "Administration portuaire de St. John's"
+    },
+    "sdtc-tddc": {
+        "en": "Sustainable Development Technology Canada",
+        "fr": "Technologies du d\u00e9veloppement durable Canada"
+    },
+    "tf": {
+        "en": "Telefilm Canada",
+        "fr": "T\u00e9l\u00e9film Canada"
+    },
+    "oci-bec": {
+        "en": "The Correctional Investigator Canada",
+        "fr": "L'Enqu\u00eateur correctionnel Canada"
+    },
+    "jfpc-cfp": {
+        "en": "The Joint Federal\/Provincial Commission into the April 2020 Nova Scotia Mass Casualty",
+        "fr": "Commission f\u00e9d\u00e9rale-provinciale sur les \u00e9v\u00e9nements d\u2019avril 2020 en Nouvelle \u00c9cosse"
+    },
+    "nbc-ccbn": {
+        "en": "The National Battlefields Commission",
+        "fr": "Commission des champs de bataille nationaux"
+    },
+    "sibc-cpivml": {
+        "en": "The Seaway International Bridge Corporation",
+        "fr": "Corporation du pont international de la voie maritime, Lt\u00e9e"
+    },
+    "smrbc-sprsm": {
+        "en": "The St. Mary's River Bridge Company",
+        "fr": "Soci\u00e9t\u00e9 du pont de la Rivi\u00e8re Ste Marie"
+    },
+    "tbpa-aptb": {
+        "en": "Thunder Bay Port Authority",
+        "fr": "Administration portuaire de Thunder Bay"
+    },
+    "tpa-apt": {
+        "en": "Toronto Port Authority",
+        "fr": "Administration portuaire de Toronto"
+    },
+    "tmc": {
+        "en": "Trans Mountain Corporation",
+        "fr": "Trans Mountain Corporation"
+    },
+    "tatc-tatc": {
+        "en": "Transportation Appeal Tribunal of Canada",
+        "fr": "Tribunal d'appel des transports du Canada"
+    },
+    "tatc": {
+        "en": "Transportation Appeal Tribunal of Canada",
+        "fr": "Tribunal d'appel des transports du Canada"
+    },
+    "tsb-bst": {
+        "en": "Transportation Safety Board of Canada",
+        "fr": "Bureau de la s\u00e9curit\u00e9 des transports du Canada"
+    },
+    "tc": {
+        "en": "Transport Canada",
+        "fr": "Transports Canada"
+    },
+    "tb-ct": {
+        "en": "Treasury Board",
+        "fr": "Conseil du Tr\u00e9sor"
+    },
+    "tbs-sct": {
+        "en": "Treasury Board of Canada Secretariat",
+        "fr": "Secr\u00e9tariat du Conseil du Tr\u00e9sor du Canada"
+    },
+    "tbpi": {
+        "en": "Trinity Bay Private Investments Inc.",
+        "fr": "Trinity Bay Private Investments Inc."
+    },
+    "vfpa-apvf": {
+        "en": "Vancouver Fraser Port Authority",
+        "fr": "Administration portuaire Vancouver Fraser"
+    },
+    "vac-acc": {
+        "en": "Veterans Affairs Canada",
+        "fr": "Anciens Combattants Canada"
+    },
+    "vrab-tacra": {
+        "en": "Veterans Review and Appeal Board",
+        "fr": "Tribunal des anciens combattants (r\u00e9vision et appel)"
+    },
+    "viarail": {
+        "en": "VIA Rail Canada Inc.",
+        "fr": "VIA Rail Canada Inc."
+    },
+    "hgr-tgf": {
+        "en": "Via Rail High Frequency Rail",
+        "fr": "Via Rail train \u00e0 grande fr\u00e9quence"
+    },
+    "vinv": {
+        "en": "VOP Investments Inc.",
+        "fr": "VOP Investments Inc."
+    },
+    "wlwb-owte": {
+        "en": "Wek\u2019eezhii Land and Water Board",
+        "fr": "Office Wek'eezhii des terres et des eaux"
     },
     "wd-deo": {
-        "en": "Western Economic Diversification Canada ",
-        "fr": " Diversification de l'\u00e9conomie de l'Ouest Canada"
+        "en": "Western Economic Diversification Canada",
+        "fr": "Diversification de l'\u00e9conomie de l'Ouest Canada"
+    },
+    "wdba-apwd": {
+        "en": "Windsor-Detroit Bridge Authority",
+        "fr": "Autorit\u00e9 du pont Windsor-D\u00e9troit"
     },
     "wpa-apw": {
-        "en": "Windsor Port Authority ",
-        "fr": " Administration portuaire de Windsor"
+        "en": "Windsor Port Authority",
+        "fr": "Administration portuaire de Windsor"
     },
     "yesab-oeesy": {
-        "en": "Yukon Environmental and Socio-economic Assessment Board ",
-        "fr": " Office d\u2019\u00e9valuation environnementale et socio-\u00e9conomique du Yukon"
+        "en": "Yukon Environmental and Socio-economic Assessment Board",
+        "fr": "Office d\u2019\u00e9valuation environnementale et socio-\u00e9conomique du Yukon"
     },
     "ysrb-odsy": {
-        "en": "Yukon Surface Rights Board ",
-        "fr": " Office des droits de surface du Yukon"
+        "en": "Yukon Surface Rights Board",
+        "fr": "Office des droits de surface du Yukon"
     }
 }

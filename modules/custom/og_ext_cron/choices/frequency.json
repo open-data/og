@@ -64,6 +64,10 @@
         "fr": "Triennal"
     },
     "P4Y": {
+        "en": "Every four years",
+        "fr": "Quadriennal"
+    },
+    "P5Y": {
         "en": "Every five years",
         "fr": "Quinquennal"
     },

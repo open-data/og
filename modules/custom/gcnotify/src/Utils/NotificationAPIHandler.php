@@ -161,7 +161,7 @@ class NotificationAPIHandler
 
         if ($request->headers->get('AUTHORIZATION') == null
             || empty($authorization_header)
-            || $authorization_header == "" 
+            || $authorization_header == ""
         ) {
             return 'MISSING AUTHORIZATION HEADER';
         }

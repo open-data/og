@@ -1,5 +1,0 @@
-name: 'Open Government Extend User'
-description: 'Provides default user roles, users, and permissions.'
-type: module
-core_version_requirement: ^8 || ^9
-package: 'Open Government'

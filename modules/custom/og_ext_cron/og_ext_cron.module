@@ -12,64 +12,28 @@ use \Drupal\og_ext_cron\Utils\CronFunctions;
  */
 function og_ext_cron_cron() {
 
-  $currentHour = (int)date('G', time());
-  switch( $currentHour ){
-    /**
-     * Hours are in UTC 0 time.
-     */
+  $cron_tasks = new CronFunctions;
 
-    case 1:  # 8 pm EST
-    case 2:  # 9 pm EST
-      // clear proactive disclosure view caches
-      CronFunctions::clear_view_caches();
-      break;
+  // clear proactive disclosure view caches
+  $cron_tasks->clearViewCaches();
 
-    case 3:  # 10 pm EST
-    case 4:  # 11 pm EST
-      // export dataset comments
-      CronFunctions::export_external_comments();
-      break;
+  // export suggested datasets
+  $cron_tasks->exportSuggestedDatasets();
 
-    case 5:  # 12 am EST
-    case 6:  # 1 am EST
-      // export dataset ratings
-      CronFunctions::export_cumulative_dataset_ratings();
-      break;
+  // export dataset ratings
+  $cron_tasks->exportCumulativeDatasetRatings();
 
-    case 7:  # 2 am EST
-    case 8:  # 3 am EST
-      // export suggested datasets
-      CronFunctions::export_suggested_datasets();
-      break;
+  // generate inventory vote count json file
+  $cron_tasks->generateVoteCountJsonFile();
 
-    case 9:  # 4 am EST
-    case 10:  # 5 am EST
-      // generate inventory vote count json file
-      CronFunctions::generate_vote_count_json_file();
-      break;
+  // generate ATI informal requests CSV file
+  $cron_tasks->generateAtiRequestsCsvFile();
 
-    case 11:  # 6 am EST
-    case 12:  # 7 am EST
-      // generate ATI informal requests CSV file
-      CronFunctions::generate_ati_requests_csv_file();
-      break;
-
-    default:
-      \Drupal::logger('cron')->notice('Nothing to run right now.');
-      break;
-
-  }
-
-/**
- * Development Code
- * Keep commented out for development purposes only
- */
-/*
-  // fetch organizations list from CKAN
-  CronFunctions::fetch_orgs_from_ckan();
+  /* for development purpose only
 
   // fetch field lists from CKAN
   $fields = [
+    'organizations' => 'records',
     'character_set' => 'resource_fields',
     'audience' => 'dataset_fields',
     'format' => 'resource_fields',
@@ -81,7 +45,7 @@ function og_ext_cron_cron() {
   ];
 
   foreach ($fields as $field => $type) {
-    CronFunctions::fetch_from_ckan($field, $type);
+    $cron_tasks->fetchFromCkan($field, $type);
   }
-*/
+  */
 }

@@ -72,12 +72,11 @@ function voting_webform_webform_submission_prepare_form(WebformSubmissionInterfa
     if ($url) {
       // set referred_url to send back to the referring page
       $webform_submission->setElementData('referred_url', $url);
+    } else {
+      \Drupal::logger('vote')
+        ->warning($webform->id() . ': No referring URL found');
     }
-    else {
-      \Drupal::logger('vote')->warning($webform->id() . ': No referring URL found');
-    }
-  }
-  elseif ($webform->id() === 'vote_up_down_external') {
+  } elseif ($webform->id() === 'vote_up_down_external') {
     $url = \Drupal::request()->getRequestUri();
     if ($url) {
       // set referred_url to send back to the referring page
@@ -85,9 +84,9 @@ function voting_webform_webform_submission_prepare_form(WebformSubmissionInterfa
       $url_explode = explode("/",$url);
       $uuid = end($url_explode);
       $webform_submission->setElementData('uuid', $uuid);
-    }
-    else {
-      \Drupal::logger('vote')->warning($webform->id() . ': No referring URL found');
+    } else {
+      \Drupal::logger('vote')
+        ->warning($webform->id() . ': No referring URL found');
     }
   }
 }
@@ -121,7 +120,10 @@ function getAverageVoteAndCount($uuid, $webform_id) {
   }
 
   catch (Exception $e) {
-    \Drupal::logger('vote')->warning($webform_id . ': Exception thrown while trying to get vote average for dataset with uuid: ' . $uuid);
+    \Drupal::logger('vote')
+      ->warning($webform_id
+        . ': Exception thrown while trying to get vote average for dataset with uuid: '
+        . $uuid);
     return NULL;
   }
 }

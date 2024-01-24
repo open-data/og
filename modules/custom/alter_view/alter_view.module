@@ -6,7 +6,7 @@ use \Drupal\views\ViewExecutable;
 
 /**
  * @file
- * Contains alter_field.module.
+ * Contains alter_view.module.
  */
 
 /**
@@ -59,32 +59,6 @@ function alter_view_views_pre_render(ViewExecutable $view) {
       }
       $position++;
     }
-  }
-}
-
-/**
- * Implements hook_views_pre_view
- * attach external comment form to the footer of view pd_core_inventory_details
- */
-function alter_view_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
-  if ($view->id() === 'pd_core_inventory_details') {
-    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $options = array(
-      'id' => 'area',
-      'table' => 'views',
-      'field' => 'area',
-      'relationship' => 'none',
-      'group_type' => 'group',
-      'admin_label' => '',
-      'empty' => false,
-      'tokenize' => false,
-      'content' => [
-        'value' => '<div data-ajax-replace="/' . $language . '/external-comment/inventory/' . $view->args[0] . '" ></div>',
-        'format' => 'full_html',
-      ],
-      'plugin_id' => 'text',
-    );
-    $view->setHandler($display_id, 'footer', 'area', $options);
   }
 }
 

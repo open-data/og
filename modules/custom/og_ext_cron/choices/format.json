@@ -1,13 +1,17 @@
 {
     "AAC": "AAC",
     "AIFF": "AIFF",
-    "ASCII Grid": "ASCII Grid",
+    "ASCII Grid": {
+        "en": "ASCII Grid",
+        "fr": "Grille ASCII"
+    },
     "APK": {
         "en": "Android Application",
-        "fr": "Android Application"
+        "fr": "Application Android"
     },
     "AVI": "AVI",
     "BAG": "BAG",
+    "BAM": "BAM",
     "BMP": "BMP",
     "BWF": "BWF",
     "CCT": "CCT",
@@ -16,7 +20,7 @@
     "CDR": "CDR",
     "COD": {
         "en": "Blackberry Application",
-        "fr": "Blackberry Application"
+        "fr": "Application Blackberry"
     },
     "CSV": "CSV",
     "DBD": "DBD",
@@ -36,7 +40,11 @@
     "ESRI REST": "ESRI REST",
     "EXE": "EXE",
     "FGDB\/GDB": "FGDB\/GDB",
-    "Flat raster binary": "Flat raster binary",
+    "FITS": "FITS",
+    "Flat raster binary": {
+        "en": "Flat raster binary",
+        "fr": "Binaire raster plat"
+    },
     "GDB": {
         "en": "GeoSoftDatabases",
         "fr": "GeoSoftDatabases"
@@ -57,12 +65,16 @@
     },
     "GRIB1": "GRIB1",
     "GRIB2": "GRIB2",
+    "GZ": {
+        "en": "Gzip",
+        "fr": "Gzip"
+    },
     "HDF": "HDF",
     "HTML": "HTML",
     "IATI": "IATI",
     "IPA": {
-        "en": "IOS Application",
-        "fr": "IOS Application"
+        "en": "iOS Application",
+        "fr": "Application iOS"
     },
     "JAR": "JAR",
     "JFIF": "JFIF",
@@ -98,6 +110,7 @@
     "PDF\/UA": "PDF\/UA",
     "PNG": "PNG",
     "PPT": "PPT",
+    "QLR": "QLR",
     "PPTX": "PPTX",
     "RDF": "RDF",
     "TTL": {
@@ -111,7 +124,9 @@
     "RDFa": "RDFa",
     "RSS": "RSS",
     "RTF": "RTF",
+    "SAM": "SAM",
     "SAR": "SAR",
+    "SAS": "SAS",
     "SAV": "SAV",
     "SEGY": "SEGY",
     "SHP": "SHP",
@@ -129,6 +144,7 @@
     "TRIG": "TRIG",
     "TRIX": "TRIX",
     "TFW": "TFW",
+    "TSV": "TSV",
     "TXT": "TXT",
     "VPF": "VPF",
     "WAV": "WAV",

@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\Core\Database\Database;
+
   /**
    * @file
    * Create table for storing GC Notify status updates.
@@ -111,9 +113,22 @@
           'table' => 'webform_submission',
           'columns' => [
             'webform_sid' => 'sid',
+            ],
           ],
         ],
-      ],
-    ];
-  return $schema;
-}
+      ];
+    return $schema;
+  }
+
+  /**
+   * Update schema to add status_description field
+   */
+  function gcnotify_update_8001() {
+    $field = [
+        'type' => 'varchar',
+        'description' => 'The description of status',
+        'length' => 255,
+      ];
+     $schema = Database::getConnection()->schema();
+     $schema->addField('gcnotify', 'status_description', $field);
+  }

@@ -3,4 +3,4 @@ type: module
 description: "Drupal implementation for Service Canada's GC Invitation Manager"
 package: "Open Government"
 version: 1.0
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9 || ^10

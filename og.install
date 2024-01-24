@@ -21,7 +21,7 @@ function og_install() {
   \Drupal::configFactory()
     ->getEditable('system.theme')
     ->set('default', 'gcweb')
-    ->set('admin', 'seven')
+    ->set('admin', 'claro')
     ->save();
 
   // Enable the admin theme.

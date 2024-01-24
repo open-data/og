@@ -23,16 +23,24 @@ use Drupal\Core\Form\FormStateInterface;
 class VoteUpDownHandler extends WebformHandlerBase
 {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function submitForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission) {
-    $node = \Drupal::routeMatch()->getParameter($webform_submission->getSourceEntity()->getEntityTypeId());
-    if ($node instanceof \Drupal\node\NodeInterface) {
-      if ($webform_submission->getSourceEntity()->id() === $node->id()) {
-        $node->field_vote_up_down = $node->get('field_vote_up_down')->value + 1;
-        $node->save();
-      }
+    /**
+     * {@inheritdoc}
+     */
+    public function submitForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission)
+    {
+        $node = \Drupal::routeMatch()
+            ->getParameter(
+                $webform_submission
+                    ->getSourceEntity()
+                    ->getEntityTypeId()
+            );
+        if ($node instanceof \Drupal\node\NodeInterface) {
+            if ($webform_submission->getSourceEntity()->id() === $node->id()) {
+                $node->field_vote_up_down = $node
+                    ->get('field_vote_up_down')
+                    ->value + 1;
+                $node->save();
+            }
+        }
     }
-  }
 }

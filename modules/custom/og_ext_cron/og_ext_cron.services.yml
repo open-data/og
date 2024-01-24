@@ -1,5 +1,0 @@
-services:
-  og_ext_cron.queue:
-    class: \Drupal\og_ext_cron\Plugin\QueueWorker\CronQueue
-    public: true
-    arguments: ['ogp_queue', '@database']

@@ -23,7 +23,6 @@ function alter_view_views_pre_render(ViewExecutable $view) {
   $views = [
     'pd_core_ati', 'pd_core_ati_details',
     'pd_core_hospitalityq', 'pd_core_hospitalityq_details',
-    'pd_core_inventory', 'pd_core_inventory_details',
     'pd_core_reclassification', 'pd_core_reclassification_details',
     'pd_core_wrongdoing', 'pd_core_wrongdoing_details',
   ];
@@ -58,30 +57,6 @@ function alter_view_views_pre_render(ViewExecutable $view) {
         unset($view->result[$position]);
       }
       $position++;
-    }
-  }
-}
-
-/**
- * Implements template_preprocess_views_bootstrap_table
- * add vote column to pd_core_inventory
- */
-function alter_view_preprocess_views_bootstrap_table(array &$variables) {
-  $view = $variables['view'];
-  if (is_object($view) && $view->id() === 'pd_core_inventory') {
-    for ($x=0; $x< sizeof($variables['rows']); $x++) {
-      $uuid = $view->result[$x]->_item->getField('id')->getValues();
-      $connection = \Drupal::database();
-      $query = $connection->select('external_voting', 'v');
-      $query->condition('v.uuid', $uuid, '=');
-      $query->fields('v', ['vote_count']);
-      $result = $query->execute();
-      $vote_count=0;
-      foreach ($result as $record) {
-        $vote_count = $record->vote_count;
-      }
-
-      $variables['rows'][$x]['columns']['nothing']['content'][0]['field_output']['#markup']= Markup::create($vote_count);
     }
   }
 }

@@ -23,9 +23,6 @@ function og_ext_cron_cron() {
   // export dataset ratings
   $cron_tasks->exportCumulativeDatasetRatings();
 
-  // generate inventory vote count json file
-  $cron_tasks->generateVoteCountJsonFile();
-
   // generate ATI informal requests CSV file
   $cron_tasks->generateAtiRequestsCsvFile();
 

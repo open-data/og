@@ -3,6 +3,6 @@ type: module
 description: "Integrate Canadian Digital Services' GC Notify service with Drupal for email messaging"
 package: 'Open Government'
 version: 1.0
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9 || ^10
 dependencies:
   - drupal:webform

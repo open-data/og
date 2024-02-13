@@ -23,18 +23,33 @@ use Drupal\Core\Form\FormStateInterface;
 class VoteRatingHandler extends WebformHandlerBase
 {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function submitForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission) {
-    $node = \Drupal::routeMatch()->getParameter($webform_submission->getSourceEntity()->getEntityTypeId());
-    if ($node instanceof \Drupal\node\NodeInterface) {
-      if ($webform_submission->getSourceEntity()->id() === $node->id()) {
-        $node->field_vote_average = (($node->get('field_vote_average')->value * $node->get('field_vote_count')->value)
-            + $form_state->getValue('rating')) / ($node->get('field_vote_count')->value + 1);
-        $node->field_vote_count = $node->get('field_vote_count')->value + 1;
-        $node->save();
-      }
+    /**
+     * {@inheritdoc}
+     */
+    public function submitForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission)
+    {
+        $node = \Drupal::routeMatch()
+            ->getParameter(
+                $webform_submission
+                    ->getSourceEntity()
+                    ->getEntityTypeId()
+            );
+        if ($node instanceof \Drupal\node\NodeInterface) {
+            $rating = $form_state->getValue('rating');
+
+            if ($webform_submission->getSourceEntity()->id() === $node->id()
+                && in_array($rating, [1,2,3,4,5])
+            ) {
+                $vote_count = $node->get('field_vote_count')->value;
+                $vote_avg = $node
+                    ->get('field_vote_average')
+                    ->value;
+                $weighted_average = $vote_avg * $vote_count;
+                $new_avg = ($weighted_average + $rating) / ($vote_count + 1);
+                $node->field_vote_average = $new_avg;
+                $node->field_vote_count = $vote_count + 1;
+                $node->save();
+            }
+        }
     }
-  }
 }

@@ -1,9 +1,0 @@
-{
-    "name": "og/obd",
-    "description": "open by Default",
-    "type": "drupal-module",
-    "license": "GPL-2.0-or-later",
-    "require": {
-        "microsoft/azure-storage-blob": "*"
-    }
-}

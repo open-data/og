@@ -53,7 +53,7 @@
         "drupal/autologout": "1.4.0",
         "drupal/bootstrap_layouts": "5.3.0",
         "drupal/ckeditor_codemirror": "^3.0@beta",
-        "drupal/core": "10.2.0",
+        "drupal/core": "10.2.3",
         "drupal/csv_serialization": "4.0.0",
         "drupal/facets": "2.0.6",
         "drupal/fontawesome": "2.26.0",
@@ -75,7 +75,7 @@
         "drush/drush": "^12.4.3",
         "fortawesome/font-awesome": "6.4.2",
         "oomphinc/composer-installers-extender": "^2.0.0",
-        "opengov/gcweb": "dev-drupal-10",
+        "opengov/gcweb": "dev-master",
         "symfony/event-dispatcher": "^6.2",
         "wikimedia/composer-merge-plugin": "^2.0.0"
     },

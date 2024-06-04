@@ -17,9 +17,6 @@ function og_ext_cron_cron() {
   // clear proactive disclosure view caches
   $cron_tasks->clearViewCaches();
 
-  // export suggested datasets
-  $cron_tasks->exportSuggestedDatasets();
-
   // export dataset ratings
   $cron_tasks->exportCumulativeDatasetRatings();
 

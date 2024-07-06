@@ -51,6 +51,7 @@ function imSetup() {
 		}		
 
 	} catch (e) {
+		consoleLog(e);
 		return false;
 	}
 		
@@ -334,7 +335,7 @@ function imSetup() {
 	*/
 	function downloadSurveyDB() {
 
-		$.getJSON(
+		jQuery.getJSON(
 		dbURL,
 		function() {
 			consoleLog("Get Json File is Successful");
@@ -571,22 +572,15 @@ function imSetup() {
 	 * Display the popup given the survey parameters
 	 */
 	function invite(survey) {
-		var referrerPath = encodeURIComponent(window.location.pathname),
-			surveyLink = survey["link-" + wb_im.lang],
-			delimiter = "?",
-			popupInput;
 
-		if ( surveyLink.includes( "?" ) ) {
-			delimiter = "&";
-		}
-
+		var popupInput
 		if (Adobe.toLowerCase() === "yes")
 		{
-			popupInput = "<input type='hidden' name='popupName' value='" + survey["name"] + "'>";
+			popupInput = "<input type='hidden' name='popupName' value='" + survey["name"] + "'>" 
 		} 
 		else
 		{
-			popupInput = "";
+			popupInput = "" 
 		}
 	
 		var html =  
@@ -602,7 +596,7 @@ function imSetup() {
 			"<div class='gc-im-modal-body'>" +
 				survey["body-" + wb_im.lang] +
 				"<ul class='list-inline mrgn-sm'>" +
-			"<li class='mrgn-sm marginBottom-yes'><a id='survey-yes' class='gc-im-btn gc-im-btn-primary' href='" + survey["link-" + wb_im.lang] + delimiter + "ref=" + referrerPath + "' target='_blank' referrer-policy='unsafe-url'>" + survey["yes-" + wb_im.lang] + "</a></li> " + 
+					"<li class='mrgn-sm marginBottom-yes'><a id='survey-yes' class='gc-im-btn gc-im-btn-primary' href='" + survey["link-" + wb_im.lang] + "' target='_blank'>" + survey["yes-" + wb_im.lang] + "</a></li> " + 
 					"<li class='mrgn-sm marginBottom-no'><button id='survey-no' class='gc-im-btn gc-im-btn-secondary survey-close'>" + survey["no-" + wb_im.lang] + "</button></li>" +
 				"</ul>" +
 				popupInput +
@@ -612,7 +606,7 @@ function imSetup() {
 			"</div>" +
 		"</aside>",
 		
-		$html = $( html ),
+		$html = jQuery( html ),
 		$userFocus = false,
 		overlayIsClosing,
 		focusFlag;
@@ -622,9 +616,9 @@ function imSetup() {
 	  	// Proceed if any of the overlay's links or buttons get clicked (including middle mouse clicks) 
 		// or if the escape key gets pressed within the overlay. 
 	  	if (
-		  ( ( e.type === "click" || e.type === "vclick" ) && e.which === 1 && $( e.target ).closest( "a, button", this ).length ) // Clicked/Tapped a link/button.
+		  ( ( e.type === "click" || e.type === "vclick" ) && e.which === 1 && jQuery( e.target ).closest( "a, button", this ).length ) // Clicked/Tapped a link/button.
 		  ||
-		  ( e.type === "mouseup" && e.which === 2 && $( e.target ).closest( "a", this ).length ) // Middle-clicked a link.
+		  ( e.type === "mouseup" && e.which === 2 && jQuery( e.target ).closest( "a", this ).length ) // Middle-clicked a link.
 		  ||
 		  ( ( e.type === "keydown" ) && ( e.which === 27 ) ) // Pressed escape key.
 		) {
@@ -632,8 +626,8 @@ function imSetup() {
 		
 			// add to remove added classes to overlay when closing
 			$html.removeClass( "open" );
-			$("#first-focus").remove();
-			$( "#wb-info" ).removeClass( "im-mrgn" );		
+			jQuery("#first-focus").remove();
+			jQuery( "#wb-info" ).removeClass( "im-mrgn" );		
 					
 		  	// Set a flag to indicate the overlay is closing.
 		  	// Needed to prevent IE11 (possibly also IE8-10/Edge) from failing to return 
@@ -642,14 +636,14 @@ function imSetup() {
 		  	overlayIsClosing = 1;
 		  
 		  	// Hide the overlay immediately.			
-		  	$( this ).hide();
+		  	jQuery( this ).hide();
 		  
 		  	// Remove the overlay shortly afterwards.
 		  	// This is being done to prevent problems when the yes link is middle-clicked. If the overlay were to be immediately removed, middle-clicking the yes link would remove the overlay without opening the link in a new tab/window. To avoid that issue, the overlay is now getting immediately hidden, then removed a short time later.
 		  	setTimeout( function() { $html.empty() }, 1000 );
 			
 			// Remove this event handler.
-			$( this ).off();
+			jQuery( this ).off();
 	  	}
 		
 		// if Tab in the NO button then focus will be triggerred outside of the popup
@@ -658,7 +652,7 @@ function imSetup() {
 			if (e.target.id === "survey-no")
 			{	
 				setTimeout( function() {
-					$("#wb-tphp").trigger("focus");
+					jQuery("#wb-tphp").trigger("focus");
 				},1000);	
 			}	
 		}
@@ -669,7 +663,7 @@ function imSetup() {
 			if (e.target.id === "close-im")
 			{	
 				setTimeout( function() {
-					$("#wb-tphp").trigger("focus");
+					jQuery("#wb-tphp").trigger("focus");
 				},1000);	
 			}	
 		}
@@ -678,30 +672,30 @@ function imSetup() {
 	
 
 		// Insert the overlay directly before the <main> element.
-		$( "main" ).before( $html );
+		jQuery( "main" ).before( $html );
 
 		// Since jQuery fix will sanitize the target attribute, here is a quick solution to add it back right after the IM html popup is inserted
-		$("#survey-yes").attr("target", "_blank");
+		jQuery("#survey-yes").attr("target", "_blank");
 		
 		// Inset the "Skip to Invitation Manager Popup" link before the <main> element.
 		if (wb_im.lang === "fr")
 		{
-			$( "#wb-tphp" ).prepend("<li id='first-focus' class='wb-slc'>" +
+			jQuery( "#wb-tphp" ).prepend("<li id='first-focus' class='wb-slc'>" +
 			"<a  class='wb-sl' href='#gc-im-popup'>Passer au Gestionnaire des Invitations</a></li> ");
 		}
 		else {
-			$( "#wb-tphp" ).prepend("<li id='first-focus' class='wb-slc'>" +
+			jQuery( "#wb-tphp" ).prepend("<li id='first-focus' class='wb-slc'>" +
 			"<a   class='wb-sl' href='#gc-im-popup'>Skip to Invitation Manager Popup</a></li> ");
 		}
 		
 		// trigger the init and open event of the overlay
-		$( "#gc-im-popup" ).trigger( "wb-init.gc-im-wb-overlay" );
-		$( "#gc-im-popup" ).trigger( "open.gc-im-wb-overlay" );
+		jQuery( "#gc-im-popup" ).trigger( "wb-init.gc-im-wb-overlay" );
+		jQuery( "#gc-im-popup" ).trigger( "open.gc-im-wb-overlay" );
 		
 		// add for Adobe tracking
 		if (!$html.is(":hidden") && Adobe.toLowerCase() === "yes")
 		{
-			var popUpName = $("input[name='popupName']").val();
+			var popUpName = jQuery("input[name='popupName']").val();
                    
 			_satellite.setVar('jsPopupName', popUpName);
 			//direct call rule
@@ -710,12 +704,12 @@ function imSetup() {
 		}
 		
 		// Correct popup positionning on load, on resize an on Y scroll if necessary
-		$( window ).on( "resize scroll", function() {
+		jQuery( window ).on( "resize scroll", function() {
 			
 			
 			// Equals to popup default bottom value in CSS
 			var bottomY = 25;
-			var $footer = $( "#wb-info" );
+			var $footer = jQuery( "#wb-info" );
 			
 			if (!$html.is(":hidden"))
 			{
@@ -725,9 +719,9 @@ function imSetup() {
 			else{
 				$footer.removeClass( "im-mrgn" );
 			}
-			if ( $( window ).scrollTop() >= $( document ).outerHeight() - $( window ).outerHeight() - $footer.outerHeight() ) {
+			if ( jQuery( window ).scrollTop() >= jQuery( document ).outerHeight() - jQuery( window ).outerHeight() - $footer.outerHeight() ) {
 					$html.css( {
-						bottom: ( $footer.outerHeight() - ( $( document ).outerHeight() - $( window ).outerHeight() - $( window ).scrollTop() ) + bottomY )
+						bottom: ( $footer.outerHeight() - ( jQuery( document ).outerHeight() - jQuery( window ).outerHeight() - jQuery( window ).scrollTop() ) + bottomY )
 					} );
 				} else {
 					$html.css( {
@@ -767,7 +761,7 @@ function imSetup() {
 		}
 		
 		// get the config.json file
-		$.getJSON(
+		jQuery.getJSON(
 			path + "config.JSON",
 			//"/invitation-manager/config.JSON",
 			function() {

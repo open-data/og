@@ -44,9 +44,7 @@
       { "url" : "/en/search/hospitalityq*" },
       { "url" : "/fr/search/hospitalityq*" },
       { "url" : "/en/search/hospitalityq/reference/*" },
-      { "url" : "/fr/search/hospitalityq/reference/*" },
-      { "url" : "/en/search/ati*" },
-      { "url" : "/fr/search/ati*" }
+      { "url" : "/fr/search/hospitalityq/reference/*" }
     ]
   }]
 }

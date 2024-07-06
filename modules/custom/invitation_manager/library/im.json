@@ -41,8 +41,12 @@
       { "url" : "/fr/divulgation-proactive" },
       { "url" : "en/access-to-information" },
       { "url" : "/fr/acces-linformation" },
-      { "url" : "/en/search/*" },
-      { "url" : "/fr/search/*" }
+      { "url" : "/en/search/hospitalityq*" },
+      { "url" : "/fr/search/hospitalityq*" },
+      { "url" : "/en/search/hospitalityq/reference/*" },
+      { "url" : "/fr/search/hospitalityq/reference/*" },
+      { "url" : "/en/search/ati*" },
+      { "url" : "/fr/search/ati*" }
     ]
   }]
 }

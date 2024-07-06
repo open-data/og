@@ -13,7 +13,6 @@
 function invitation_manager_page_attachments(array &$attachments) {
   $node = \Drupal::request()->get('node');
   if (is_object($node) && 
-    $node->getType() === 'landing_page' && 
     \Drupal::currentUser()->isAuthenticated() === false) {
 
     if (!in_array('core/jquery', $attachments['#attached']['library']))

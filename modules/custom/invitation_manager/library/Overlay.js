@@ -24,7 +24,7 @@ wb_im = {
 	
 	initQueue: 0,
 	selectors: [],
-	doc: $( document ),
+	doc: jQuery( document ),
 	isReady: false,
 	isStarted: false,
 	seed: 0,
@@ -236,7 +236,7 @@ wb_im = {
 				overlayClose;
 				
 			if ( elm ) {
-				$elm = $( elm );
+				$elm = jQuery( elm );
 				
 				// Only initialize the i18nText once
 				if ( !i18nText ) {
@@ -264,7 +264,7 @@ wb_im = {
 		* openOverlay function
 		*/
 		openOverlay = function( overlayId, noFocus ) {
-			var $overlay = $( "#" + wb.jqEscape( overlayId ) );
+			var $overlay = jQuery( "#" + wb.jqEscape( overlayId ) );
 			
 			$overlay
 					.addClass( "open" )
@@ -297,7 +297,7 @@ wb_im = {
 		* closeOverlay function
 		*/
 		closeOverlay = function( overlayId, noFocus, userClosed ) {
-			var $overlay = $( "#" + overlayId ),
+			var $overlay = jQuery( "#" + overlayId ),
 				sourceLink = sourceLinks[ overlayId ];
 				
 			$overlay
@@ -319,7 +319,3 @@ wb_im = {
 	
 	
 } )( jQuery, window, document, wb_im); 
-
-
-
-

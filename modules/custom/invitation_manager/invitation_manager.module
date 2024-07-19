@@ -6,6 +6,21 @@
  */
 
 /**
+ * Implements hook_page_bottom().
+ * This function loads the js snippet at the bottom of the page, needed to define location for config.JSON
+ * Only public page sessions (not when a user is logged in) load survey pop-up
+ */
+function invitation_manager_page_bottom(array &$page_bottom) {
+  if (!\Drupal::currentUser()->isAuthenticated()) {
+    $page_bottom['invitation_manager'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'script',
+      '#value' => 'window.imConfigPath = "/invitation-manager/";',
+    ];
+  }
+}
+
+/**
  * Implements hook_page_attachments().
  * This function loads assets from the Service Canada GC Invitation Manager library
  * Only public page sessions (not when a user is logged in) load survey pop-up

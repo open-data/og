@@ -26,26 +26,40 @@ function invitation_manager_page_bottom(array &$page_bottom) {
  * Only public page sessions (not when a user is logged in) load survey pop-up
  */
 function invitation_manager_page_attachments(array &$attachments) {
+  if (\Drupal::currentUser()->isAuthenticated())
+    return;
+
+  $attach = false;
+
   $node = \Drupal::request()->get('node');
-  $url = $node->toUrl()->toString();
-  $nodes = [
-    '/en/homepage',
-    '/fr/homepage',
-    '/en/proactive-disclosure',
-    '/fr/divulgation-proactive',
-    '/en/access-to-information',
-    '/fr/acces-linformation',
-    '/en/search/hospitalityq',
-    '/fr/search/hospitalityq',
-  ];
+  if (is_object($node)) {
+    $url = $node->toUrl()->toString();
+    $nodes = [
+      '/en/homepage',
+      '/fr/homepage',
+      '/en/proactive-disclosure',
+      '/fr/divulgation-proactive',
+      '/en/access-to-information',
+      '/fr/acces-linformation',
+      '/en/search/hospitalityq',
+      '/fr/search/hospitalityq',
+    ];
 
-  $view_id = \Drupal::request()->get('view_id');
-  $views = [
-    'pd_core_hospitalityq_details',
-  ];
+    if (in_array($url, $nodes))
+      $attach = true;
 
-  if (( in_array($url, $nodes) || in_array($view_id, $views)) &&
-    \Drupal::currentUser()->isAuthenticated() === false) {
+  } else {
+    $view_id = \Drupal::request()->get('view_id');
+    $views = [
+      'pd_core_hospitalityq_details',
+    ];
+
+    if ($view_id && in_array($view_id, $views))
+      $attach = true;
+  }
+
+
+  if ($attach) {
 
     if (!in_array('core/jquery', $attachments['#attached']['library']))
       $attachments['#attached']['library'][] = 'core/jquery';

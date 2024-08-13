@@ -6,14 +6,45 @@
  */
 
 /**
+ * Implements hook_page_bottom().
+ * This function loads the js snippet at the bottom of the page, needed to define location for config.JSON
+ * Only public page sessions (not when a user is logged in) load survey pop-up
+ */
+function invitation_manager_page_bottom(array &$page_bottom) {
+  if (!\Drupal::currentUser()->isAuthenticated()) {
+    $page_bottom['invitation_manager'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'script',
+      '#value' => 'window.imConfigPath = "/invitation-manager/";',
+    ];
+  }
+}
+
+/**
  * Implements hook_page_attachments().
  * This function loads assets from the Service Canada GC Invitation Manager library
  * Only public page sessions (not when a user is logged in) load survey pop-up
  */
 function invitation_manager_page_attachments(array &$attachments) {
   $node = \Drupal::request()->get('node');
-  if (is_object($node) && 
-    $node->getType() === 'landing_page' && 
+  $url = $node->toUrl()->toString();
+  $nodes = [
+    '/en/homepage',
+    '/fr/homepage',
+    '/en/proactive-disclosure',
+    '/fr/divulgation-proactive',
+    '/en/access-to-information',
+    '/fr/acces-linformation',
+    '/en/search/hospitalityq',
+    '/fr/search/hospitalityq',
+  ];
+
+  $view_id = \Drupal::request()->get('view_id');
+  $views = [
+    'pd_core_hospitalityq_details',
+  ];
+
+  if (( in_array($url, $nodes) || in_array($view_id, $views)) &&
     \Drupal::currentUser()->isAuthenticated() === false) {
 
     if (!in_array('core/jquery', $attachments['#attached']['library']))

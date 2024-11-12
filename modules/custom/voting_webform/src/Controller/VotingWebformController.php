@@ -86,9 +86,9 @@ class VotingWebformController extends ControllerBase
         // get url, id and domain of request object
         $host_domain = $request->getHttpHost();
         $referer_url = $request->headers->get('referer');
-        $url_explode = explode("/", $referer_url);
+        $url_explode = explode("/", $referer_url ?? "");
         $referer_id = end($url_explode);
-        $referer_id = explode('?', $referer_id);
+        $referer_id = explode('?', $referer_id ?? "");
         $referer_id = $referer_id[0];
 
         if ($referer_url) {

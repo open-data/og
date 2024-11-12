@@ -1,0 +1,2 @@
+Pass empty string for referer_url to avoid exception in the PHP explode function. 
+This behaviour is new in PHP8. 

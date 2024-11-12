@@ -1,0 +1,1 @@
+Update Drupal core to version 10.2.10 to apply security updates for SA-CORE-2024-002.

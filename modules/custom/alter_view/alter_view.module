@@ -84,7 +84,7 @@ function alter_view_preprocess_views_view(&$variables) {
  */
 function alter_view_preprocess_views_view_field(&$variables) {
     if ($variables['view']->id() == 'pd_core_ati_details'
-      && $variables['field']->field == 'comments_en') {
+      && in_array($variables['field']->field, ['comments_en', 'comments_fr']) ) {
 
       $variables['output'] = preg_replace(
         '@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@',

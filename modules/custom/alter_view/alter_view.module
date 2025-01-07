@@ -1,5 +1,6 @@
 <?php
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Render\Markup;
 use \Drupal\node\Entity\Node;
 use \Drupal\views\ViewExecutable;
@@ -75,5 +76,23 @@ function alter_view_preprocess_views_view(&$variables) {
       $view->result[0]->_item->getField('pages')->getValues()[0] == "0") {
         unset($variables['footer']['area_text_custom_1'], $variables['footer']['entity_webform'], $variables['footer']['entity_block_content']);
     }
+  }
+}
+
+/**
+ * Implements template_preprocess_views_view_field().
+ */
+function alter_view_preprocess_views_view_field(&$variables) {
+    if ($variables['view']->id() == 'pd_core_ati_details'
+      && $variables['field']->field == 'comments_en') {
+
+      $variables['output'] = preg_replace(
+        '@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@',
+        '<a href="$1" target="_blank" rel="nofollow">$1</a>',
+        $variables['output']);
+
+      $variables['output'] = Markup::create(
+        Html::decodeEntities($variables['output'])
+        );
   }
 }

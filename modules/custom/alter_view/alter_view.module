@@ -83,8 +83,9 @@ function alter_view_preprocess_views_view(&$variables) {
  * Implements template_preprocess_views_view_field().
  */
 function alter_view_preprocess_views_view_field(&$variables) {
+    $fields = ['comments_en','comments_fr', 'summary_en', 'summary_fr'];
     if ($variables['view']->id() == 'pd_core_ati_details'
-      && in_array($variables['field']->field, ['comments_en', 'comments_fr']) ) {
+      && in_array($variables['field']->field, $fields) ) {
 
       $variables['output'] = preg_replace(
         '@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@',

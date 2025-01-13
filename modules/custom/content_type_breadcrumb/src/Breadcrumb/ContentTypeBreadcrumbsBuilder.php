@@ -14,10 +14,7 @@ class ContentTypeBreadcrumbsBuilder implements BreadcrumbBuilderInterface
     private $config;
     private $menu_id;
     private $views = [
-    'pd_core_ati_details',
-    'pd_core_hospitalityq_details',
-    'pd_core_reclassification_details',
-    'pd_core_wrongdoing_details',
+        'pd_core_ati_details',
     ];
 
     public function __construct()
@@ -149,7 +146,6 @@ class ContentTypeBreadcrumbsBuilder implements BreadcrumbBuilderInterface
             \Drupal::logger('content breadcrumb')->error($e->getMessage());
         }
 
-        $breadcrumb->addCacheContexts(['route']);
         return $breadcrumb;
     }
 }

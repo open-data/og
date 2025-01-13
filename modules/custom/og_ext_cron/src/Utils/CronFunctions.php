@@ -24,13 +24,7 @@ class CronFunctions
     {
         $pd_views = [
         'pd_core_ati',
-        'pd_core_hospitalityq',
-        'pd_core_reclassification',
-        'pd_core_wrongdoing',
         'pd_core_ati_details',
-        'pd_core_hospitalityq_details',
-        'pd_core_reclassification_details',
-        'pd_core_wrongdoing_details',
         ];
 
         foreach ($pd_views as $view_name) {

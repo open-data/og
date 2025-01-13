@@ -4,7 +4,7 @@ use \Drupal\node\Entity\Node;
 
 /**
  * @file
- * Contains od_ext_webform.module.
+ * Contains og_ext_webform.module.
  */
 
 /**

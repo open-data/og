@@ -14,18 +14,18 @@ use \Drupal\views\ViewExecutable;
  * Implements hook_views_pre_render
  * modify solr searches
  * show language specific fields and sorts
- * example description_en when English is the current language and description_fr when French is the current language
+ * example description_en when English is the current language
+ * and description_fr when French is the current language
  */
 function alter_view_views_pre_render(ViewExecutable $view) {
+
   $language_manager = \Drupal::service('language_manager');
   $currentLang = $language_manager->getCurrentLanguage()->getId();
   $field_to_disable = $currentLang == 'en' ? 'fr' : 'en';
 
   $views = [
-    'pd_core_ati', 'pd_core_ati_details',
-    'pd_core_hospitalityq', 'pd_core_hospitalityq_details',
-    'pd_core_reclassification', 'pd_core_reclassification_details',
-    'pd_core_wrongdoing', 'pd_core_wrongdoing_details',
+    'pd_core_ati',
+    'pd_core_ati_details',
   ];
 
   if (in_array($view->id(), $views)) {

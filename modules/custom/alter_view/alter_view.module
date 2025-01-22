@@ -50,16 +50,6 @@ function alter_view_views_pre_render(ViewExecutable $view) {
       }
     }
   }
-  elseif ($view->id() === 'suggested_dataset_moderation' && $view->current_display === 'untranslated') {
-    $position = 0;
-    foreach ($view->result as $row) {
-      $node = Node::load($row->nid);
-      if ($node->hasTranslation('en') && $node->hasTranslation('fr')) {
-        unset($view->result[$position]);
-      }
-      $position++;
-    }
-  }
 }
 
 /**

@@ -1,0 +1,1 @@
+Add a 200 response when GCNotify sends a health check request to callback endpoint.

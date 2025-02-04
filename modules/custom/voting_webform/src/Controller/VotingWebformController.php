@@ -122,9 +122,7 @@ class VotingWebformController extends ControllerBase
               ->warning($type. ': No uuid given for vote');
             return false;
 
-        } elseif ($type != 'suggest-dataset'
-            && ($id != $referer_id || !in_array(strlen($id), [ 36, 32]))
-        ) {
+        } elseif ($id != $referer_id || !in_array(strlen($id), [ 36, 32])) {
             // condition 4 - invalid uuid
             \Drupal::logger('vote')
               ->warning($type . ': Invalid UUID');

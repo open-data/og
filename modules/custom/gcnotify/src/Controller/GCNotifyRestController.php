@@ -46,29 +46,55 @@ class GCNotifyRestController extends ControllerBase
         $gcnotify_status = json_decode($request->getContent(), true);
         $gcnotify_status['callback_received'] = \Drupal::time()->getRequestTime();
 
-        \Drupal::logger('gcnotify')->notice(
-            'Received GC Notify Callback for notification id: '
-            . $gcnotify_status['id']
-        );
+        if ( array_key_exists('id', $gcnotify_status) ) {
 
-        // 2. Find webform with id and update notes
+            \Drupal::logger('gcnotify')->notice(
+                'Received GC Notify Callback for notification id: '
+                . $gcnotify_status['id']
+            );
 
-        $sid = $this->update_webform_notes($gcnotify_status);
-        if ($sid) {
-            $gcnotify_status['webform_sid'] = $sid;
+            // 2. Find webform with id and update notes
+
+            $sid = $this->update_webform_notes($gcnotify_status);
+            if ($sid) {
+                $gcnotify_status['webform_sid'] = $sid;
+            }
+
+            // 3. Save response to database
+
+            $this->save_gcnotify_status($gcnotify_status);
+
+            // 4. Return response
+
+            return new Response(
+                'Callback received',
+                Response::HTTP_OK,
+                ['Content-Type', 'text/html']
+            );
         }
 
-        // 3. Save response to database
+        // 5. Process health check callbacks from GCNotify app
 
-        $this->save_gcnotify_status($gcnotify_status);
+        elseif ( array_key_exists('health_check', $gcnotify_status) && 
+            filter_var($gcnotify_status['health_check'], FILTER_VALIDATE_BOOLEAN) ) {
 
-        // 4. Return response
+             \Drupal::logger('gcnotify')->notice(
+                'Received GC Notify Callback for health_check on '
+                . date('Y-m-d H:i:s', $gcnotify_status['callback_received'])
+            );
 
-        return new Response(
-            'Callback received',
-            Response::HTTP_OK,
-            ['Content-Type', 'text/html']
-        );
+            return new Response(
+                'Callback received',
+                Response::HTTP_OK,
+                ['Content-Type', 'text/html']
+            );
+        }
+
+        else {
+
+            throw new AccessDeniedHttpException('Callback received: UNKNOWN REQUEST');
+
+        }
     }
 
     protected function update_webform_notes($status)

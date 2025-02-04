@@ -156,18 +156,18 @@ class NotificationAPIHandler
         $token = \Drupal\Core\Site\Settings::get('gcnotify')['bearer_token'];
 
         if (empty($token)) {
-            return 'MISSING BEARER TOKEN CONFIGURATION';
+            return 'Callback Authentication: MISSING BEARER TOKEN CONFIGURATION';
         }
 
         if ($request->headers->get('AUTHORIZATION') == null
             || empty($authorization_header)
             || $authorization_header == ""
         ) {
-            return 'MISSING AUTHORIZATION HEADER';
+            return 'Callback Authentication: MISSING AUTHORIZATION HEADER';
         }
 
         if (!preg_match('/\Bearer\b/', $authorization_header)) {
-            return 'INVALID AUTHORIZATION HEADER TOKEN TYPE';
+            return 'Callback Authentication: INVALID AUTHORIZATION HEADER TOKEN TYPE';
         }
 
         $authorization_header = Html::escape($authorization_header);
@@ -175,7 +175,7 @@ class NotificationAPIHandler
         $authorization_token = $authorization_header_values[1];
 
         if (!hash_equals(hash('sha256', $token), $authorization_token)) {
-            return 'INVALID BEARER TOKEN';
+            return 'Callback Authentication: INVALID BEARER TOKEN';
         }
 
         return true;

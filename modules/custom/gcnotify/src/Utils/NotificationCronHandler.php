@@ -63,9 +63,12 @@ class NotificationCronHandler
                 ->key('id')
                 ->execute();
 
-            if (array_key_exists('webform_sid', $notification))
-                $this->update_webform_notes($notification['webform_sid']);
-
+            if (array_key_exists('webform_sid', $notification)) {
+                $this->update_webform_notes(
+                    $notification['webform_sid'],
+                    $notification['api_response']
+                );
+            }
         }
     
         \Drupal::logger('gcnotify')->notice('Completed update of notifications from GC Notify API');
@@ -115,7 +118,7 @@ class NotificationCronHandler
 
     }
 
-    protected function update_webform_notes($sid)
+    protected function update_webform_notes($sid, $status)
     {
         $webform_submission = WebformSubmission::load($sid);
         if ($webform_submission) {

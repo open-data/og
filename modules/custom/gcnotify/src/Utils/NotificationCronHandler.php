@@ -66,7 +66,7 @@ class NotificationCronHandler
             if (array_key_exists('webform_sid', $notification)) {
                 $this->update_webform_notes(
                     $notification['webform_sid'],
-                    $notification['api_response']
+                    $notification,
                 );
             }
         }

@@ -7,8 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\gcnotify\Utils\NotificationAPIHandler;
-use Drupal\webform\Entity\WebformSubmission;
-use Drupal\webform\WebformSubmissionInterface;
+
 
 /**
  * Class GCNotifyRestController.
@@ -17,7 +16,7 @@ class GCNotifyRestController extends ControllerBase
 {
 
     /**
-     * Process notification status from REST GC Notify Callback service.
+     * Receive notification status from REST GC Notify Callback service.
      *
      * @param Request $request
      *
@@ -43,40 +42,15 @@ class GCNotifyRestController extends ControllerBase
             throw new AccessDeniedHttpException($auth);
         }
 
-        $gcnotify_status = json_decode($request->getContent(), true);
-        $gcnotify_status['callback_received'] = \Drupal::time()->getRequestTime();
+        // 2. Log the payload
 
-        if ( isset($gcnotify_status['id']) ) {
+        \Drupal::logger('gcnotify')->notice(
+            'Received GC Notify Callback '
+            . \Drupal::service('date.formatter')
+            ->format(\Drupal::time()->getRequestTime())
+        );
 
-            \Drupal::logger('gcnotify')->notice(
-                'Received GC Notify Callback for notification id: '
-                . $gcnotify_status['id']
-            );
-
-            // 2. Find webform with id and update notes
-
-            $sid = $this->update_webform_notes($gcnotify_status);
-            if ($sid) {
-                $gcnotify_status['webform_sid'] = $sid;
-            }
-
-            // 3. Save response to database
-
-            $this->save_gcnotify_status($gcnotify_status);
-
-        }
-
-        else {
-
-            // 4. Log the payload
-
-            \Drupal::logger('gcnotify')->notice(
-                'Received GC Notify Callback '
-                . $request->getContent()
-            );
-        }
-
-        // 5. Return response
+        // 3. Return response
 
         return new Response(
             'Callback received',
@@ -86,97 +60,4 @@ class GCNotifyRestController extends ControllerBase
 
     }
 
-    protected function update_webform_notes($status)
-    {
-
-        $database = \Drupal::service('database');
-
-        $status['callback_received'] = \Drupal::service('date.formatter')
-          ->format($status['callback_received']);
-
-        $gcnotify_submission = $database->select('webform_submission', 'w')
-            ->fields('w', ['sid'])
-            ->condition(
-                'w.notes', "%"
-                . $database->escapeLike('"id": "' . $status['id'] . '"')
-                . "%", 'LIKE'
-            )
-            ->execute()
-            ->fetchAll();
-
-        if ($gcnotify_submission) {
-
-            $sid = $gcnotify_submission[0]->sid;
-            $webform_submission = WebformSubmission::load($sid);
-            $notes = ($webform_submission->hasNotes())
-              ? $webform_submission->getNotes()
-              : '';
-            $notes = "\r\nGC Notify callback received. Details:\r\n"
-              . json_encode($status, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
-              . $notes;
-            $webform_submission->setNotes($notes);
-            $webform_submission->resave();
-            return $sid;
-        }
-
-        return false;
-    }
-
-    protected function save_gcnotify_status($status)
-    {
-
-        $status['created_at'] = strtotime($status['created_at']);
-        $status['completed_at'] = strtotime($status['completed_at']);
-        $status['sent_at'] = strtotime($status['sent_at']);
-
-        if (array_key_exists('reference', $status)) {
-            if (filter_var($status['reference'], FILTER_VALIDATE_URL) !== false) {
-                $url_components = parse_url($status['reference']);
-                $domain = isset($url_components['host'])
-                  ? $url_components['host']
-                  : '';
-                if ($domain === "open.canada.ca"
-                    || $domain === "ouvert.canada.ca"
-                ) {
-                    $status['environment'] = 'PRODUCTION PORTAL';
-                } elseif ($domain === "staging.open.canada.ca"
-                    || $domain === "stadification.ouvert.canada.ca"
-                ) {
-                    $status['environment'] = 'STAGING PORTAL';
-                } elseif ($domain === "test.open.canada.ca"
-                    || $domain === "essai.ouvert.canada.ca"
-                ) {
-                    $status['environment'] = 'TEST PORTAL';
-                } elseif ($domain === "registry.open.canada.ca"
-                    || $domain === "registre.ouvert.canada.ca"
-                ) {
-                    $status['environment'] = 'PRODUCTION REGISTRY';
-                } elseif ($domain === "registry-staging.open.canada.ca"
-                    || $domain === "stadification-registre.ouvert.canada.ca"
-                ) {
-                    $status['environment'] = 'STAGING REGISTRY';
-                } elseif ($domain === "test-registry.open.canada.ca"
-                    || $domain === "essai-registre.ouvert.canada.ca"
-                ) {
-                    $status['environment'] = 'TEST REGISTRY';
-                } else {
-                    $status['environment'] = $domain;
-                }
-            } elseif (strpos($status['reference'], 'tbs-sct.gc.ca') !== false) {
-                $status['environment'] = 'SERVER';
-            } else {
-                $status['environment'] = 'UNABLE TO RESOLVE';
-            }
-        } else {
-            $status['environment'] = '';
-        }
-
-        $database = \Drupal::service('database');
-
-        $database->upsert('gcnotify')
-            ->fields(array_keys($status))
-            ->values($status)
-            ->key('id')
-            ->execute();
-    }
 }

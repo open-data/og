@@ -25,17 +25,17 @@ class NotificationAPIHandler
         if (!isset($gcnotify_settings)) {
 
             \Drupal::logger('gcnotify')->error(
-                'Unable to send email using GC Notify. GC Notify Settings not available.'
+                'Unable to get email notifications using GC Notify API. GC Notify Settings not available.'
             );
             return false;
 
         }
 
         $header = [
-        'headers' => [
-        'Authorization' => $gcnotify_settings['authorization'],
-        'Content-Type' => 'application/json',
-        ],
+            'headers' => [
+            'Authorization' => $gcnotify_settings['authorization'],
+            'Content-Type' => 'application/json',
+            ],
         ];
 
         $api_endpoint = $gcnotify_settings['base_uri'] . '/notifications';
@@ -51,7 +51,7 @@ class NotificationAPIHandler
                 if ($response->getStatusCode() == '200' || $response->getStatusCode() == '201') {
                     $data = json_decode($response->getBody()->getContents(), true);
                     $api_endpoint = isset($data['links']['next']) ? $data['links']['next'] : '';
-                    $api_notifications += $data['notifications'];
+                    $api_notifications = array_merge($api_notifications, $data['notifications']);
                 }
 
                 else {

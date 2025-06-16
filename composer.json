@@ -81,7 +81,6 @@
         "fortawesome/font-awesome": "6.4.2",
         "oomphinc/composer-installers-extender": "^2.0.0",
         "opengov/gcweb": "dev-master",
-        "symfony/event-dispatcher": "^7.3@beta",
         "wikimedia/composer-merge-plugin": "^2.0.0"
     },
     "require-dev": {

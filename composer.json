@@ -50,14 +50,14 @@
     "require": {
         "php": ">=8",
         "ext-json": "*",
-        "composer/installers": "^1.9.0",
+        "composer/installers": "^2.0",
         "cweagans/composer-patches": "^1.7.0",
-        "drupal/core-composer-scaffold": "^10.0.0",
+        "drupal/core-composer-scaffold": "^10.4",
         "drupal/admin_toolbar": "3.5.3",
         "drupal/advanced_email_validation": "2.0.2",
         "drupal/autologout": "2.0.1",
         "drupal/bootstrap_layouts": "5.5.0",
-        "drupal/core": "10.3.14",
+        "drupal/core": "10.4.7",
         "drupal/csv_serialization": "4.0.1",
         "drupal/facets": "3.0.0",
         "drupal/fontawesome": "3.0.0",
@@ -76,16 +76,15 @@
         "drupal/simple_sitemap": "4.2.2",
         "drupal/token_filter": "2.2.1",
         "drupal/views_bootstrap": "5.4.1",
-        "drupal/webform": "6.2.9",
+        "drupal/webform": "6.3.0-beta2",
         "drush/drush": "12.5.3",
         "fortawesome/font-awesome": "6.4.2",
         "oomphinc/composer-installers-extender": "^2.0.0",
         "opengov/gcweb": "dev-master",
-        "symfony/event-dispatcher": "^6.2",
         "wikimedia/composer-merge-plugin": "^2.0.0"
     },
     "require-dev": {
-        "drupal/core-dev": "^10"
+        "drupal/core-dev": "^10.4"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -99,7 +98,6 @@
         "enable-patching": true,
         "patches": {
             "drupal/core": {
-                "Views exposed sort filters does not sort with facets": "https://www.drupal.org/files/issues/2018-10-30/views-exposed-sort-filters-2992672-10.patch",
         		"Dynamically provide action plugins for every moderation state change":"https://www.drupal.org/files/issues/2023-03-10/2797583-218.patch"
             }
         },

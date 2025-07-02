@@ -50,14 +50,14 @@
     "require": {
         "php": ">=8",
         "ext-json": "*",
-        "composer/installers": "^2.0",
+        "composer/installers": "^2.3",
         "cweagans/composer-patches": "^1.7.0",
-        "drupal/core-composer-scaffold": "^10.4",
+        "drupal/core-composer-scaffold": "^11.2",
         "drupal/admin_toolbar": "3.5.3",
         "drupal/advanced_email_validation": "2.0.2",
         "drupal/autologout": "2.0.1",
         "drupal/bootstrap_layouts": "5.5.0",
-        "drupal/core": "10.4.7",
+        "drupal/core": "11.2.2",
         "drupal/csv_serialization": "4.0.1",
         "drupal/facets": "3.0.0",
         "drupal/fontawesome": "3.0.0",
@@ -84,7 +84,7 @@
         "wikimedia/composer-merge-plugin": "^2.0.0"
     },
     "require-dev": {
-        "drupal/core-dev": "^10.4"
+        "drupal/core-dev": "^11.2"
     },
     "conflict": {
         "drupal/drupal": "*"

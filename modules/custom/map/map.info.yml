@@ -1,7 +1,7 @@
 name: 'map'
 type: module
 description: 'Implement FGP viewer for map content type'
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^9 || ^10 || ^11
 package: 'Open Government'
 dependencies:
   - drupal:node

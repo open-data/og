@@ -80,7 +80,7 @@
         "drush/drush": "12.5.3",
         "fortawesome/font-awesome": "7.0.1",
         "oomphinc/composer-installers-extender": "^2.0.0",
-        "opengov/gcweb": "dev-master",
+        "opengov/gcweb": "dev-drupal/bootstrap/5.0.2",
         "wikimedia/composer-merge-plugin": "^2.0.0"
     },
     "require-dev": {

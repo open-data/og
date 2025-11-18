@@ -16,16 +16,16 @@
             "type"    : "package",
             "package" : {
                 "name"    : "wet-boew/wet-boew",
-                "version" : "v4.0.85",
+                "version" : "v4.0.89",
                 "type"    : "drupal-library",
                 "dist"    : {
-                    "url"  : "https://github.com/wet-boew/wet-boew-cdn/archive/v4.0.85.tar.gz",
+                    "url"  : "https://github.com/wet-boew/wet-boew-cdn/archive/v4.0.89.tar.gz",
                     "type" : "tar"
                 },
                 "source"  : {
                     "url"       : "https://github.com/wet-boew/wet-boew-cdn.git",
                     "type"      : "git",
-                    "reference" : "v4.0.85"
+                    "reference" : "v4.0.89"
                 }
             }
         },
@@ -33,16 +33,16 @@
             "type"    : "package",
             "package" : {
                 "name"    : "wet-boew/theme-gcweb",
-                "version" : "v16.2.0",
+                "version" : "v17.1.1",
                 "type"    : "drupal-library",
                 "dist"    : {
-                    "url"  : "https://github.com/wet-boew/themes-cdn/archive/v16.2.0-gcweb.tar.gz",
+                    "url"  : "https://github.com/wet-boew/themes-cdn/archive/v17.1.1-gcweb.tar.gz",
                     "type" : "tar"
                 },
                 "source"  : {
                     "url"       : "https://github.com/wet-boew/themes-cdn.git",
                     "type"      : "git",
-                    "reference" : "v16.2.0-gcweb"
+                    "reference" : "v17.1.1-gcweb"
                 }
             }
         }
@@ -53,32 +53,32 @@
         "composer/installers": "^2.3",
         "cweagans/composer-patches": "^1.7.0",
         "drupal/core-composer-scaffold": "^11.2",
-        "drupal/admin_toolbar": "3.5.3",
+        "drupal/admin_toolbar": "3.6.2",
         "drupal/advanced_email_validation": "2.0.2",
         "drupal/autologout": "2.0.1",
         "drupal/bootstrap_layouts": "5.5.0",
         "drupal/core": "11.2.2",
         "drupal/csv_serialization": "4.0.1",
-        "drupal/facets": "3.0.0",
+        "drupal/facets": "3.0.1",
         "drupal/fontawesome": "3.0.0",
         "drupal/google_analytics": "4.0.3",
-        "drupal/google_tag": "2.0.8",
-        "drupal/honeypot": "2.2.2",
-        "drupal/menu_breadcrumb": "2.0.0",
-        "drupal/metatag": "2.1.0",
+        "drupal/google_tag": "2.0.9",
+        "drupal/honeypot": "2.1.4",
+        "drupal/menu_breadcrumb": "2.0.1",
+        "drupal/metatag": "2.2.0",
         "drupal/password_policy": "4.0.3",
         "drupal/pathauto": "1.13.0",
         "drupal/recaptcha_v3": "2.0.4",
-        "drupal/redirect": "1.11.0",
-        "drupal/redis": "1.9.0",
-        "drupal/search_api": "1.38.0",
+        "drupal/redirect": "1.12.0",
+        "drupal/redis": "1.10.0",
+        "drupal/search_api": "1.39.0",
         "drupal/search_api_solr": "4.3.10",
         "drupal/simple_sitemap": "4.2.2",
         "drupal/token_filter": "2.2.1",
         "drupal/views_bootstrap": "5.4.1",
-        "drupal/webform": "6.3.0-beta2",
+        "drupal/webform": "6.3.0-beta5",
         "drush/drush": "13.5.0",
-        "fortawesome/font-awesome": "6.4.2",
+        "fortawesome/font-awesome": "7.0.1",
         "oomphinc/composer-installers-extender": "^2.0.0",
         "opengov/gcweb": "dev-master",
         "wikimedia/composer-merge-plugin": "^2.0.0"

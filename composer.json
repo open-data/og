@@ -57,7 +57,7 @@
         "drupal/advanced_email_validation": "2.0.2",
         "drupal/autologout": "2.0.1",
         "drupal/bootstrap_layouts": "5.5.0",
-        "drupal/core": "11.2.2",
+        "drupal/core": "11.2.8",
         "drupal/csv_serialization": "4.0.1",
         "drupal/facets": "3.0.1",
         "drupal/fontawesome": "3.0.0",

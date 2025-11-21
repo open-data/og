@@ -59,7 +59,7 @@
         "drupal/bootstrap_layouts": "5.5.0",
         "drupal/core": "11.2.8",
         "drupal/csv_serialization": "4.0.1",
-        "drupal/facets": "3.0.1",
+        "drupal/facets": "3.0.2",
         "drupal/fontawesome": "3.0.0",
         "drupal/google_analytics": "4.0.3",
         "drupal/google_tag": "2.0.9",

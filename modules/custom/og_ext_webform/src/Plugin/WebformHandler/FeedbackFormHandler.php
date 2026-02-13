@@ -111,7 +111,7 @@ class FeedbackFormHandler extends WebformHandlerBase {
       }
 
     }
-    catch (RequestException $e) {
+    catch (\Throwable $e) {
       \Drupal::logger('feedback')->error(
         'Unable to fetch maintainer_email from CKAN API for dataset @api. Exception: @message',
         [

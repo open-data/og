@@ -1,7 +1,7 @@
 name: 'content_type_breadcrumb'
 description: 'The module generates custom breadcrumb for nodes of content type'
 type: module
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^9 || ^10 || ^11
 package: 'Open Government'
 version: 1.0
 configure: content_type_breadcrumb.form

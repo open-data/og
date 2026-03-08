@@ -94,21 +94,31 @@ class NotificationAPIHandler
 
         }
 
+        $reference = '';
+        if (!empty($personalisation['webform_submission_reference'])) {
+            $reference = $personalisation['webform_submission_reference'];
+        } else {
+            $request = \Drupal::request();
+            $reference = ($request && $request->headers->get('referer'))
+                ? $request->headers->get('referer')
+                : 'Unknown (Direct/No Referer)';
+        }
+
         $api_endpoint = $gcnotify_settings['base_uri'] . '/notifications/email';
         $authorization = $gcnotify_settings['authorization'];
         $template_id = $gcnotify_settings['template_id'][$template][$langcode];
 
         $options = [
-        'json' => [
-        'email_address' => $recipient,
-        'template_id' => $template_id,
-        'reference' => \Drupal::request()->headers->get('referer'),
-        'personalisation' => $personalisation,
-        ],
-        'headers' => [
-        'Authorization' => $authorization,
-        'Content-Type' => 'application/json',
-        ],
+            'json' => [
+                'email_address' => $recipient,
+                'template_id' => $template_id,
+                'reference' => $reference,
+                'personalisation' => $personalisation,
+            ],
+            'headers' => [
+                'Authorization' => $authorization,
+                'Content-Type' => 'application/json',
+            ],
         ];
 
         $client = new Client();

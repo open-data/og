@@ -2,12 +2,11 @@
 
 namespace Drupal\og_ext_webform\Drush\Commands;
 
-use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
-use Drupal\Core\Utility\Token;
 use Drush\Attributes as CLI;
 use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
-use Drupal\webform\Entity\WebformSubmission;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Database\Connection;
 
 /**
  * A Drush commandfile.
@@ -16,60 +15,70 @@ final class OgExtWebformCommands extends DrushCommands {
 
     use AutowireTrait;
 
-    /**
-     * Constructs an OgExtWebformCommands object.
-     */
-    public function __construct(
-        private readonly Token $token,
-        ) {
-            parent::__construct();
-        }
+    protected EntityTypeManagerInterface $entityTypeManager;
+    protected Connection $database;
 
-  /**
-   * Command description here.
-   */
+    public function __construct(EntityTypeManagerInterface $entity_type_manager, Connection $database) {
+        parent::__construct();
+        $this->entityTypeManager = $entity_type_manager;
+        $this->database = $database;
+    }
+
+    /**
+     * Sends outstanding feedback emails with optional delay between consecutive emails.
+     */
     #[CLI\Command(name: 'feedback_webform:send', aliases: ['fws'])]
-    #[CLI\Option(name: 'delay', description: 'Delay between consecutive emails, defaults to 5 seconds.')]
-    #[CLI\Usage(
-        name: 'feedback_webform:send',
-        description: 'Sends outstanding feedback emails with optional delay between consecutive emails.'
-    )]
-    public function sendOutstandingFeedback($options = ['delay' => 5]) {
+    #[CLI\Option(name: 'delay', description: 'Delay between consecutive emails, defaults to 2 seconds.')]
+    #[CLI\Usage(name: 'drush fws --delay=5', description: 'Send feedback emails with a 5 second delay.')]
+    public function sendOutstandingFeedback(array $options = ['delay' => 2]) {
 
         $total_processed = 0;
-        $connection = \Drupal::database();
+        $delay = max(2, (int) $options['delay']);
+        $storage = $this->entityTypeManager->getStorage('webform_submission');
 
-        $sids = $connection->select('webform_submission_data', 'wsd')
+        $sids = $this->database->select('webform_submission_data', 'wsd')
             ->distinct()
             ->fields('wsd', ['sid'])
             ->condition('wsd.webform_id', 'feedback')
             ->condition('wsd.name', 'status')
             ->condition('wsd.value', 'outstanding')
+            ->orderBy('wsd.sid')
             ->execute()
             ->fetchCol();
 
         if (empty($sids)) {
-            $this->output()->writeln("No outstanding feedback to send.");
+            $this->io()->writeln("No outstanding feedback to send.");
             return;
         }
 
-        $sids = array_values($sids);
-    
-        foreach ($sids as $sid) {
-            $submission = WebformSubmission::load($sid);
-            $submission->in_drush_mode = TRUE;
-            $submission->save();
+        $this->io()->progressStart(count($sids));
+        $batches = array_chunk($sids, 50);
 
-            $this->output()->writeln(
-                "Outstanding feedback submission# {$submission->id()} sent for dataset {$submission->getElementData('feedback_webpage')}"
-                );
+        foreach ($batches as $batch) {
+            $submissions = $storage->loadMultiple($batch);
+            foreach ($submissions as $sid => $submission) {
 
-            $total_processed++;
-            sleep((int)$options['delay']);
+                if (!$submission) {
+                    continue;
+                }
+
+                $submission->in_drush_mode = TRUE;
+                $submission->save();
+
+                $this->io()->writeln(
+                    "Outstanding feedback submission #{$submission->id()} sent for dataset {$submission->getElementData('feedback_webpage')}"
+                    );
+
+                $total_processed++;
+                $storage->resetCache([$sid]);
+                sleep($delay);
+            }
+
+            $this->io()->progressAdvance(count($batch));
         }
 
-        \Drupal::entityTypeManager()->getStorage('webform_submission')->resetCache($sids);
-        $this->output()->writeln("Done! Total submissions processed: $total_processed");
+        $this->io()->progressFinish();
+        $this->io()->writeln("Done! Total submissions processed: $total_processed");
 
     }
 

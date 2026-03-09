@@ -2,11 +2,16 @@
 
 namespace Drupal\og_ext_webform\Plugin\WebformHandler;
 
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\webform\WebformTranslationManagerInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\gcnotify\Utils\NotificationAPIHandler;
-use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
 
 /**
  * Form submission handler.
@@ -20,9 +25,34 @@ use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
  *   results = \Drupal\webform\Plugin\WebformHandlerInterface::RESULTS_PROCESSED,
  * )
  */
-class FeedbackFormHandler extends WebformHandlerBase {
+class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactoryPluginInterface {
 
     protected static $isProcessing = FALSE;
+    protected $loggerFactory;
+    protected DateFormatterInterface $dateFormatter;
+    protected WebformTranslationManagerInterface $translationManager;
+
+    public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, DateFormatterInterface $date_formatter, WebformTranslationManagerInterface $translation_manager) {
+        parent::__construct($configuration, $plugin_id, $plugin_definition);
+        $this->loggerFactory = $logger_factory;
+        $this->dateFormatter = $date_formatter;
+        $this->translationManager = $translation_manager;
+    }
+
+    public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+        return new static(
+            $configuration,
+            $plugin_id,
+            $plugin_definition,
+            $container->get('logger.factory'),
+            $container->get('date.formatter'),
+            $container->get('webform.translation_manager')
+        );
+    }
+
+    protected function getFeedbackLogger() {
+        return $this->loggerFactory->get('feedback');
+    }
 
     /**
      * Provide handler summary for admin UI.
@@ -40,7 +70,7 @@ class FeedbackFormHandler extends WebformHandlerBase {
 
         $url = $webform_submission->getElementData('feedback_webpage');
         if (empty($url)) {
-            \Drupal::logger('feedback')->warning(
+            $this->getFeedbackLogger()->error(
               'No URL provided in feedback_webpage field for feedback submission.'
             );
             return;
@@ -48,7 +78,7 @@ class FeedbackFormHandler extends WebformHandlerBase {
 
         $path = parse_url($url, PHP_URL_PATH);
         if (empty($path)) {
-            \Drupal::logger('feedback')->warning(
+            $this->getFeedbackLogger()->error(
               'Invalid URL provided in feedback_webpage field: @url',
               ['@url' => $url]
             );
@@ -63,7 +93,7 @@ class FeedbackFormHandler extends WebformHandlerBase {
             '/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i',
             $uuid
         )) {
-            \Drupal::logger('feedback')->warning(
+            $this->getFeedbackLogger()->error(
               'Invalid UUID @uuid provided for feedback dataset URL: @url',
               ['@uuid' => $uuid, '@url' => $url]
             );
@@ -73,13 +103,13 @@ class FeedbackFormHandler extends WebformHandlerBase {
         // Get maintainer_email from the Solr index
         $maintainer_email = $this->getContactEmail($uuid, $url);
 
-        // Set the ati_email field and status on the webform submission.
+        // Set the ati_email field on the webform submission.
         if (!empty($maintainer_email) &&
             filter_var($maintainer_email, FILTER_VALIDATE_EMAIL) ) {
             $webform_submission->setElementData('ati_email', $maintainer_email);
         }
         else {
-            \Drupal::logger('feedback')->warning(
+            $this->getFeedbackLogger()->error(
               'Invalid or missing maintainer_email returned from CKAN Solr index for dataset: @url',
               ['@url' => $url]
             );
@@ -127,7 +157,7 @@ class FeedbackFormHandler extends WebformHandlerBase {
 
             if (!$response || $response->getStatusCode() >= 300) {
                 if (!$handler instanceof EmailWebformHandler) {
-                    \Drupal::logger('feedback')->error(
+                    $this->getFeedbackLogger()->error(
                         'Email handler "@id" not found.',
                         ['@id' => $handler_id]);
                     return;
@@ -146,7 +176,7 @@ class FeedbackFormHandler extends WebformHandlerBase {
             );
 
         } catch (\Exception $e) {
-            \Drupal::logger('feedback')->error('Failed to process SID @sid: @msg', [
+            $this->getFeedbackLogger()->error('Failed to process SID @sid: @msg', [
                 '@sid' => $webform_submission->id(),
                 '@msg' => $e->getMessage(),
             ]);
@@ -162,7 +192,7 @@ class FeedbackFormHandler extends WebformHandlerBase {
         $index = Index::load($index_name);
 
         if (!$index) {
-            \Drupal::logger('feedback')->warning(
+            $this->getFeedbackLogger()->error(
               'Solr index not provided for feedback dataset URL: @url',
               ['@url' => $url]
             );
@@ -176,7 +206,7 @@ class FeedbackFormHandler extends WebformHandlerBase {
         $row = !empty($items) ? $items[array_key_first($items)] : null;
 
         if (!$row) {
-            \Drupal::logger('feedback')->warning(
+            $this->getFeedbackLogger()->error(
                 'UUID @uuid not found in CKAN Solr index for feedback dataset URL: @url',
                 ['@uuid' => $uuid, '@url' => $url]
             );
@@ -191,11 +221,9 @@ class FeedbackFormHandler extends WebformHandlerBase {
     {
 
         $langcode = $webform_submission->getLangcode();
-        $webform_translation_manager = \Drupal::service('webform.translation_manager');
         $webform = $webform_submission->getWebform();
         $webform_values = $webform_submission->getData();
-        $translation = $webform_translation_manager
-          ->getTranslationElements($webform, $langcode);
+        $translation = $this->translationManager->getTranslationElements($webform, $langcode);
 
         $created = $webform_submission->get('created')->value;
 
@@ -236,8 +264,7 @@ class FeedbackFormHandler extends WebformHandlerBase {
 
         $personalisation = [
             'webform_submission_sid' => $webform_submission->id(),
-            'webform_submission_created' => \Drupal::service('date.formatter')
-                ->format($created, 'medium', '', 'America/Toronto'),
+            'webform_submission_created' => $this->dateFormatter->format($created, 'medium', '', 'America/Toronto'),
             'webform_submission_values' => $data,
             'webform_submission_reference' => (!empty($webform_submission->in_drush_mode) && $webform_submission->in_drush_mode === TRUE)
                 ? $webform_submission->getElementData('feedback_webpage')

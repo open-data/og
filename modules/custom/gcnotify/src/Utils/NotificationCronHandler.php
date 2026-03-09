@@ -45,8 +45,14 @@ class NotificationCronHandler
             $notification['api_response_date'] = (new DrupalDateTime())->getTimestamp();
             $notification['environment'] = $this->get_environment($notification);
 
-            if (strpos($notification['reference'], 'search/ati/reference') !== false)
-                $notification['webform_sid'] = explode(' # ', $notification['subject'])[1];
+            $is_ati_search = strpos($notification['reference'], 'search/ati/reference') !== false;
+            $is_feedback = strpos($notification['reference'], '/feedback') !== false;
+
+            if ($is_ati_search || $is_feedback) {
+                if (preg_match('/#\s*(\d+)/', $notification['subject'], $matches)) {
+                    $notification['webform_sid'] = $matches[1];
+                }
+            }
 
             $extra_fields = ['email_address', 'type', 'phone_number', 'line_1', 'line_2',
             'line_3', 'line_4', 'line_5', 'line_6', 'postcode', 'template',

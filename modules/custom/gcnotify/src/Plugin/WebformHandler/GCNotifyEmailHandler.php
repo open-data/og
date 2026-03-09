@@ -4,7 +4,7 @@ namespace Drupal\gcnotify\Plugin\WebformHandler;
 
 use Drupal\gcnotify\Utils\NotificationAPIHandler;
 use Drupal\webform\Plugin\WebformHandlerBase;
-use Drupal\webform\webformSubmissionInterface;
+use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
 use Drupal\webform\Utility\WebformElementHelper;
 use Symfony\Component\HttpFoundation\Request;

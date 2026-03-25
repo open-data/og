@@ -2,12 +2,15 @@
 
 namespace Drupal\og_ext_webform\Plugin\WebformHandler;
 
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformTranslationManagerInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
-use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\Plugin\WebformHandlerMessageInterface;
 use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\search_api\Entity\Index;
@@ -32,8 +35,20 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
     protected DateFormatterInterface $dateFormatter;
     protected WebformTranslationManagerInterface $translationManager;
 
-    public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, DateFormatterInterface $date_formatter, WebformTranslationManagerInterface $translation_manager) {
+    public function __construct(
+        array $configuration,
+        $plugin_id,
+        $plugin_definition,
+        LoggerChannelFactoryInterface $logger_factory,
+        ConfigFactoryInterface $config_factory,
+        EntityTypeManagerInterface $entity_type_manager,
+        DateFormatterInterface $date_formatter,
+        WebformTranslationManagerInterface $translation_manager
+    ) {
         parent::__construct($configuration, $plugin_id, $plugin_definition);
+
+        $this->configFactory = $config_factory;
+        $this->entityTypeManager = $entity_type_manager;
         $this->loggerFactory = $logger_factory;
         $this->dateFormatter = $date_formatter;
         $this->translationManager = $translation_manager;
@@ -45,6 +60,8 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
             $plugin_id,
             $plugin_definition,
             $container->get('logger.factory'),
+            $container->get('config.factory'),
+            $container->get('entity_type.manager'),
             $container->get('date.formatter'),
             $container->get('webform.translation_manager')
         );

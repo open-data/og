@@ -126,6 +126,7 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
             $webform_submission->setElementData('ati_email', $maintainer_email);
         }
         else {
+            $webform_submission->setElementData('ati_email', '');
             $this->getFeedbackLogger()->error(
               'Invalid or missing maintainer_email returned from CKAN Solr index for dataset: @url',
               ['@url' => $url]
@@ -156,6 +157,11 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
         try {
             $to = $webform_submission->getElementData('ati_email');
             if (!$to) {
+                return;
+            }
+
+            // Do not send feedback to support inboxes
+            if ($to == 'open-ouvert@tbs-sct.gc.ca' || $to == 'PortalSupport-Soutienportail@tbs-sct.gc.ca') {
                 return;
             }
 

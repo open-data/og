@@ -160,8 +160,10 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
                 return;
             }
 
+            $helpdesk_email = \Drupal\Core\Site\Settings::get('ati_email');
+
             // Do not send feedback to support inboxes
-            if ($to == 'open-ouvert@tbs-sct.gc.ca' || $to == 'PortalSupport-Soutienportail@tbs-sct.gc.ca') {
+            if ($to == 'open-ouvert@tbs-sct.gc.ca' || $to == $helpdesk_email) {
                 return;
             }
 

@@ -272,7 +272,8 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
                 : $element['#title'];
 
                 // generate element in pattern [key]: value
-                $data .= '**' . $element_label . '**' . "\r\n";
+                $suffix = $langcode === 'fr' ? ' :' : ':';
+                $data .= "**{$element_label}{$suffix}**\r\n";
                 if ($element['#type'] == 'select') {
                     $data .= (array_key_exists($key, $translation)
                       && array_key_exists('#options', $translation[$key]))

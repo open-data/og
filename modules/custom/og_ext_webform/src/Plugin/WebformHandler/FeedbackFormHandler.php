@@ -284,11 +284,13 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
             return null;
         }
 
-        $title_json = $row->getField('extras_title_translated')?->getValues();
+        $title_field = $row->getField('extras_title_translated')?->getValues();
         $title = null;
-        if ($title_json && isset($title_json[0])) {
-            $title = json_decode($title_json[0]);
-            $title = $title?->get($langcode, '');
+
+        if ($title_field && isset($title_field[0])) {
+            $title_json = json_decode($title_field[0], true);
+            $langcode = $langcode ?: 'en';
+            $title = (is_array($title_json)) ? ($title_json[$langcode] ?? '') : '';
         }
         return $title;
     }

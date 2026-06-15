@@ -133,6 +133,20 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
             );
         }
 
+        // Get extras_title_translated from the Solr index
+        $dataset_title = $this->getDatasetTitle($uuid, $url);
+
+        // Set the dataset_title field on the webform submission.
+        if (!empty($dataset_title)) {
+            $webform_submission->setElementData('dataset_title', $dataset_title);
+        }
+        else {
+            $webform_submission->setElementData('dataset_title', '');
+            $this->getFeedbackLogger()->error(
+              'Invalid or missing extras_title_translated returned from CKAN Solr index for dataset: @url',
+              ['@url' => $url]
+            );
+        }
     }
 
     /**
@@ -240,6 +254,43 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
 
         $maintainer_email = $row->getField('maintainer_email')?->getValues();
         return $maintainer_email[0] ?? null;
+    }
+
+    protected function getDatasetTitle($uuid, $url) {
+
+        $index_name = \Drupal\Core\Site\Settings::get('feedback_index', 'ckan_portal');
+        $index = Index::load($index_name);
+
+        if (!$index) {
+            $this->getFeedbackLogger()->error(
+              'Solr index not provided for feedback dataset URL: @url',
+              ['@url' => $url]
+            );
+            return null;
+        }
+
+        $query = $index->query();
+        $query->addCondition('id', $uuid);
+        $results = $query->execute();
+        $items = $results->getResultItems();
+        $row = !empty($items) ? $items[array_key_first($items)] : null;
+
+        if (!$row) {
+            $this->getFeedbackLogger()->error(
+                'UUID @uuid not found in CKAN Solr index for feedback dataset URL: @url',
+                ['@uuid' => $uuid, '@url' => $url]
+            );
+            return null;
+        }
+
+        $title_json = $row->getField('extras_title_translated')?->getValues();
+        $title = null;
+        if ($title_json && isset($title_json[0])) {
+            $title = json_decode($title_json[0]);
+            $langcode = $webform_submission->getLangcode();
+            $title = $title?->get($langcode, '');
+        }
+        return $title;
     }
 
     protected function getRequestOptions(WebformSubmissionInterface $webform_submission)

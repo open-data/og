@@ -134,7 +134,8 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
         }
 
         // Get extras_title_translated from the Solr index
-        $dataset_title = $this->getDatasetTitle($uuid, $url);
+        $langcode = $webform_submission->getLangcode();
+        $dataset_title = $this->getDatasetTitle($uuid, $url, $langcode);
 
         // Set the dataset_title field on the webform submission.
         if (!empty($dataset_title)) {
@@ -256,7 +257,7 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
         return $maintainer_email[0] ?? null;
     }
 
-    protected function getDatasetTitle($uuid, $url) {
+    protected function getDatasetTitle($uuid, $url, $langcode) {
 
         $index_name = \Drupal\Core\Site\Settings::get('feedback_index', 'ckan_portal');
         $index = Index::load($index_name);
@@ -287,7 +288,6 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
         $title = null;
         if ($title_json && isset($title_json[0])) {
             $title = json_decode($title_json[0]);
-            $langcode = $webform_submission->getLangcode();
             $title = $title?->get($langcode, '');
         }
         return $title;

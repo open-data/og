@@ -341,6 +341,7 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
 
         $personalisation = [
             'webform_submission_sid' => $webform_submission->id(),
+            'webform_submission_dataset_title' => $webform_submission->getElementData('dataset_title'),
             'webform_submission_created' => $this->dateFormatter->format($created, 'medium', '', 'America/Toronto'),
             'webform_submission_values' => $data,
             'webform_submission_reference' => (!empty($webform_submission->in_drush_mode) && $webform_submission->in_drush_mode === TRUE)

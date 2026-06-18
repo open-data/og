@@ -133,6 +133,21 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
             );
         }
 
+        // Get extras_title_translated from the Solr index
+        $langcode = $webform_submission->getLangcode();
+        $dataset_title = $this->getDatasetTitle($uuid, $url, $langcode);
+
+        // Set the dataset_title field on the webform submission.
+        if (!empty($dataset_title)) {
+            $webform_submission->setElementData('dataset_title', $dataset_title);
+        }
+        else {
+            $webform_submission->setElementData('dataset_title', '');
+            $this->getFeedbackLogger()->error(
+              'Invalid or missing extras_title_translated returned from CKAN Solr index for dataset: @url',
+              ['@url' => $url]
+            );
+        }
     }
 
     /**
@@ -242,6 +257,44 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
         return $maintainer_email[0] ?? null;
     }
 
+    protected function getDatasetTitle($uuid, $url, $langcode) {
+
+        $index_name = \Drupal\Core\Site\Settings::get('feedback_index', 'ckan_portal');
+        $index = Index::load($index_name);
+
+        if (!$index) {
+            $this->getFeedbackLogger()->error(
+              'Solr index not provided for feedback dataset URL: @url',
+              ['@url' => $url]
+            );
+            return null;
+        }
+
+        $query = $index->query();
+        $query->addCondition('id', $uuid);
+        $results = $query->execute();
+        $items = $results->getResultItems();
+        $row = !empty($items) ? $items[array_key_first($items)] : null;
+
+        if (!$row) {
+            $this->getFeedbackLogger()->error(
+                'UUID @uuid not found in CKAN Solr index for feedback dataset URL: @url',
+                ['@uuid' => $uuid, '@url' => $url]
+            );
+            return null;
+        }
+
+        $title_field = $row->getField('extras_title_translated')?->getValues();
+        $title = null;
+
+        if ($title_field && isset($title_field[0])) {
+            $title_json = json_decode($title_field[0], true);
+            $langcode = $langcode ?: 'en';
+            $title = (is_array($title_json)) ? ($title_json[$langcode] ?? '') : '';
+        }
+        return $title;
+    }
+
     protected function getRequestOptions(WebformSubmissionInterface $webform_submission)
     {
 
@@ -272,7 +325,8 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
                 : $element['#title'];
 
                 // generate element in pattern [key]: value
-                $data .= '**' . $element_label . '**' . "\r\n";
+                $suffix = $langcode === 'fr' ? ' :' : ':';
+                $data .= "**{$element_label}{$suffix}**\r\n";
                 if ($element['#type'] == 'select') {
                     $data .= (array_key_exists($key, $translation)
                       && array_key_exists('#options', $translation[$key]))
@@ -289,6 +343,7 @@ class FeedbackFormHandler extends WebformHandlerBase implements ContainerFactory
 
         $personalisation = [
             'webform_submission_sid' => $webform_submission->id(),
+            'webform_submission_dataset_title' => $webform_submission->getElementData('dataset_title'),
             'webform_submission_created' => $this->dateFormatter->format($created, 'medium', '', 'America/Toronto'),
             'webform_submission_values' => $data,
             'webform_submission_reference' => (!empty($webform_submission->in_drush_mode) && $webform_submission->in_drush_mode === TRUE)

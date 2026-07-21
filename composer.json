@@ -76,7 +76,7 @@
         "drupal/simple_sitemap": "4.2.2",
         "drupal/token_filter": "2.2.1",
         "drupal/views_bootstrap": "5.4.1",
-        "drupal/webform": "6.3.0-beta5",
+        "drupal/webform": "6.3.0",
         "drush/drush": "13.7.6",
         "fortawesome/font-awesome": "7.0.1",
         "oomphinc/composer-installers-extender": "^2.0.0",

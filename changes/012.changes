@@ -1,0 +1,19 @@
+Security Updates:
+
+- `drupal/core`: Upgraded from (`11.2.12` ➔ `11.4.4`) to cover the following security advisories:
+
+	* Cross-site scripting - SA-CORE-2026-012
+	* Cross-site scripting - SA-CORE-2026-011
+	* Information disclosure - SA-CORE-2026-010
+	* Improper validation - SA-CORE-2026-009
+	* Server-side request forgery - SA-CORE-2026-008
+	* Cache poisoning and open redirect - SA-CORE-2026-007
+	* Gadget chain - SA-CORE-2026-006
+	* PHP object injection - SA-CORE-2026-005
+
+Other dependencies:
+
+- `drupal/redis`: Upgraded from `1.10.0` to `1.11.0`
+- `drupal/webform`: Upgraded from `6.3.0-beta5` to `6.3.0` (Stable)
+- `drush/drush`: Upgraded CLI tooling from `13.5.0` to `13.7.6`
+

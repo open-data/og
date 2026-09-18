@@ -50,8 +50,12 @@ At deployment, preserve existing external links with edge or web-server
 redirects from `/aia-eia-js?lang=en|fr` to the corresponding language-prefixed
 URL.
 
-The module adds an **Algorithmic Impact Assessment** link to Drupal's main
-menu. Site administrators can reposition or disable that link normally.
+The module does not add a main-menu link. Add one through Open Government
+site configuration if the assessment should appear in navigation.
+
+Enabling the module imports `translations/aia.fr.po` into Locale for Drupal
+`t()` chrome. Questionnaire copy comes from `data/en.json`, `data/fr.json`,
+and `data/survey-enfr.json` and does not depend on that import.
 
 ## Data handling
 

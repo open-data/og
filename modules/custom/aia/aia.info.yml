@@ -5,3 +5,4 @@ package: Open Government
 core_version_requirement: ^11
 dependencies:
   - drupal:language
+  - drupal:locale

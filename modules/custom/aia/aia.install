@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the AIA module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\locale\Gettext;
+
+/**
+ * Implements hook_install().
+ */
+function aia_install(): void {
+  aia_import_french_interface_translations();
+}
+
+/**
+ * Imports bundled French interface translations.
+ */
+function aia_update_11001(): void {
+  aia_import_french_interface_translations();
+}
+
+/**
+ * Loads translations/aia.fr.po into locale if French is available.
+ */
+function aia_import_french_interface_translations(): void {
+  if (!\Drupal::moduleHandler()->moduleExists('locale')) {
+    return;
+  }
+  if (\Drupal::languageManager()->getLanguage('fr') === NULL) {
+    return;
+  }
+
+  $uri = \Drupal::root() . '/' . \Drupal::service('extension.list.module')->getPath('aia') . '/translations/aia.fr.po';
+  if (!is_file($uri)) {
+    return;
+  }
+
+  $file = new \stdClass();
+  $file->filename = basename($uri);
+  $file->uri = $uri;
+  $file->langcode = 'fr';
+
+  Gettext::fileToDatabase($file, [
+    'customized' => LOCALE_CUSTOMIZED,
+    'overwrite_options' => [
+      'customized' => TRUE,
+      'not_customized' => TRUE,
+    ],
+  ]);
+  _locale_refresh_translations(['fr']);
+}

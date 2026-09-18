@@ -1,0 +1,222 @@
+{
+    "riskArea": "Risk Area",
+    "noOfQuestions": "No. of Questions",
+    "projectScore": "Project Score",
+    "maximumScore": "Maximum Score",
+    "mitigationArea": "Mitigation Area",
+    "showHelp": "Show help",
+    "startAgain": "Start Again",
+    "version": "Version: 1.0.1",
+    "exportEnglishResults": "Export English Document",
+    "exportFrenchResults": "Export French Document",
+    "frenchContent": "French Content",
+    "englishContent": "English Content",
+    "export": "Export",
+    "loadJSONFile": "Upload JSON File",
+    "loadFile": "Click to load a previously saved JSON file",
+    "localSaveWarning": "Information in the AIA is only stored locally on your computer, and the Government of Canada does not have access to the information you place into the tool. If you wish to keep your work, please save the data locally for future use by using the 'Save' button. You can reload a previously saved AIA form using the 'Upload JSON File' button.",
+    "swtchLang": "Français",
+    "onThisPage": "On this page",
+    "jsonFileUpload":"Upload JSON File",
+    "htmlCode": "en-CA",
+    "saveButton": "Save",
+    "appTitle": "Algorithmic Impact Assessment",
+    "selectSection": "Select Section",
+    "navigateSectionLabel": "Navigate to a Specific Page (Out of 13)",
+    "linkProjectText": "Link to GitHub project repository",
+    "linkProjectAnchor": "https://github.com/canada-ca/aia-eia-js",
+    "linkDirective": "http://www.tbs-sct.gc.ca/pol/doc-eng.aspx?id=32592",
+    "print": "Print",
+    "sectionBusinessDriverImpact":"Reasons for Automation",
+    "riskProfile": "Risk Profile",
+    "projectAuthority": "Project Authority",
+    "aboutTheSystem":"About the System",
+    "aboutTheAlgorithm":"About the Algorithm",
+    "aboutDecision": "About the Decision",
+    "impactAssessment": "Impact Assessment",
+    "aboutTheData": "About the Data",
+    "consultations": "Consultations",
+    "deRiskingAndMitigationMeasuresDQ": "De-Risking and Mitigation Measures - Data Quality",
+    "deRiskingAndMitigationMeasuresPF": "De-Risking and Mitigation Measures - Procedural Fairness",
+    "deRiskingAndMitigationMeasuresP": "De-Risking and Mitigation Measures - Privacy",
+    "otherRequirementsTitle": "Other requirements",
+    "otherRequirements": "The Directive on Automated Decision-Making also includes other requirements that must be met for all impact levels.",
+    "linkDirectiveText": "Link to the Directive on Automated Decision-Making",
+    "contactAtipForPia": "Contact your institution's ATIP office to discuss the requirement for a Privacy Impact Assessment as per the Directive on Privacy Impact Assessment.",
+    "pageProgressBar": " of 13",
+    "riskLevel": "Impact Level",
+    "currentScore": "Current Score",
+    "rawRiskScore": "Raw Impact Score",
+    "mitigationScore": "Mitigation Score",
+    "resultTitle": "Algorithmic Impact Assessment Results",
+    "resultScore": "Final Score",
+    "resultSectionQA": "Questions and Answers",
+    "resultSectionPD": "Project Details",
+    "resultSectionRQA": "Impact Questions and Answers",
+    "resultSectionMQA": "Mitigation Questions and Answers",
+    "alertNotificationPopUp": "Correct file type: successfully loaded JSON file",
+    "alertNotificationWrongPopUp": "Wrong file type: please select a JSON file",
+    "alertConfirmRestart": "This will erase all unsaved data. Are you sure you want to continue?",
+    "IL": "IL",
+    "CS": "CS",
+    "RS": "RS",
+    "MS": "MS",
+    "modifier": "Points",
+    "openSourceDesign1": "The system will use open source software.",
+    "consultationDesign1": "The following internal stakeholders will be consulted:",
+    "consultationDesign2": "",
+    "consultationDesign3": "The following external stakeholders will be consulted:",
+    "consultationDesign4": "",
+    "dataQualityDesign1": "Documented processes will be in place to test datasets against biases and other unexpected outcomes.",
+    "dataQualityDesign2": "This information will be made publicly available.",
+    "dataQualityDesign3": "Documentation showing how data quality issues have been resolved during the design process will be developed.",
+    "dataQualityDesign4": "This information will be made publicly available.",
+    "dataQualityDesign5": "A Gender Based Analysis will be done against the data used by the system.",
+    "dataQualityDesign6": "This information will be made publicly available.",
+    "dataQualityDesign7": "Accountability for the design, development, maintenance and improvement of the system will be assigned. ",
+    "dataQualityDesign8": "Documented processes will be in place to manage the risk that outdated or unreliable data will be used by the system.",
+    "dataQualityDesign9": "This information will be made publicly available.",
+    "dataQualityDesign10": "All of the data used by the system will be posted on the Open Government Portal.",
+    "fairnessDesign1": "The audit trail will identify the authority or delegated authority identified in legislation.",
+    "fairnessDesign2": "The system will provide an audit trail that records all of the recommendations or decisions made by the system.",
+    "fairnessDesign3": "Key decision points will be identifiable in the audit trail.",
+    "fairnessDesign4": "All key decision points will be linked to relevant legislation, policies and procedures.",
+    "fairnessDesign5": "A log will be kept detailing all of the changes made to the model and to the system.",
+    "fairnessDesign6": "An audit trail that clearly sets out all of the decision points made by the system will be developed.",
+    "fairnessDesign7": "The audit trail will identify which version of the system was used for each decision it supports.",
+    "fairnessDesign8": "The audit trail could be used to generate a notification or statement of reasons for each decision it supports.",
+    "fairnessDesign9": "The audit trail will show who the authorized decision maker is.",
+    "fairnessDesign10": "The system will be able to produce reasons for its decisions or recommendations when required.",
+    "fairnessDesign11": "There will be a process in place to grant, monitor and revoke access permissions to the system.",
+    "fairnessDesign12": "There will be a mechanism in place to capture feedback by users of the system.",
+    "fairnessDesign13": "There will be a resource process established for clients that wish to challenge the decision.",
+    "fairnessDesign14": "The system will enable human override of system decisions.",
+    "fairnessDesign15": "There will be a process to log the instances when overrides were performed.",
+    "fairnessDesign16": "The audit trail will include change control processes to record modifications to the system's operation or performance.",
+    "fairnessDesign17": "A concept case will be developed and presented to the Government of Canada's Enterprise Architecture Review Board.",
+    "privacyDesign1": "A Privacy Impact Assessment will be undertaken, or existing PIA will be revised.",
+    "privacyDesign2": "The system will reflect Privacy by Design principles",
+    "openSourceImplementation1": "The system uses open source software",
+    "consultationImplementation1": "The following internal stakeholders have been consulted:",
+    "consultationImplementation2": "List upcoming",
+    "consultationImplementation3": "The following external stakeholders have been consulted:",
+    "consultationImplementation4": "List upcoming",
+    "dataQualityImplementation1": "A documented process is currently in place to test datasets against biases and other unexpected outcomes.",
+    "dataQualityImplementation2": "This information is now publicly available.",
+    "dataQualityImplementation3": "A process has been developed to document how data quality issues have been resolved during the design process.",
+    "dataQualityImplementation4": "This information is now publicly available.",
+    "dataQualityImplementation5": "A Gender Based Analysis Plus has been conducted on the data that will be used by the system.",
+    "dataQualityImplementation6": "This information is now publicly available.",
+    "dataQualityImplementation7": "Accountabilities for the design, development, maintenance, and improvements for the system have been assigned.",
+    "dataQualityImplementation8": "A process has been developed to manage any risks of having outdated or unreliable data that could be used in the system.",
+    "dataQualityImplementation9": "This information is now publicly available.",
+    "dataQualityImplementation10": "The data used for the system has been posted on the Open Government portal.",
+    "fairnessImplementation1": "The audit trail clearly identifies the authority or delegated authority as identified in legislation.",
+    "fairnessImplementation2": "The system records all the recommendations or decisions made by the system.",
+    "fairnessImplementation3": "All key decision points are identifiable in the audit trail.",
+    "fairnessImplementation4": "All key decisions points are linked to the relevant legislation, policy or procedure.",
+    "fairnessImplementation5": "A change log has been developed to detail all of the changes made to the model and to the system.",
+    "fairnessImplementation6": "The system's audit trail indicates all of the decision points made by the system.",
+    "fairnessImplementation7": "The system's audit trail can be used to help generate a notification of the decision (including a statement of reasons or other notifications) where required.",
+    "fairnessImplementation8": "The audit trail identifies which version of the system was used for each decision.",
+    "fairnessImplementation9": "The system's audit trail shows who the authorized decision-makers are.",
+    "fairnessImplementation10": "The system is able to produce reasons for its decision or recommendations when required.",
+    "fairnessImplementation11": "There is a process in place to grant, monitor, and revoke access permission to the system.",
+    "fairnessImplementation12": "There is a mechanism to capture feedback by users of the systems.",
+    "fairnessImplementation13": "There is a recourse process in place for clients that wish to challenge the decision.",
+    "fairnessImplementation14": "The system enables human override of system decisions.",
+    "fairnessImplementation15": "There is a process in place to log instances when overrides were performed.",
+    "fairnessImplementation16": "The system's audit trail includes change control processes to record modifications to the system's operation or performance.",
+    "fairnessImplementation17": "A concept case has been prepared for the Government of Canada Enterprise Architecture Review Board.",
+    "privacyImplementation1": "",
+    "privacyImplementation2": "",
+    "requirements": {
+        "title": "Section 2: Requirements Specific to Impact Level",
+        "elements": [
+            {
+                "title": "Notice",
+                "elements": [{
+                    "text": "Plain language notice posted through all service delivery channels in use (Internet, in person, mail or telephone)."
+                }, {
+                    "text": "Plain language notice posted through all service delivery channels in use (Internet, in person, mail or telephone)."
+                }, {
+                    "text": "Plain language notice posted through all service delivery channels in use (Internet, in person, mail or telephone).\nIn addition, the notice must direct clients to the published explanation required under Explanation level I."
+                }, {
+                    "text": "Plain language notice posted through all service delivery channels in use (Internet, in person, mail or telephone).\nIn addition, the notice must direct clients to the published explanation required under Explanation level I."
+                }]
+            },
+            {
+                "title": "Explanation",
+                "elements": [{
+                    "text": "In addition to any applicable legal requirement, ensure that a meaningful explanation is published on how the system works in general. The explanation must be in plain language and include information about:\n\nthe role of the system in the decision-making process\ninput data, its source and method of collection\nthe criteria used to evaluate input data and the operations applied to process it\nresults of any reviews or audits\nthe output produced by the automated decision system and any relevant information needed to interpret it in the context of the administrative decision\nthe principal factors behind a decision\n\n\nThis explanation must be made on a discoverable departmental website and linked in the algorithmic impact assessment.\n\n\nExplanations must also inform clients of relevant recourse options, where appropriate. "
+                }, {
+                    "text": "The explanation from level I is published.\n\n\nIn addition, a more detailed, meaningful, plain language, explanation is provided to the client with any decision that results in the denial of a benefit or service, or involves a regulatory action.\n\n\nThis explanation must inform the client of the reason or justification of the administrative decision. This involves a clear and client-focused description of how the automated decision system came to the output it did, including:\n\nthe principal factors that led to it, such as, where appropriate, a description of the decision tree, scoring or weights of certain factors, and\nhow the automated decision system output was used by human officers\n\n\nThe client must also be provided with the link to the published level I explanation."
+                }, {
+                    "text": "The explanation from level I is published.\n\n\nIn addition, a more detailed, meaningful, plain language, explanation is provided to the client with any decision that results in the denial of a benefit or service, or involves a regulatory action.\n\n\nThis explanation must inform the client of the reason or justification of the administrative decision. This involves a clear and client-focused description of how the automated decision system came to the output it did, including:\n\nthe principal factors that led to it, such as, where appropriate, a description of the decision tree, scoring or weights of certain factors, and\nhow the automated decision system output was used by human officers\n\n\nThe client must also be provided with the link to the published level I explanation."
+                }, {
+                    "text": "The explanation from level I is published.\n\n\nIn addition, a more detailed, meaningful, plain language, explanation is provided to the client with any decision that results in the denial of a benefit or service, or involves a regulatory action.\n\n\nThis explanation must inform the client of the reason or justification of the administrative decision. This involves a clear and client-focused description of how the automated decision system came to the output it did, including:\n\nthe principal factors that led to it, such as, where appropriate, a description of the decision tree, scoring or weights of certain factors, and\nhow the automated decision system output was used by human officers\n\n\nThe client must also be provided with the link to the published level I explanation."
+                }]
+            },
+            {
+                "title": "Peer review",
+                "elements": [{
+                    "text": "None"
+                }, {
+                    "text": "Consult at least one of the following qualified experts and publish the complete review or a plain language summary on a Government of Canada website:\n\nExperts from a federal, provincial, territorial or municipal government institution\nFaculty members of a post-secondary institution\nResearchers from a relevant non-governmental organization\nContracted third-party vendor with a relevant specialization\nA data and automation advisory board specified by Treasury Board of Canada Secretariat "
+                }, {
+                    "text": "Consult at least one of the following qualified experts and publish the complete review or a plain language summary on a Government of Canada website:\n\nExperts from a federal, provincial, territorial or municipal government institution\nFaculty members of a post-secondary institution\nResearchers from a relevant non-governmental organization\nContracted third-party vendor with a relevant specialization\nA data and automation advisory board specified by Treasury Board of Canada Secretariat "
+                }, {
+                    "text": "Consult at least two of the following qualified experts and publish the complete review or a plain language summary on a Government of Canada website:\n\nExperts from the National Research Council of Canada, Statistics Canada, the Communications Security Establishment, or Shared Services Canada\nFaculty members of a post-secondary institution\nResearchers from a relevant non-governmental organization\nContracted third-party vendor with a relevant specialization\nA data and automation advisory board specified by Treasury Board of Canada Secretariat "
+                }]
+            },
+            {
+                "title": "Gender-based Analysis Plus",
+                "elements": [{
+                    "text": "None"
+                }, {
+                    "text": "Ensure that the <a href=\"https://www.canada.ca/en/women-gender-equality/gender-based-analysis-plus.html\">Gender-based Analysis Plus</a> has been consulted with your department's diversity and inclusion experts and includes:\n\nAn assessment of how the automation project might impact different population groups. This includes consideration of the impacts of the automated decision system and data used in the project, as well as the likely impact of the final decision. Where possible, cite the data used to assess the impacts. It is recommended that the data be gender-disaggregated and include other intersecting identity factors such as age, disability and race. If the data is unavailable, identify where the data gaps exist\nDetails of planned or existing measures to address risks identified through the Gender-based Analysis Plus or other assessments"
+                }, {
+                    "text": "Ensure that the <a href=\"https://www.canada.ca/en/women-gender-equality/gender-based-analysis-plus.html\">Gender-based Analysis Plus</a> has been consulted with your department's diversity and inclusion experts and includes:\n\nAn assessment of how the automation project might impact different population groups. This includes consideration of the impacts of the automated decision system and data used in the project, as well as the likely impact of the final decision. Where possible, cite the data used to assess the impacts. It is recommended that the data be gender-disaggregated and include other intersecting identity factors such as age, disability and race. If the data is unavailable, identify where the data gaps exist\nDetails of planned or existing measures to address risks identified through the Gender-based Analysis Plus or other assessments"
+                }, {
+                    "text": "Ensure that the <a href=\"https://www.canada.ca/en/women-gender-equality/gender-based-analysis-plus.html\">Gender-based Analysis Plus</a> has been consulted with your department's diversity and inclusion experts and includes:\n\nAn assessment of how the automation project might impact different population groups. This includes consideration of the impacts of the automated decision system and data used in the project, as well as the likely impact of the final decision. Where possible, cite the data used to assess the impacts. It is recommended that the data be gender-disaggregated and include other intersecting identity factors such as age, disability and race. If the data is unavailable, identify where the data gaps exist\nDetails of planned or existing measures to address risks identified through the Gender-based Analysis Plus or other assessments"
+                }]
+            },
+            {
+                "title": "Training",
+                "elements": [{
+                    "text": "Role-based training on how to appropriately use and explain the functionalities of the automated decision system, at a high level."
+                }, {
+                    "text": "Role-based training on how to appropriately use and explain the functionalities of the automated decision system, at a high level."
+                }, {
+                    "text": "Role-based training on how to appropriately manage, secure, and use the functionalities and explain the capabilities of the automated decision system, including:\n\nthe technical aspects of the automated decision system to ensure an up-to-date understanding of the how the system works\npotential impacts of the automated decision system on privacy, fairness, and human rights and how to detect them\nhow to evaluate and, if necessary, override decisions\n\n\nTraining must be recurring.  "
+                }, {
+                    "text": "Role-based training on how to appropriately manage, secure, and use the functionalities and explain the capabilities of the automated decision system, including:\n\nthe technical aspects of the automated decision system to ensure an up-to-date understanding of the how the system works\npotential impacts of the automated decision system on privacy, fairness, and human rights and how to detect them\nhow to evaluate and, if necessary, override decisions\n\n\nTraining must be recurring. "
+                }]
+            },
+            {
+                "title": "Ensuring human involvement",
+                "elements": [{
+                    "text": "The system may make decisions and assessments without direct human involvement.\nHumans are to be involved in system quality assurance and can intervene in the making of decisions by the system where appropriate."
+                }, {
+                    "text": "The system may make decisions and assessments without direct human involvement.\nHumans are to be involved in system quality assurance and can intervene in the making of decisions by the system where appropriate."
+                }, {
+                    "text": "The final decision must be made by a human.\nDecisions cannot be made without having clearly defined human involvement during the decision-making process.\nHumans review the decisions or recommendations made by the system for accuracy and appropriateness. Humans are to be involved in ongoing quality assurance and can intervene in the making of decisions and assessments made by the system."
+                }, {
+                    "text": "The final decision must be made by a human.\nDecisions cannot be made without having clearly defined human involvement during the decision-making process.\nHumans review the decisions or recommendations made by the system for accuracy and appropriateness. Humans are to be involved in ongoing quality assurance and can intervene in the making of decisions and assessments made by the system."
+                }]
+            },
+            {
+                "title": "Approval for the system to operate",
+                "elements": [{
+                    "text": "Assistant deputy minister responsible for the program."
+                }, {
+                    "text": "Assistant deputy minister responsible for the program. "
+                }, {
+                    "text": "Deputy Head"
+                }, {
+                    "text": "Treasury Board"
+                }]
+            }
+        ]
+    }
+}

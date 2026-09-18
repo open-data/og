@@ -1,0 +1,6 @@
+aia.assessment:
+  title: 'Algorithmic Impact Assessment'
+  description: 'Complete an Algorithmic Impact Assessment.'
+  route_name: aia.assessment
+  menu_name: main
+  weight: 50

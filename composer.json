@@ -52,6 +52,7 @@
         "ext-json": "*",
         "composer/installers": "^2.3",
         "cweagans/composer-patches": "^1.7.0",
+        "dompdf/dompdf": "^3.1",
         "drupal/core-composer-scaffold": "^11.4",
         "drupal/admin_toolbar": "3.6.2",
         "drupal/advanced_email_validation": "2.0.2",

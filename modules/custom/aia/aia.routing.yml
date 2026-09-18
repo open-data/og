@@ -1,0 +1,30 @@
+aia.assessment:
+  path: '/aia-eia-js'
+  defaults:
+    _form: '\Drupal\aia\Form\AiaAssessmentForm'
+    _title: 'Algorithmic Impact Assessment'
+  requirements:
+    _access: 'TRUE'
+
+aia.results:
+  path: '/aia-eia-js/results'
+  defaults:
+    _controller: '\Drupal\aia\Controller\ResultsController::view'
+    _title: 'Assessment results'
+  requirements:
+    _access: 'TRUE'
+
+aia.export:
+  path: '/aia-eia-js/export'
+  defaults:
+    _controller: '\Drupal\aia\Controller\AssessmentFileController::export'
+  requirements:
+    _access: 'TRUE'
+
+aia.pdf:
+  path: '/aia-eia-js/results/pdf/{language}'
+  defaults:
+    _controller: '\Drupal\aia\Controller\PdfController::download'
+  requirements:
+    _access: 'TRUE'
+    language: 'en|fr'

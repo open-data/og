@@ -1,0 +1,10 @@
+services:
+  aia.survey_repository:
+    class: Drupal\aia\SurveyRepository
+    arguments: ['@extension.list.module', '@language_manager']
+
+  aia.condition_evaluator:
+    class: Drupal\aia\ConditionEvaluator
+
+  aia.score_calculator:
+    class: Drupal\aia\ScoreCalculator

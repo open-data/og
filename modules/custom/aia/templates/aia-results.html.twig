@@ -12,6 +12,9 @@
 
   <div class="aia-file-actions">
     <a class="aia-btn aia-btn--success aia-save" href="{{ export_url }}" download="AIA Results.json">{{ ui.saveButton }}</a>
+    {% if pdf_url %}
+      <a class="aia-btn aia-btn--default" href="{{ pdf_url }}">{{ ui.exportPdf }}</a>
+    {% endif %}
     {{ reset_form }}
   </div>
 
@@ -125,52 +128,40 @@
   </section>
 
   <h2 id="aia-questions">Section 3: {{ ui.resultSectionQA }}</h2>
-  <form{{ translation_form.attributes }}>
-    {{ translation_form.form_build_id }}
-    {{ translation_form.form_token }}
-    {{ translation_form.form_id }}
-    {{ translation_form.status }}
-    {% for key, section in sections %}
-      {% if section.items %}
-        <section class="aia-result-section" id="aia-section-{{ key }}">
-          <h3>{{ section.title }}</h3>
-          {% set current_group = '' %}
-          {% for item in section.items %}
-            {% if item.group and item.group != current_group %}
-              <h4>{{ item.group }}</h4>
-              {% set current_group = item.group %}
+  {% for key, section in sections %}
+    {% if section.items %}
+      <section class="aia-result-section" id="aia-section-{{ key }}">
+        <h3>{{ section.title }}</h3>
+        {% set current_group = '' %}
+        {% for item in section.items %}
+          {% if item.group and item.group != current_group %}
+            <h4>{{ item.group }}</h4>
+            {% set current_group = item.group %}
+          {% endif %}
+          <div class="aia-answer">
+            <p class="aia-answer__question"><strong>{{ item.number }}. {{ item.question }}</strong></p>
+            {% if item.is_text %}
+              <p class="aia-answer__text">{{ item.answer_items|first.label }}</p>
+            {% else %}
+              {% for answer_item in item.answer_items %}
+                <div class="aia-answer__row">
+                  <div class="aia-answer__value{% if item.answer_items|length > 1 %} aia-answer__value--list{% endif %}">{{ answer_item.label }}</div>
+                  {% if answer_item.points is not null %}
+                    <div class="aia-points">{{ ui.modifier }}: {{ answer_item.points > 0 ? '+' ~ answer_item.points : answer_item.points }}</div>
+                  {% endif %}
+                </div>
+              {% endfor %}
             {% endif %}
-            <div class="aia-answer">
-              <p class="aia-answer__question"><strong>{{ item.number }}. {{ item.question }}</strong></p>
-              {% if item.is_text %}
-                <p>
-                  <span class="aia-lang-label">{{ answer_language == 'fr' ? ui.frenchContent : ui.englishContent }} :</span>
-                </p>
-                <p class="aia-answer__text">{{ item.answer_items|first.label }}</p>
-                {% if translation_form.translations[item.name] is defined %}
-                  {{ translation_form.translations[item.name] }}
-                {% endif %}
-              {% else %}
-                {% for answer_item in item.answer_items %}
-                  <div class="aia-answer__row">
-                    <div class="aia-answer__value{% if item.answer_items|length > 1 %} aia-answer__value--list{% endif %}">{{ answer_item.label }}</div>
-                    {% if answer_item.points is not null %}
-                      <div class="aia-points">{{ ui.modifier }}: {{ answer_item.points > 0 ? '+' ~ answer_item.points : answer_item.points }}</div>
-                    {% endif %}
-                  </div>
-                {% endfor %}
-              {% endif %}
-            </div>
-          {% endfor %}
-        </section>
-      {% endif %}
-    {% endfor %}
-    {{ translation_form.submit }}
-  </form>
+          </div>
+        {% endfor %}
+      </section>
+    {% endif %}
+  {% endfor %}
 
   <section class="aia-export">
     <h1>{{ ui.export }}</h1>
-    <a class="aia-btn aia-btn--default" href="{{ path('aia.pdf', {'language': 'en'}) }}">{{ ui.exportEnglishResults }}</a>
-    <a class="aia-btn aia-btn--default" href="{{ path('aia.pdf', {'language': 'fr'}) }}">{{ ui.exportFrenchResults }}</a>
+    {% if pdf_url %}
+      <a class="aia-btn aia-btn--default" href="{{ pdf_url }}">{{ ui.exportPdf }}</a>
+    {% endif %}
   </section>
 </article>

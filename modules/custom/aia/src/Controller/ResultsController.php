@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\aia\Controller;
 
 use Drupal\aia\Form\ResetAssessmentForm;
-use Drupal\aia\Form\ResultsTranslationForm;
 use Drupal\aia\ScoreCalculator;
 use Drupal\aia\SurveyRepository;
 use Drupal\Core\Controller\ControllerBase;
@@ -160,9 +159,9 @@ final class ResultsController extends ControllerBase {
       '#breakdowns' => $breakdowns,
       '#requirements' => $this->surveyRepository->getRequirements($score['level']),
       '#language_links' => $languageLinks,
-      '#translation_form' => $this->resultsFormBuilder->getForm(ResultsTranslationForm::class),
       '#reset_form' => $this->resultsFormBuilder->getForm(ResetAssessmentForm::class),
       '#export_url' => Url::fromRoute('aia.export')->toString(),
+      '#pdf_url' => Url::fromRoute('aia.pdf', ['language' => $currentLangcode])->toString(),
       '#restart_url' => Url::fromRoute('aia.assessment')->toString(),
       '#attached' => [
         'library' => ['aia/assessment', 'core/drupal.ajax'],

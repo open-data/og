@@ -135,6 +135,7 @@ final class QuestionnaireParityTest extends TestCase {
       'export',
       'exportEnglishResults',
       'exportFrenchResults',
+      'exportPdf',
       'englishContent',
       'frenchContent',
       'modifier',

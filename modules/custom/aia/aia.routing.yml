@@ -1,5 +1,5 @@
 aia.assessment:
-  path: '/aia-eia-js'
+  path: '/aia'
   defaults:
     _form: '\Drupal\aia\Form\AiaAssessmentForm'
     _title: 'Algorithmic Impact Assessment'
@@ -7,7 +7,7 @@ aia.assessment:
     _access: 'TRUE'
 
 aia.results:
-  path: '/aia-eia-js/results'
+  path: '/aia/results'
   defaults:
     _controller: '\Drupal\aia\Controller\ResultsController::view'
     _title: 'Assessment results'
@@ -15,16 +15,76 @@ aia.results:
     _access: 'TRUE'
 
 aia.export:
-  path: '/aia-eia-js/export'
+  path: '/aia/export'
   defaults:
     _controller: '\Drupal\aia\Controller\AssessmentFileController::export'
   requirements:
     _access: 'TRUE'
 
 aia.pdf:
-  path: '/aia-eia-js/results/pdf/{language}'
+  path: '/aia/results/pdf/{language}'
   defaults:
     _controller: '\Drupal\aia\Controller\PdfController::download'
+  requirements:
+    _access: 'TRUE'
+    language: 'en|fr'
+
+aia.assessment_fr:
+  path: '/eia'
+  defaults:
+    _form: '\Drupal\aia\Form\AiaAssessmentForm'
+    _title: "Évaluation de l'incidence algorithmique"
+  requirements:
+    _access: 'TRUE'
+
+aia.results_fr:
+  path: '/eia/results'
+  defaults:
+    _controller: '\Drupal\aia\Controller\ResultsController::view'
+    _title: "Résultats de l'évaluation"
+  requirements:
+    _access: 'TRUE'
+
+aia.export_fr:
+  path: '/eia/export'
+  defaults:
+    _controller: '\Drupal\aia\Controller\AssessmentFileController::export'
+  requirements:
+    _access: 'TRUE'
+
+aia.pdf_fr:
+  path: '/eia/results/pdf/{language}'
+  defaults:
+    _controller: '\Drupal\aia\Controller\PdfController::download'
+  requirements:
+    _access: 'TRUE'
+    language: 'en|fr'
+
+aia.legacy.assessment:
+  path: '/aia-eia-js'
+  defaults:
+    _controller: '\Drupal\aia\Controller\LegacyPathController::assessment'
+  requirements:
+    _access: 'TRUE'
+
+aia.legacy.results:
+  path: '/aia-eia-js/results'
+  defaults:
+    _controller: '\Drupal\aia\Controller\LegacyPathController::results'
+  requirements:
+    _access: 'TRUE'
+
+aia.legacy.export:
+  path: '/aia-eia-js/export'
+  defaults:
+    _controller: '\Drupal\aia\Controller\LegacyPathController::export'
+  requirements:
+    _access: 'TRUE'
+
+aia.legacy.pdf:
+  path: '/aia-eia-js/results/pdf/{language}'
+  defaults:
+    _controller: '\Drupal\aia\Controller\LegacyPathController::pdf'
   requirements:
     _access: 'TRUE'
     language: 'en|fr'

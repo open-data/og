@@ -14,6 +14,7 @@ use Drupal\locale\Gettext;
  */
 function aia_install(): void {
   aia_import_french_interface_translations();
+  aia_enable_path_language_negotiation();
   aia_create_legacy_language_redirects();
 }
 
@@ -28,6 +29,14 @@ function aia_update_11001(): void {
  * Creates redirects from the old query-string language URLs.
  */
 function aia_update_11002(): void {
+  aia_create_legacy_language_redirects();
+}
+
+/**
+ * Switches public paths to /aia and /eia.
+ */
+function aia_update_11003(): void {
+  aia_enable_path_language_negotiation();
   aia_create_legacy_language_redirects();
 }
 
@@ -63,7 +72,10 @@ function aia_import_french_interface_translations(): void {
 }
 
 /**
- * Redirects /aia-eia-js?lang=en|fr to the language-prefixed routes.
+ * Removes Redirect-module copies of the old aia-eia-js URLs.
+ *
+ * LegacyPathController issues the 301s to /aia and /eia. Redirect entities
+ * were generating prefixed paths such as /fr/aia.
  */
 function aia_create_legacy_language_redirects(): void {
   if (!\Drupal::moduleHandler()->moduleExists('redirect')) {
@@ -71,27 +83,23 @@ function aia_create_legacy_language_redirects(): void {
   }
 
   $storage = \Drupal::entityTypeManager()->getStorage('redirect');
-  foreach (['en', 'fr'] as $langcode) {
-    $existing = $storage->loadByProperties([
-      'redirect_source__path' => 'aia-eia-js',
-    ]);
-    $already = FALSE;
-    foreach ($existing as $redirect) {
-      $source = $redirect->getSource();
-      if (($source['query']['lang'] ?? NULL) === $langcode) {
-        $already = TRUE;
-        break;
-      }
-    }
-    if ($already) {
-      continue;
-    }
-
-    $language = \Drupal::languageManager()->getLanguage($langcode);
-    $redirect = $storage->create();
-    $redirect->setSource('aia-eia-js', ['lang' => $langcode]);
-    $redirect->setRedirect('aia-eia-js', [], $language ? ['language' => $language] : []);
-    $redirect->setStatusCode(301);
-    $redirect->save();
+  $existing = $storage->loadByProperties([
+    'redirect_source__path' => 'aia-eia-js',
+  ]);
+  if ($existing !== []) {
+    $storage->delete($existing);
   }
+}
+
+/**
+ * Enables /aia and /eia language negotiation.
+ */
+function aia_enable_path_language_negotiation(): void {
+  $config = \Drupal::configFactory()->getEditable('language.types');
+  $negotiation = $config->get('negotiation') ?? [];
+  foreach (['language_interface', 'language_url'] as $type) {
+    $negotiation[$type]['enabled']['aia-path'] = -20;
+    $negotiation[$type]['method_weights']['aia-path'] = -20;
+  }
+  $config->set('negotiation', $negotiation)->save();
 }

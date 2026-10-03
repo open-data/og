@@ -553,7 +553,7 @@ final class AiaAssessmentForm extends FormBase {
     $langcode = (string) ($form_state->getTriggeringElement()['#aia_language'] ?? 'en');
     $language = $this->languageManager->getLanguage($langcode)
       ?? $this->languageManager->getDefaultLanguage();
-    $form_state->setRedirect('aia.assessment', [], ['language' => $language]);
+    $form_state->setRedirect($langcode === 'fr' ? 'aia.assessment_fr' : 'aia.assessment');
   }
 
   /**

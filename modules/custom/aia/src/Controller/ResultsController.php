@@ -69,7 +69,7 @@ final class ResultsController extends ControllerBase {
     if ($otherLanguage !== NULL) {
       $languageLinks[] = [
         'title' => (string) ($ui['swtchLang'] ?? ($otherLangcode === 'fr' ? 'Français' : 'English')),
-        'url' => Url::fromRoute('aia.results', [], ['language' => $otherLanguage])->toString(),
+        'url' => Url::fromRoute($otherLangcode === 'fr' ? 'aia.results_fr' : 'aia.results')->toString(),
         'langcode' => $otherLangcode,
       ];
     }
@@ -161,7 +161,10 @@ final class ResultsController extends ControllerBase {
       '#language_links' => $languageLinks,
       '#reset_form' => $this->resultsFormBuilder->getForm(ResetAssessmentForm::class),
       '#export_url' => Url::fromRoute('aia.export')->toString(),
-      '#pdf_url' => Url::fromRoute('aia.pdf', ['language' => $currentLangcode])->toString(),
+      '#pdf_url' => Url::fromRoute(
+        $currentLangcode === 'fr' ? 'aia.pdf_fr' : 'aia.pdf',
+        ['language' => $currentLangcode],
+      )->toString(),
       '#restart_url' => Url::fromRoute('aia.assessment')->toString(),
       '#attached' => [
         'library' => ['aia/assessment', 'core/drupal.ajax'],

@@ -8,3 +8,10 @@ services:
 
   aia.score_calculator:
     class: Drupal\aia\ScoreCalculator
+
+  aia.path_processor:
+    class: Drupal\aia\PathProcessor\AiaPathProcessor
+    arguments: ['@language_manager']
+    tags:
+      - { name: path_processor_inbound, priority: 200 }
+      - { name: path_processor_outbound, priority: 50 }

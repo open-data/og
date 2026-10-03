@@ -37,18 +37,25 @@ updated project `composer.lock` and exported configuration.
 
 ## Routes
 
-- `/aia-eia-js` — assessment
-- `/aia-eia-js/results` — completed results
-- `/aia-eia-js/export` — JSON progress export
-- `/aia-eia-js/results/pdf/en` — English PDF
-- `/aia-eia-js/results/pdf/fr` — French PDF
+- `/aia` — English assessment
+- `/eia` — French assessment
+- `/aia/results`, `/eia/results` — completed results
+- `/aia/export`, `/eia/export` — JSON progress export
+- `/aia/results/pdf/en`, `/eia/results/pdf/fr` — PDF download
 
-Language switching follows Drupal's configured URL language negotiation.
-With Open Government's current path-prefix configuration, the public URLs are
-`/en/aia-eia-js` and `/fr/aia-eia-js`.
-At deployment, preserve existing external links with edge or web-server
-redirects from `/aia-eia-js?lang=en|fr` to the corresponding language-prefixed
-URL.
+The old public URLs still 301 in Drupal:
+
+- `/aia-eia-js?lang=en` → `/aia`
+- `/aia-eia-js?lang=fr` → `/eia`
+
+Nginx can take those over later, for example:
+
+```nginx
+location = /aia-eia-js {
+    if ($arg_lang = fr) { return 301 /eia; }
+    return 301 /aia;
+}
+```
 
 The module does not add a main-menu link. Add one through Open Government
 site configuration if the assessment should appear in navigation.

@@ -110,44 +110,11 @@ final class AiaAssessmentForm extends FormBase {
         'class' => ['aia-assessment'],
       ],
     ];
-    $form['assessment']['toolbar_links'] = [
-      '#type' => 'container',
-      '#attributes' => ['class' => ['aia-toolbar-links']],
-    ];
-    $form['assessment']['toolbar_links']['language_links'] = [
-      '#type' => 'container',
-      '#attributes' => [
-        'class' => ['aia-language-links'],
-        'aria-label' => $this->t('Language selection'),
-      ],
-    ];
-    $currentLangcode = $this->languageManager->getCurrentLanguage()->getId() === 'fr' ? 'fr' : 'en';
-    $otherLangcode = $currentLangcode === 'fr' ? 'en' : 'fr';
-    $otherLanguage = $this->languageManager->getLanguage($otherLangcode);
-    if ($otherLanguage !== NULL) {
-      $form['assessment']['toolbar_links']['language_links'][$otherLangcode] = [
-        '#type' => 'submit',
-        '#value' => (string) ($ui['swtchLang'] ?? ($otherLangcode === 'fr' ? 'Français' : 'English')),
-        '#submit' => ['::switchLanguage'],
-        '#limit_validation_errors' => [],
-        '#aia_language' => $otherLangcode,
-        '#attributes' => [
-          'class' => ['aia-btn', 'aia-btn--default'],
-          'lang' => $otherLangcode,
-        ],
-      ];
-    }
-    $form['assessment']['toolbar_links']['source'] = [
-      '#type' => 'link',
-      '#title' => (string) ($ui['linkProjectText'] ?? $this->t('View the source project')),
-      '#url' => Url::fromUri((string) ($ui['linkProjectAnchor'] ?? 'https://github.com/canada-ca/aia-eia-js')),
-      '#attributes' => ['class' => ['aia-btn', 'aia-btn--default', 'aia-source-link']],
-    ];
     $form['assessment']['storage_notice'] = [
       '#type' => 'html_tag',
       '#tag' => 'p',
-      '#value' => $this->t('Your answers are stored temporarily in this Drupal session and mirrored to local browser storage for recovery.'),
-      '#attributes' => ['class' => ['aia-storage-notice']],
+      '#value' => $this->t('Your answers are stored temporarily in this session and mirrored to local browser storage for recovery.'),
+      '#attributes' => ['class' => ['alert alert-info mrgn-tp-lg mrgn-bttm-lg']],
     ];
     $form['assessment']['file_actions'] = [
       '#type' => 'container',

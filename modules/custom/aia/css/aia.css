@@ -64,7 +64,6 @@
   justify-content: flex-end;
 }
 
-.aia-btn,
 .aia-assessment .button,
 .aia-results .button,
 .aia-file-actions .form-item label,
@@ -88,14 +87,11 @@
   vertical-align: middle;
 }
 
-.aia-btn:hover,
-.aia-btn:focus,
 .aia-assessment .button:hover,
 .aia-results .button:hover {
   text-decoration: none;
 }
 
-.aia-btn--default,
 .aia-assessment .button,
 .aia-results .button,
 .aia-file-actions .form-item label,
@@ -107,8 +103,6 @@
   border-color: #dcdee1;
 }
 
-.aia-btn--default:hover,
-.aia-btn--default:focus,
 .aia-assessment .button:hover,
 .aia-results .button:hover,
 .aia-file-actions .form-item label:hover,
@@ -118,7 +112,6 @@
   border-color: #bbbfc5;
 }
 
-.aia-btn--success,
 .aia-assessment .aia-save,
 .aia-results .aia-save {
   color: #fff;
@@ -126,8 +119,6 @@
   border-color: #278400;
 }
 
-.aia-btn--success:hover,
-.aia-btn--success:focus,
 .aia-assessment .aia-save:hover,
 .aia-results .aia-save:hover {
   color: #fff;
@@ -135,15 +126,12 @@
   border-color: #1d6300;
 }
 
-.aia-btn--primary,
 .aia-assessment .button--primary {
   color: #fff;
   background-color: #26374a;
   border-color: #26374a;
 }
 
-.aia-btn--primary:hover,
-.aia-btn--primary:focus,
 .aia-assessment .button--primary:hover {
   color: #fff;
   background-color: #1c2b3a;
@@ -417,7 +405,7 @@
   margin-block: 2rem;
 }
 
-.aia-export .aia-btn {
+.aia-export {
   margin-inline-end: 0.5rem;
   margin-block-end: 0.5rem;
 }

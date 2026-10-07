@@ -125,7 +125,7 @@ final class AiaAssessmentForm extends FormBase {
       '#value' => (string) ($ui['saveButton'] ?? $this->t('Save')),
       '#submit' => ['::exportAssessment'],
       '#limit_validation_errors' => [],
-      '#attributes' => ['class' => ['aia-btn', 'aia-btn--success', 'aia-save']],
+      '#attributes' => ['class' => ['btn', 'btn-success', 'aia-save']],
       '#access' => $answers !== [] || $pageNumber > 0,
     ];
     $form['assessment']['file_actions']['aia_import'] = [
@@ -135,7 +135,7 @@ final class AiaAssessmentForm extends FormBase {
       '#description' => '',
       '#accept' => '.json,application/json',
       '#attributes' => ['class' => ['aia-file-input']],
-      '#label_attributes' => ['class' => ['aia-btn', 'aia-btn--default']],
+      '#label_attributes' => ['class' => ['btn', 'btn-default']],
     ];
     $form['assessment']['file_actions']['import'] = [
       '#type' => 'submit',
@@ -153,7 +153,7 @@ final class AiaAssessmentForm extends FormBase {
       '#submit' => ['::resetAssessment'],
       '#limit_validation_errors' => [],
       '#attributes' => [
-        'class' => ['aia-btn', 'aia-btn--default'],
+        'class' => ['btn', 'btn-default'],
         'data-aia-reset' => TRUE,
       ],
       '#access' => $answers !== [] || $pageNumber > 0,
@@ -254,7 +254,7 @@ final class AiaAssessmentForm extends FormBase {
         '#submit' => ['::previousPage'],
         // SurveyJS prevPage() deliberately does not validate the current page.
         '#limit_validation_errors' => [],
-        '#attributes' => ['class' => ['aia-btn', 'aia-btn--default']],
+        '#attributes' => ['class' => ['btn', 'btn-default']],
       ];
     }
     if ($pageNumber === 0 || $pageNumber < count($pages) - 1) {
@@ -262,7 +262,7 @@ final class AiaAssessmentForm extends FormBase {
         '#type' => 'submit',
         '#button_type' => 'primary',
         '#value' => $pageNumber === 0 ? $this->chrome('Start', 'Commencer') : $this->chrome('Next', 'Suivant'),
-        '#attributes' => ['class' => ['aia-btn', 'aia-btn--primary']],
+        '#attributes' => ['class' => ['btn', 'btn-primary']],
       ];
     }
     if ($pageNumber > 0) {
@@ -271,7 +271,7 @@ final class AiaAssessmentForm extends FormBase {
         '#button_type' => $pageNumber === count($pages) - 1 ? 'primary' : 'default',
         '#value' => $this->chrome('Complete', 'Terminer'),
         '#submit' => ['::completeAssessment'],
-        '#attributes' => ['class' => ['aia-btn', $pageNumber === count($pages) - 1 ? 'aia-btn--primary' : 'aia-btn--success']],
+        '#attributes' => ['class' => ['btn', $pageNumber === count($pages) - 1 ? 'btn-primary' : 'btn-success']],
       ];
     }
     $score = $this->scoreCalculator->calculate(

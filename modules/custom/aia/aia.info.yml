@@ -1,0 +1,8 @@
+name: Algorithmic Impact Assessment
+type: module
+description: Native Drupal questionnaire, scoring, and results for the Algorithmic Impact Assessment.
+package: Open Government
+core_version_requirement: ^11
+dependencies:
+  - drupal:language
+  - drupal:locale

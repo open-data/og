@@ -1,0 +1,160 @@
+<article class="aia-results">
+  <div class="aia-toolbar-links">
+    <nav class="aia-language-links" aria-label="{{ 'Language selection'|t }}">
+      {% for link in language_links %}
+        <a class="btn btn-default" href="{{ link.url }}" hreflang="{{ link.langcode }}">{{ link.title }}</a>
+      {% endfor %}
+    </nav>
+    <a class="btn btn-default aia-source-link" href="{{ ui.linkProjectAnchor }}">{{ ui.linkProjectText }}</a>
+  </div>
+
+  <p class="aia-version">{{ ui.version }}</p>
+
+  <div class="aia-file-actions">
+    <a class="btn btn-success aia-save" href="{{ export_url }}" download="AIA Results.json">{{ ui.saveButton }}</a>
+    {% if pdf_url %}
+      <a class="btn btn-default" href="{{ pdf_url }}">{{ ui.exportPdf }}</a>
+    {% endif %}
+    {{ reset_form }}
+  </div>
+
+  <p class="aia-storage-notice">
+    {{ 'Your answers are stored temporarily in this Drupal session and mirrored to local browser storage for recovery.'|t }}
+  </p>
+
+  <nav class="aia-on-this-page" aria-label="{{ ui.onThisPage }}">
+    <p>{{ ui.onThisPage }}</p>
+    <ul>
+      <li><a href="#aia-score-heading">Section 1: {{ ui.riskLevel }}</a></li>
+      <li><a href="#aia-requirements">{{ requirements.title }}</a></li>
+      <li>
+        <a href="#aia-questions">Section 3: {{ ui.resultSectionQA }}</a>
+        <ul>
+          {% for key, section in sections %}
+            {% if section.items %}
+              <li><a href="#aia-section-{{ key }}">{{ section.title }}</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <section class="aia-score" aria-labelledby="aia-score-heading">
+    <h2 id="aia-score-heading">Section 1: {{ ui.riskLevel }}: {{ score.level }}</h2>
+    <h3>{{ ui.currentScore }}: {{ score.total }}</h3>
+    <h3>{{ ui.rawRiskScore }}: {{ score.raw }}</h3>
+    {% set risk_breakdown = breakdowns.risk %}
+    <table class="aia-table">
+      <thead>
+        <tr>
+          <th scope="col">{{ risk_breakdown.headers.area }}</th>
+          <th scope="col">{{ risk_breakdown.headers.questions }}</th>
+          <th scope="col">{{ risk_breakdown.headers.score }}</th>
+          <th scope="col">{{ risk_breakdown.headers.maximum }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in risk_breakdown.items %}
+          <tr>
+            <th scope="row">{{ item.area }}</th>
+            <td>{{ item.questions }}</td>
+            <td>{{ item.score }}</td>
+            <td>{{ item.maximum }}</td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <th scope="row">{{ risk_breakdown.total_label|upper }}</th>
+          <td>{{ risk_breakdown.totals.questions }}</td>
+          <td>{{ risk_breakdown.totals.score }}</td>
+          <td>{{ risk_breakdown.totals.maximum }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>{{ ui.mitigationScore }}: {{ score.mitigation }}</h3>
+    {% set mitigation_breakdown = breakdowns.mitigation %}
+    <table class="aia-table">
+      <thead>
+        <tr>
+          <th scope="col">{{ mitigation_breakdown.headers.area }}</th>
+          <th scope="col">{{ mitigation_breakdown.headers.questions }}</th>
+          <th scope="col">{{ mitigation_breakdown.headers.score }}</th>
+          <th scope="col">{{ mitigation_breakdown.headers.maximum }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in mitigation_breakdown.items %}
+          <tr>
+            <th scope="row">{{ item.area }}</th>
+            <td>{{ item.questions }}</td>
+            <td>{{ item.score }}</td>
+            <td>{{ item.maximum }}</td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <th scope="row">{{ mitigation_breakdown.total_label|upper }}</th>
+          <td>{{ mitigation_breakdown.totals.questions }}</td>
+          <td>{{ mitigation_breakdown.totals.score }}</td>
+          <td>{{ mitigation_breakdown.totals.maximum }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="aia-requirements" id="aia-requirements">
+    <h2>{{ requirements.title }} {{ score.level }}</h2>
+    {% for requirement in requirements.items %}
+      <section>
+        <h3>{{ requirement.title }}</h3>
+        {% for requirement_section in requirement.sections %}
+          <p>{{ requirement_section.title }}</p>
+          {% if requirement_section.list %}
+            <ul>
+              {% for list_item in requirement_section.list %}
+                <li>{{ list_item }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endfor %}
+      </section>
+    {% endfor %}
+    <h3>{{ requirements.other_title }}</h3>
+    <p>{{ requirements.other_text }}</p>
+    <p>
+      <a href="{{ requirements.directive_url }}">{{ requirements.directive_link_text }}</a>
+    </p>
+    <p>{{ requirements.privacy_text }}</p>
+  </section>
+
+  <h2 id="aia-questions">Section 3: {{ ui.resultSectionQA }}</h2>
+  {% for key, section in sections %}
+    {% if section.items %}
+      <section class="aia-result-section" id="aia-section-{{ key }}">
+        <h3>{{ section.title }}</h3>
+        {% set current_group = '' %}
+        {% for item in section.items %}
+          {% if item.group and item.group != current_group %}
+            <h4>{{ item.group }}</h4>
+            {% set current_group = item.group %}
+          {% endif %}
+          <div class="aia-answer">
+            <p class="aia-answer__question"><strong>{{ item.number }}. {{ item.question }}</strong></p>
+            {% if item.is_text %}
+              <p class="aia-answer__text">{{ item.answer_items|first.label }}</p>
+            {% else %}
+              {% for answer_item in item.answer_items %}
+                <div class="aia-answer__row">
+                  <div class="aia-answer__value{% if item.answer_items|length > 1 %} aia-answer__value--list{% endif %}">{{ answer_item.label }}</div>
+                  {% if answer_item.points is not null %}
+                    <div class="aia-points">{{ ui.modifier }}: {{ answer_item.points > 0 ? '+' ~ answer_item.points : answer_item.points }}</div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </section>
+    {% endif %}
+  {% endfor %}
+</article>

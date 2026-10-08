@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Theme hooks for the Algorithmic Impact Assessment module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function aia_theme($existing, $type, $theme, $path): array {
+  return [
+    'aia_results' => [
+      'variables' => [
+        'score' => [],
+        'sections' => [],
+        'breakdowns' => [],
+        'requirements' => [],
+        'language_links' => [],
+        'reset_form' => [],
+        'ui' => [],
+        'answer_language' => 'en',
+        'export_url' => NULL,
+        'pdf_url' => NULL,
+        'restart_url' => NULL,
+      ],
+    ],
+  ];
+}

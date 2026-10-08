@@ -1,0 +1,12 @@
+assessment:
+  version: '1.0.5'
+  css:
+    theme:
+      css/aia.css: {}
+  js:
+    js/aia.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/drupal.ajax
+    - core/once

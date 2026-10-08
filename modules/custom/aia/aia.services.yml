@@ -1,0 +1,17 @@
+services:
+  aia.survey_repository:
+    class: Drupal\aia\SurveyRepository
+    arguments: ['@extension.list.module', '@language_manager']
+
+  aia.condition_evaluator:
+    class: Drupal\aia\ConditionEvaluator
+
+  aia.score_calculator:
+    class: Drupal\aia\ScoreCalculator
+
+  aia.path_processor:
+    class: Drupal\aia\PathProcessor\AiaPathProcessor
+    arguments: ['@language_manager']
+    tags:
+      - { name: path_processor_inbound, priority: 200 }
+      - { name: path_processor_outbound, priority: 50 }

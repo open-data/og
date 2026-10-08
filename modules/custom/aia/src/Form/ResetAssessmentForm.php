@@ -61,7 +61,7 @@ final class ResetAssessmentForm extends FormBase {
       '#description' => '',
       '#accept' => '.json,application/json',
       '#attributes' => ['class' => ['aia-file-input']],
-      '#label_attributes' => ['class' => ['aia-btn', 'aia-btn--default']],
+      '#label_attributes' => ['class' => ['btn', 'btn-default']],
     ];
     $form['import'] = [
       '#type' => 'submit',
@@ -78,7 +78,7 @@ final class ResetAssessmentForm extends FormBase {
       '#value' => (string) ($ui['startAgain'] ?? $this->t('Start Again')),
       '#limit_validation_errors' => [],
       '#attributes' => [
-        'class' => ['aia-btn', 'aia-btn--default'],
+        'class' => ['btn', 'btn-default'],
         'data-aia-reset' => TRUE,
       ],
     ];

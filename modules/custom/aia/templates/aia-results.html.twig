@@ -2,18 +2,18 @@
   <div class="aia-toolbar-links">
     <nav class="aia-language-links" aria-label="{{ 'Language selection'|t }}">
       {% for link in language_links %}
-        <a class="aia-btn aia-btn--default" href="{{ link.url }}" hreflang="{{ link.langcode }}">{{ link.title }}</a>
+        <a class="btn btn-default" href="{{ link.url }}" hreflang="{{ link.langcode }}">{{ link.title }}</a>
       {% endfor %}
     </nav>
-    <a class="aia-btn aia-btn--default aia-source-link" href="{{ ui.linkProjectAnchor }}">{{ ui.linkProjectText }}</a>
+    <a class="btn btn-default aia-source-link" href="{{ ui.linkProjectAnchor }}">{{ ui.linkProjectText }}</a>
   </div>
 
   <p class="aia-version">{{ ui.version }}</p>
 
   <div class="aia-file-actions">
-    <a class="aia-btn aia-btn--success aia-save" href="{{ export_url }}" download="AIA Results.json">{{ ui.saveButton }}</a>
+    <a class="btn btn-success aia-save" href="{{ export_url }}" download="AIA Results.json">{{ ui.saveButton }}</a>
     {% if pdf_url %}
-      <a class="aia-btn aia-btn--default" href="{{ pdf_url }}">{{ ui.exportPdf }}</a>
+      <a class="btn btn-default" href="{{ pdf_url }}">{{ ui.exportPdf }}</a>
     {% endif %}
     {{ reset_form }}
   </div>

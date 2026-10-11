@@ -1,7 +1,11 @@
 services:
+  aia.institution_directory:
+    class: Drupal\aia\InstitutionDirectory
+    arguments: ['@http_client', '@cache.default', '@logger.factory']
+
   aia.survey_repository:
     class: Drupal\aia\SurveyRepository
-    arguments: ['@extension.list.module', '@language_manager']
+    arguments: ['@extension.list.module', '@language_manager', '@aia.institution_directory']
 
   aia.condition_evaluator:
     class: Drupal\aia\ConditionEvaluator

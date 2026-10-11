@@ -18,7 +18,7 @@
     {{ reset_form }}
   </div>
 
-  <p class="aia-storage-notice">
+  <p class="alert alert-info">
     {{ 'Your answers are stored temporarily in this Drupal session and mirrored to local browser storage for recovery.'|t }}
   </p>
 
@@ -45,7 +45,7 @@
     <h3>{{ ui.currentScore }}: {{ score.total }}</h3>
     <h3>{{ ui.rawRiskScore }}: {{ score.raw }}</h3>
     {% set risk_breakdown = breakdowns.risk %}
-    <table class="aia-table">
+    <table class="table table-striped table-hover">
       <thead>
         <tr>
           <th scope="col">{{ risk_breakdown.headers.area }}</th>
@@ -74,7 +74,7 @@
 
     <h3>{{ ui.mitigationScore }}: {{ score.mitigation }}</h3>
     {% set mitigation_breakdown = breakdowns.mitigation %}
-    <table class="aia-table">
+    <table class="table table-striped table-hover">
       <thead>
         <tr>
           <th scope="col">{{ mitigation_breakdown.headers.area }}</th>

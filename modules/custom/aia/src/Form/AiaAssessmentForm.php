@@ -114,7 +114,7 @@ final class AiaAssessmentForm extends FormBase {
       '#type' => 'html_tag',
       '#tag' => 'p',
       '#value' => $this->t('Your answers are stored temporarily in this session and mirrored to local browser storage for recovery.'),
-      '#attributes' => ['class' => ['alert alert-info mrgn-tp-lg mrgn-bttm-lg']],
+      '#attributes' => ['class' => ['alert', 'alert-info', 'mrgn-tp-lg', 'mrgn-bttm-lg']],
     ];
     $form['assessment']['file_actions'] = [
       '#type' => 'container',
@@ -193,7 +193,7 @@ final class AiaAssessmentForm extends FormBase {
         '#options' => $pageOptions,
         '#default_value' => $pageNumber,
         '#parents' => ['jump_page'],
-        '#attributes' => ['class' => ['aia-section-select']],
+        '#attributes' => ['class' => ['form-control', 'aia-section-select']],
       ];
       $form['assessment']['section_navigation']['jump'] = [
         '#type' => 'submit',
@@ -220,7 +220,7 @@ final class AiaAssessmentForm extends FormBase {
         ],
         'bar' => [
           '#markup' => Markup::create(sprintf(
-            '<div class="aia-progress__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="%1$d" aria-label="%2$s"><div class="aia-progress__bar" style="width:%1$d%%">%2$s</div></div>',
+            '<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="%1$d" aria-label="%2$s"><div class="progress-bar" style="width:%1$d%%">%2$s</div></div>',
             $percent,
             $this->escape((string) $progressLabel),
           )),
@@ -283,7 +283,14 @@ final class AiaAssessmentForm extends FormBase {
       '#attributes' => [
         'class' => [
           'aia-current-score',
+          'alert',
           'aia-current-score--level-' . $score['level'],
+          match ((int) $score['level']) {
+            1 => 'alert-success',
+            3 => 'alert-warning',
+            4 => 'alert-danger',
+            default => 'alert-info',
+          },
         ],
         'aria-live' => 'polite',
       ],
@@ -373,13 +380,14 @@ final class AiaAssessmentForm extends FormBase {
     $titleMarkup = $this->escape($title);
     if ($required) {
       $requiredLabel = $langcode === 'fr' ? 'obligatoire' : 'required';
-      $titleMarkup .= ' <strong class="aia-required">(' . $requiredLabel . ')</strong>';
+      $titleMarkup .= ' <strong class="required">(' . $requiredLabel . ')</strong>';
     }
     $element = [
       '#title' => Markup::create($titleMarkup),
       '#description' => Markup::create(Xss::filterAdmin($description)),
       '#required' => $required,
       '#default_value' => $default,
+      '#wrapper_attributes' => ['class' => ['form-group']],
     ];
     if ($required) {
       $element['#required_error'] = $this->chrome(
@@ -392,7 +400,7 @@ final class AiaAssessmentForm extends FormBase {
       $help = $this->surveyRepository->text($question['help']);
       if ($help !== '') {
         $element['#suffix'] = Markup::create(sprintf(
-          '<details class="aia-help"><summary>%s</summary><div>%s</div></details>',
+          '<details class="well well-sm"><summary>%s</summary><div>%s</div></details>',
           $this->escape((string) $this->t('Show help')),
           Xss::filterAdmin($help),
         ));
@@ -403,6 +411,7 @@ final class AiaAssessmentForm extends FormBase {
       case 'comment':
         $element['#type'] = 'textarea';
         $element['#rows'] = 5;
+        $element['#attributes']['class'][] = 'form-control';
         break;
 
       case 'dropdown':
@@ -411,6 +420,7 @@ final class AiaAssessmentForm extends FormBase {
         $element['#options'] = $this->options($question);
         $element['#ajax'] = $this->ajaxDefinition();
         $element['#limit_validation_errors'] = [];
+        $element['#attributes']['class'][] = 'form-control';
         break;
 
       case 'radiogroup':
@@ -433,6 +443,7 @@ final class AiaAssessmentForm extends FormBase {
         if (($question['inputType'] ?? '') === 'number') {
           $element['#type'] = 'number';
         }
+        $element['#attributes']['class'][] = 'form-control';
         break;
     }
 
@@ -518,8 +529,6 @@ final class AiaAssessmentForm extends FormBase {
     $pageNumber = (int) ($this->store()->get('page') ?? 0);
     $this->savePageAnswers($form_state, $pageNumber);
     $langcode = (string) ($form_state->getTriggeringElement()['#aia_language'] ?? 'en');
-    $language = $this->languageManager->getLanguage($langcode)
-      ?? $this->languageManager->getDefaultLanguage();
     $form_state->setRedirect($langcode === 'fr' ? 'aia.assessment_fr' : 'aia.assessment');
   }
 

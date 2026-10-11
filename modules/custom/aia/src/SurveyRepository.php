@@ -27,6 +27,7 @@ final class SurveyRepository {
   public function __construct(
     private readonly ModuleExtensionList $moduleExtensionList,
     private readonly LanguageManagerInterface $languageManager,
+    private readonly ?InstitutionDirectory $institutionDirectory = NULL,
   ) {}
 
   /**
@@ -41,6 +42,7 @@ final class SurveyRepository {
       }
       $this->survey = json_decode($contents, TRUE, 512, JSON_THROW_ON_ERROR);
       $this->applyNativeStorageDisclosure();
+      $this->applyLiveInstitutions();
     }
 
     return $this->survey;
@@ -187,6 +189,41 @@ final class SurveyRepository {
       "<p>Cette version Drupal conserve temporairement vos réponses dans le stockage de session privé du serveur Drupal et les copie dans le stockage local de votre navigateur pour permettre leur récupération. Les réponses ne sont pas enregistrées comme contenu Drupal permanent. Utilisez l'action <em>Télécharger le fichier JSON</em> pour obtenir une copie transférable.</p>",
       (string) ($html['fr'] ?? ''),
     );
+  }
+
+  /**
+   * Replaces the bundled department list with the live Open Government API.
+   */
+  private function applyLiveInstitutions(): void {
+    if ($this->institutionDirectory === NULL) {
+      return;
+    }
+    $choices = $this->institutionDirectory->choices();
+    if ($choices === []) {
+      return;
+    }
+    if (isset($this->survey['pages']) && is_array($this->survey['pages'])) {
+      $this->replaceDepartmentChoices($this->survey['pages'], $choices);
+    }
+  }
+
+  /**
+   * Walks survey pages and panels to replace the department dropdown.
+   */
+  private function replaceDepartmentChoices(array &$elements, array $choices): void {
+    foreach ($elements as &$element) {
+      if (($element['name'] ?? '') === 'projectDetailsDepartment-NS') {
+        $bundled = is_array($element['choices'] ?? NULL) ? $element['choices'] : [];
+        $element['choices'] = InstitutionDirectory::mergeChoices($choices, $bundled);
+        continue;
+      }
+      if (isset($element['elements']) && is_array($element['elements'])) {
+        $this->replaceDepartmentChoices($element['elements'], $choices);
+      }
+      if (isset($element['pages']) && is_array($element['pages'])) {
+        $this->replaceDepartmentChoices($element['pages'], $choices);
+      }
+    }
   }
 
   /**

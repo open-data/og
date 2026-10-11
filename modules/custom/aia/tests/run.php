@@ -10,6 +10,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/bootstrap.php';
 
 use Drupal\aia\ConditionEvaluator;
+use Drupal\aia\InstitutionDirectory;
 use Drupal\aia\ScoreCalculator;
 use Drupal\aia\SurveyRepository;
 
@@ -71,6 +72,47 @@ aia_assert(
 );
 aia_assert($evaluator->evaluate('{drivers} contains "item6"', ['drivers' => ['item2', 'item6']]) === TRUE, 'Contains matches array values.');
 aia_assert($evaluator->evaluate('{phase} != "item1"', []) === TRUE, 'Missing answers fail equality and pass inequality.');
+
+$institutionChoices = InstitutionDirectory::mapRecords([
+  [
+    'title_en' => 'Agriculture and Agri-Food Canada',
+    'title_fr' => 'Agriculture et Agroalimentaire Canada',
+    'department_number' => '235',
+    'open_canada_id' => 'aafc-aac',
+  ],
+  [
+    'title_en' => '16342451 Canada Inc.',
+    'title_fr' => '16342451 Canada Inc.',
+    'department_number' => NULL,
+    'open_canada_id' => '16342451-canada-inc',
+  ],
+  [
+    'title_en' => 'Canada Revenue Agency',
+    'title_fr' => 'Agence du revenu du Canada',
+    'department_number' => '47',
+    'open_canada_id' => 'cra-arc',
+  ],
+]);
+aia_assert(array_column($institutionChoices, 'value') === ['aafc-aac', 'cra-arc'], 'Numbered shells are skipped and live slugs stay stable.');
+aia_assert($institutionChoices[0]['text']['fr'] === 'Agriculture et Agroalimentaire Canada', 'Institution titles stay bilingual.');
+$mergedInstitutions = InstitutionDirectory::mergeChoices($institutionChoices, [
+  [
+    'value' => '001',
+    'text' => [
+      'default' => 'Agriculture and Agri-Food (Department of)',
+      'fr' => "Agriculture et Agroalimentaire (Ministère de l')",
+    ],
+  ],
+  [
+    'value' => '130',
+    'text' => [
+      'default' => 'Canada Revenue Agency',
+      'fr' => 'Agence du revenu du Canada',
+    ],
+  ],
+]);
+aia_assert(array_column($mergedInstitutions, 'value') === ['001', '130'], 'Matched live institutions keep bundled values.');
+aia_assert($mergedInstitutions[0]['text']['default'] === 'Agriculture and Agri-Food Canada', 'Matched institutions use the live English title.');
 
 aia_assert(SurveyRepository::localize(['default' => 'Assessment', 'fr' => 'Évaluation'], 'fr') === 'Évaluation', 'French UI strings localize.');
 $sections = SurveyRepository::formatRequirementText("Intro with <a href=\"https://example.com\">link</a>.\n\nFirst item\nSecond item");

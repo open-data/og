@@ -20,13 +20,6 @@ function aia_page_attachments(array &$attachments): void {
 }
 
 /**
- * Refreshes institutions.json from the Open Government department API.
- */
-function aia_cron(): void {
-  \Drupal::service('aia.institution_directory')->refresh();
-}
-
-/**
  * Implements hook_theme().
  */
 function aia_theme($existing, $type, $theme, $path): array {

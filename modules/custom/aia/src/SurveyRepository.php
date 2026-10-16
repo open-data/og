@@ -192,7 +192,7 @@ final class SurveyRepository {
   }
 
   /**
-   * Replaces the bundled department list with institutions.json.
+   * Replaces the bundled department list with organizations.json.
    */
   private function applyInstitutionFile(): void {
     if ($this->institutionDirectory === NULL) {

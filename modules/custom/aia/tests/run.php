@@ -73,53 +73,17 @@ aia_assert(
 aia_assert($evaluator->evaluate('{drivers} contains "item6"', ['drivers' => ['item2', 'item6']]) === TRUE, 'Contains matches array values.');
 aia_assert($evaluator->evaluate('{phase} != "item1"', []) === TRUE, 'Missing answers fail equality and pass inequality.');
 
-$institutionChoices = InstitutionDirectory::mapRecords([
-  [
-    'title_en' => 'Agriculture and Agri-Food Canada',
-    'title_fr' => 'Agriculture et Agroalimentaire Canada',
-    'department_number' => '235',
-    'open_canada_id' => 'aafc-aac',
-  ],
-  [
-    'title_en' => '16342451 Canada Inc.',
-    'title_fr' => '16342451 Canada Inc.',
-    'department_number' => NULL,
-    'open_canada_id' => '16342451-canada-inc',
-  ],
-  [
-    'title_en' => 'Canada Revenue Agency',
-    'title_fr' => 'Agence du revenu du Canada',
-    'department_number' => '47',
-    'open_canada_id' => 'cra-arc',
-  ],
-]);
-aia_assert(array_column($institutionChoices, 'value') === ['aafc-aac', 'cra-arc'], 'Numbered shells are skipped and live slugs stay stable.');
-aia_assert($institutionChoices[0]['text']['fr'] === 'Agriculture et Agroalimentaire Canada', 'Institution titles stay bilingual.');
-$mergedInstitutions = InstitutionDirectory::mergeChoices($institutionChoices, [
-  [
-    'value' => '001',
-    'text' => [
-      'default' => 'Agriculture and Agri-Food (Department of)',
-      'fr' => "Agriculture et Agroalimentaire (Ministère de l')",
-    ],
-  ],
-  [
-    'value' => '130',
-    'text' => [
-      'default' => 'Canada Revenue Agency',
-      'fr' => 'Agence du revenu du Canada',
-    ],
-  ],
-]);
-aia_assert(array_column($mergedInstitutions, 'value') === ['001', '130'], 'Matched live institutions keep bundled values.');
-aia_assert($mergedInstitutions[0]['text']['default'] === 'Agriculture and Agri-Food Canada', 'Matched institutions use the live English title.');
-$encodedInstitutions = InstitutionDirectory::encodeFile($mergedInstitutions);
-$decodedInstitutions = InstitutionDirectory::decodeFile($encodedInstitutions);
-aia_assert($decodedInstitutions[0]['value'] === '001', 'institutions.json keeps department values.');
-$institutionFile = dirname(__DIR__) . '/data/institutions.json';
-aia_assert(is_file($institutionFile), 'institutions.json is the department source file.');
-$fileChoices = InstitutionDirectory::decodeFile((string) file_get_contents($institutionFile));
-aia_assert($fileChoices !== [], 'institutions.json contains department choices.');
+$organizationFile = dirname(__DIR__, 2) . '/og_ext_cron/choices/organizations.json';
+aia_assert(is_file($organizationFile), 'og_ext_cron organizations.json is the department source file.');
+$organizationPayload = json_decode((string) file_get_contents($organizationFile), TRUE, 512, JSON_THROW_ON_ERROR);
+$institutionChoices = InstitutionDirectory::mapOrganizations($organizationPayload);
+aia_assert($institutionChoices !== [], 'organizations.json contains department choices.');
+$institutionValues = array_column($institutionChoices, 'value');
+aia_assert(in_array('aafc-aac', $institutionValues, TRUE), 'Agriculture uses the Open Government organization id.');
+aia_assert(in_array('cra-arc', $institutionValues, TRUE), 'CRA uses the Open Government organization id.');
+$aafc = array_values(array_filter($institutionChoices, static fn (array $choice): bool => $choice['value'] === 'aafc-aac'))[0];
+aia_assert($aafc['text']['default'] === 'Agriculture and Agri-Food Canada', 'Organization English titles are used.');
+aia_assert($aafc['text']['fr'] === 'Agriculture et Agroalimentaire Canada', 'Organization French titles are used.');
 
 aia_assert(SurveyRepository::localize(['default' => 'Assessment', 'fr' => 'Évaluation'], 'fr') === 'Évaluation', 'French UI strings localize.');
 $sections = SurveyRepository::formatRequirementText("Intro with <a href=\"https://example.com\">link</a>.\n\nFirst item\nSecond item");

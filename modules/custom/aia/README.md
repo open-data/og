@@ -63,11 +63,11 @@ When the active theme is GCWeb those assets already exist. Otherwise the
 `aia/wet-boew` library loads Canada.ca WET CSS. Bump the version in
 `aia.libraries.yml` when you want a newer WET build.
 
-The Department dropdown is refreshed from the Open Government
-[department list API](https://open.canada.ca/data/en/dataset/933c7f9d-deb0-4367-940d-06c38f494153)
-and cached for 24 hours. Names are matched back to bundled values so saved
-answers still resolve; new organizations are appended. The bundled survey
-list is the fallback if the API is unavailable.
+The Department dropdown uses only `data/institutions.json`. Cron and stale-file
+checks fetch the Open Government
+[department list API](https://open.canada.ca/data/en/dataset/933c7f9d-deb0-4367-940d-06c38f494153),
+write that JSON file, then serve the file. Names keep existing values so saved
+answers still resolve. If the API is unavailable the existing JSON file is used.
 
 The module does not add a main-menu link. Add one through Open Government
 site configuration if the assessment should appear in navigation.

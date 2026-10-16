@@ -42,7 +42,7 @@ final class SurveyRepository {
       }
       $this->survey = json_decode($contents, TRUE, 512, JSON_THROW_ON_ERROR);
       $this->applyNativeStorageDisclosure();
-      $this->applyLiveInstitutions();
+      $this->applyInstitutionFile();
     }
 
     return $this->survey;
@@ -192,9 +192,9 @@ final class SurveyRepository {
   }
 
   /**
-   * Replaces the bundled department list with the live Open Government API.
+   * Replaces the bundled department list with institutions.json.
    */
-  private function applyLiveInstitutions(): void {
+  private function applyInstitutionFile(): void {
     if ($this->institutionDirectory === NULL) {
       return;
     }
@@ -213,8 +213,7 @@ final class SurveyRepository {
   private function replaceDepartmentChoices(array &$elements, array $choices): void {
     foreach ($elements as &$element) {
       if (($element['name'] ?? '') === 'projectDetailsDepartment-NS') {
-        $bundled = is_array($element['choices'] ?? NULL) ? $element['choices'] : [];
-        $element['choices'] = InstitutionDirectory::mergeChoices($choices, $bundled);
+        $element['choices'] = $choices;
         continue;
       }
       if (isset($element['elements']) && is_array($element['elements'])) {

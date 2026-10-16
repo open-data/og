@@ -4,44 +4,59 @@ declare(strict_types=1);
 
 namespace Drupal\aia;
 
-use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use GuzzleHttp\ClientInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Loads federal institutions from the Open Government department list.
+ * Loads federal institutions from a JSON file refreshed by the department API.
  *
  * Source: https://open.canada.ca/data/en/dataset/933c7f9d-deb0-4367-940d-06c38f494153
  */
 final class InstitutionDirectory {
 
-  public const CACHE_ID = 'aia:institutions:v2';
-
   public const RESOURCE_ID = '04cbec5c-5a3d-4d34-927d-e41c9e6e3736';
 
   public const ENDPOINT = 'https://open.canada.ca/data/en/api/3/action/datastore_search';
 
+  public const FILENAME = 'institutions.json';
+
+  public const REFRESH_INTERVAL = 86400;
+
   public function __construct(
     private readonly ClientInterface $httpClient,
-    private readonly CacheBackendInterface $cache,
     private readonly LoggerChannelFactoryInterface $loggerFactory,
+    private readonly ModuleExtensionList $moduleExtensionList,
+    private readonly FileSystemInterface $fileSystem,
   ) {}
 
   /**
-   * Returns bilingual SurveyJS-style department choices.
+   * Returns bilingual SurveyJS-style department choices from the JSON file.
    *
    * @return list<array{value: string, text: array{default: string, fr: string}}>
    */
   public function choices(): array {
-    $cached = $this->cache->get(self::CACHE_ID);
-    if (is_object($cached) && is_array($cached->data) && $cached->data !== []) {
-      return $cached->data;
+    $choices = $this->readFile();
+    if (!$this->isStale()) {
+      return $choices;
     }
 
+    $refreshed = $this->refresh($choices);
+    return $refreshed !== [] ? $refreshed : $choices;
+  }
+
+  /**
+   * Fetches the department API, writes institutions.json, and returns it.
+   *
+   * @param list<array{value: string, text: array{default: string, fr: string}}> $existing
+   *
+   * @return list<array{value: string, text: array{default: string, fr: string}}>
+   */
+  public function refresh(array $existing = []): array {
     try {
-      $records = $this->fetchRecords();
-      $choices = self::mapRecords($records);
+      $choices = self::mergeChoices(self::mapRecords($this->fetchRecords()), $existing !== [] ? $existing : $this->readFile());
     }
     catch (\Throwable $exception) {
       $this->logger()->warning('Unable to refresh the federal institution list: @message', [
@@ -54,7 +69,7 @@ final class InstitutionDirectory {
       return [];
     }
 
-    $this->cache->set(self::CACHE_ID, $choices, time() + 86400, ['aia']);
+    $this->writeFile($choices);
     return $choices;
   }
 
@@ -92,29 +107,29 @@ final class InstitutionDirectory {
   }
 
   /**
-   * Keeps bundled values for matched names so saved answers still resolve.
+   * Keeps existing values for matched names so saved answers still resolve.
    *
    * @param list<array{value: string, text: array{default: string, fr: string}}> $live
-   * @param list<array{value: string, text: array{default: string, fr: string}}> $bundled
+   * @param list<array{value: string, text: array{default: string, fr: string}}> $existing
    *
    * @return list<array{value: string, text: array{default: string, fr: string}}>
    */
-  public static function mergeChoices(array $live, array $bundled): array {
+  public static function mergeChoices(array $live, array $existing): array {
     if ($live === []) {
-      return $bundled;
+      return $existing;
     }
 
     $usedValues = [];
     $merged = [];
     foreach ($live as $choice) {
-      $match = self::findBundledMatch($choice, $bundled);
+      $match = self::findExistingMatch($choice, $existing);
       if ($match !== NULL) {
         $choice['value'] = (string) $match['value'];
       }
       $usedValues[$choice['value']] = TRUE;
       $merged[] = $choice;
     }
-    foreach ($bundled as $choice) {
+    foreach ($existing as $choice) {
       $value = (string) ($choice['value'] ?? '');
       if ($value !== '' && !isset($usedValues[$value])) {
         $merged[] = $choice;
@@ -125,34 +140,82 @@ final class InstitutionDirectory {
   }
 
   /**
-   * Finds a bundled choice whose title matches a live institution.
+   * Decodes department choices from institutions.json contents.
+   *
+   * @return list<array{value: string, text: array{default: string, fr: string}}>
+   */
+  public static function decodeFile(string $json): array {
+    if (trim($json) === '') {
+      return [];
+    }
+    $payload = json_decode($json, TRUE, 512, JSON_THROW_ON_ERROR);
+    $choices = is_array($payload) && isset($payload['choices']) && is_array($payload['choices'])
+      ? $payload['choices']
+      : (is_array($payload) ? $payload : []);
+    $normalized = [];
+    foreach ($choices as $choice) {
+      if (!is_array($choice)) {
+        continue;
+      }
+      $value = trim((string) ($choice['value'] ?? ''));
+      $english = trim((string) ($choice['text']['default'] ?? ''));
+      $french = trim((string) ($choice['text']['fr'] ?? $english));
+      if ($value === '' || $english === '') {
+        continue;
+      }
+      $normalized[] = [
+        'value' => $value,
+        'text' => [
+          'default' => $english,
+          'fr' => $french !== '' ? $french : $english,
+        ],
+      ];
+    }
+    return $normalized;
+  }
+
+  /**
+   * Encodes department choices as institutions.json contents.
+   *
+   * @param list<array{value: string, text: array{default: string, fr: string}}> $choices
+   */
+  public static function encodeFile(array $choices): string {
+    return json_encode([
+      'updated' => gmdate('c'),
+      'source' => 'https://open.canada.ca/data/en/dataset/933c7f9d-deb0-4367-940d-06c38f494153',
+      'choices' => array_values($choices),
+    ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n";
+  }
+
+  /**
+   * Finds an existing choice whose title matches a live institution.
    *
    * @param array{value: string, text: array{default: string, fr: string}} $live
-   * @param list<array{value: string, text: array{default: string, fr: string}}> $bundled
+   * @param list<array{value: string, text: array{default: string, fr: string}}> $existing
    *
    * @return array{value: string, text: array{default: string, fr: string}}|null
    */
-  private static function findBundledMatch(array $live, array $bundled): ?array {
+  private static function findExistingMatch(array $live, array $existing): ?array {
     $liveTitles = [
       self::normalizeTitle((string) ($live['text']['default'] ?? '')),
       self::normalizeTitle((string) ($live['text']['fr'] ?? '')),
     ];
     $liveTitles = array_values(array_filter($liveTitles, static fn (string $title): bool => $title !== ''));
 
-    foreach ($bundled as $choice) {
-      $bundledTitles = [
+    foreach ($existing as $choice) {
+      $existingTitles = [
         self::normalizeTitle((string) ($choice['text']['default'] ?? '')),
         self::normalizeTitle((string) ($choice['text']['fr'] ?? '')),
       ];
-      foreach ($bundledTitles as $bundledTitle) {
-        if ($bundledTitle === '') {
+      foreach ($existingTitles as $existingTitle) {
+        if ($existingTitle === '') {
           continue;
         }
         foreach ($liveTitles as $liveTitle) {
-          if ($bundledTitle === $liveTitle) {
+          if ($existingTitle === $liveTitle) {
             return $choice;
           }
-          if (strlen($bundledTitle) >= 12 && (str_contains($liveTitle, $bundledTitle) || str_contains($bundledTitle, $liveTitle))) {
+          if (strlen($existingTitle) >= 12 && (str_contains($liveTitle, $existingTitle) || str_contains($existingTitle, $liveTitle))) {
             return $choice;
           }
         }
@@ -234,6 +297,115 @@ final class InstitutionDirectory {
     } while ($offset < $total);
 
     return $records;
+  }
+
+  /**
+   * Reads department choices from institutions.json.
+   *
+   * @return list<array{value: string, text: array{default: string, fr: string}}>
+   */
+  private function readFile(): array {
+    foreach ($this->filePaths() as $path) {
+      if ($path === '' || !is_file($path)) {
+        continue;
+      }
+      $contents = file_get_contents($path);
+      if ($contents === FALSE || trim($contents) === '') {
+        continue;
+      }
+      try {
+        $choices = self::decodeFile($contents);
+      }
+      catch (\Throwable) {
+        continue;
+      }
+      if ($choices !== []) {
+        return $choices;
+      }
+    }
+    return [];
+  }
+
+  /**
+   * Writes department choices to institutions.json.
+   *
+   * @param list<array{value: string, text: array{default: string, fr: string}}> $choices
+   */
+  private function writeFile(array $choices): void {
+    $json = self::encodeFile($choices);
+    $written = FALSE;
+    foreach ($this->writablePaths() as $path) {
+      $directory = dirname($path);
+      if (!is_dir($directory) && !@mkdir($directory, 0775, TRUE) && !is_dir($directory)) {
+        continue;
+      }
+      if (@file_put_contents($path, $json) !== FALSE) {
+        $written = TRUE;
+      }
+    }
+    if (!$written) {
+      $this->logger()->warning('Unable to write the federal institution JSON file.');
+    }
+  }
+
+  /**
+   * Returns TRUE when the JSON file is missing or older than 24 hours.
+   */
+  private function isStale(): bool {
+    foreach ($this->filePaths() as $path) {
+      if ($path !== '' && is_file($path)) {
+        return (time() - (int) filemtime($path)) > self::REFRESH_INTERVAL;
+      }
+    }
+    return TRUE;
+  }
+
+  /**
+   * Returns candidate paths, preferring the writable public copy.
+   *
+   * @return list<string>
+   */
+  private function filePaths(): array {
+    return array_values(array_unique(array_filter([
+      $this->publicPath(),
+      $this->modulePath(),
+    ])));
+  }
+
+  /**
+   * Returns paths that can receive a refreshed copy of institutions.json.
+   *
+   * @return list<string>
+   */
+  private function writablePaths(): array {
+    $paths = [$this->modulePath()];
+    $public = $this->publicPath(TRUE);
+    if ($public !== '') {
+      array_unshift($paths, $public);
+    }
+    return array_values(array_unique(array_filter($paths)));
+  }
+
+  /**
+   * Returns the shipped JSON path inside the module.
+   */
+  private function modulePath(): string {
+    return $this->moduleExtensionList->getPath('aia') . '/data/' . self::FILENAME;
+  }
+
+  /**
+   * Returns the writable public JSON path, if the files directory is available.
+   */
+  private function publicPath(bool $prepare = FALSE): string {
+    $directory = 'public://aia';
+    if ($prepare) {
+      $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+    }
+    $realpath = $this->fileSystem->realpath($directory);
+    if (!is_string($realpath) || $realpath === '') {
+      return '';
+    }
+    return $realpath . DIRECTORY_SEPARATOR . self::FILENAME;
   }
 
   /**

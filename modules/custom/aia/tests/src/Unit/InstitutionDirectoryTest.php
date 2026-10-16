@@ -79,4 +79,21 @@ final class InstitutionDirectoryTest extends TestCase {
     self::assertSame('Agriculture and Agri-Food Canada', $merged[0]['text']['default']);
   }
 
+  /**
+   * institutions.json round-trips as the only department source.
+   */
+  public function testEncodeAndDecodeFile(): void {
+    $choices = [
+      [
+        'value' => '001',
+        'text' => [
+          'default' => 'Agriculture and Agri-Food Canada',
+          'fr' => 'Agriculture et Agroalimentaire Canada',
+        ],
+      ],
+    ];
+    $decoded = InstitutionDirectory::decodeFile(InstitutionDirectory::encodeFile($choices));
+    self::assertSame($choices, $decoded);
+  }
+
 }

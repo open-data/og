@@ -1,7 +1,7 @@
 services:
   aia.institution_directory:
     class: Drupal\aia\InstitutionDirectory
-    arguments: ['@http_client', '@cache.default', '@logger.factory']
+    arguments: ['@http_client', '@logger.factory', '@extension.list.module', '@file_system']
 
   aia.survey_repository:
     class: Drupal\aia\SurveyRepository

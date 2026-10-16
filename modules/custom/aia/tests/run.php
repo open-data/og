@@ -113,6 +113,13 @@ $mergedInstitutions = InstitutionDirectory::mergeChoices($institutionChoices, [
 ]);
 aia_assert(array_column($mergedInstitutions, 'value') === ['001', '130'], 'Matched live institutions keep bundled values.');
 aia_assert($mergedInstitutions[0]['text']['default'] === 'Agriculture and Agri-Food Canada', 'Matched institutions use the live English title.');
+$encodedInstitutions = InstitutionDirectory::encodeFile($mergedInstitutions);
+$decodedInstitutions = InstitutionDirectory::decodeFile($encodedInstitutions);
+aia_assert($decodedInstitutions[0]['value'] === '001', 'institutions.json keeps department values.');
+$institutionFile = dirname(__DIR__) . '/data/institutions.json';
+aia_assert(is_file($institutionFile), 'institutions.json is the department source file.');
+$fileChoices = InstitutionDirectory::decodeFile((string) file_get_contents($institutionFile));
+aia_assert($fileChoices !== [], 'institutions.json contains department choices.');
 
 aia_assert(SurveyRepository::localize(['default' => 'Assessment', 'fr' => 'Évaluation'], 'fr') === 'Évaluation', 'French UI strings localize.');
 $sections = SurveyRepository::formatRequirementText("Intro with <a href=\"https://example.com\">link</a>.\n\nFirst item\nSecond item");

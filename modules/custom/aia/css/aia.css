@@ -7,7 +7,6 @@
 .aia-assessment {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 16rem);
 }
 
 .aia-toolbar-links,
@@ -68,19 +67,79 @@
   border: 0;
 }
 
-.aia-current-score {
+.aia-assessment .aia-nav-actions .btn-primary,
+.aia-assessment .aia-nav-actions .button--primary {
+  color: #fff;
+  background-color: #278400;
+  border-color: #278400;
+}
+
+.aia-assessment .aia-nav-actions .btn-primary:hover,
+.aia-assessment .aia-nav-actions .btn-primary:focus,
+.aia-assessment .aia-nav-actions .button--primary:hover,
+.aia-assessment .aia-nav-actions .button--primary:focus {
+  color: #fff;
+  background-color: #1d6300;
+  border-color: #1d6300;
+}
+
+.aia-assessment .aia-current-score {
+  position: -webkit-sticky;
   position: sticky;
   z-index: 10;
   bottom: 0;
   display: flex;
+  align-items: center;
   width: 100%;
-  margin-top: auto;
-  background-color: #d4edda !important;
+  margin: 1rem 0 0;
+  padding: 0.9rem 1rem;
+  border: 0;
+  background-color: #d8eeca;
+  color: #278400;
+  font-size: 0.8em;
+}
+
+.aia-assessment .aia-current-score--level-2 {
+  background-color: #d9edf7;
+  color: #269abc;
+}
+
+.aia-assessment .aia-current-score--level-3 {
+  background-color: #f9f4d4;
+  color: #8a6d3b;
+}
+
+.aia-assessment .aia-current-score--level-4 {
+  background-color: #f2dede;
+  color: #a62a1e;
+}
+
+.aia-current-score__icon {
+  flex: 0 0 1.35rem;
+  width: 1.35rem;
+  height: 1.35rem;
+  margin-inline-end: 0.85rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  position: relative;
+}
+
+.aia-current-score__icon::after {
+  content: "";
+  position: absolute;
+  left: 0.38rem;
+  top: 0.18rem;
+  width: 0.32rem;
+  height: 0.55rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
 }
 
 .aia-current-score__item {
   flex: 1 1 0;
-  padding: 0.75rem 1rem !important;
+  padding: 0 0.5rem;
+  white-space: nowrap;
 }
 
 .aia-score-short {
@@ -133,6 +192,10 @@
 
   .aia-score-short {
     display: inline;
+  }
+
+  .aia-current-score__item {
+    padding: 0.5rem 0.4rem;
   }
 
   .aia-points {

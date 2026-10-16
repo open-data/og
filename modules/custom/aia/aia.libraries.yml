@@ -11,7 +11,7 @@ wet-boew:
       https://www.canada.ca/etc/designs/canada/wet-boew/css/theme.min.css: { type: external, minified: true }
 
 assessment:
-  version: '1.0.6'
+  version: '1.0.9'
   css:
     theme:
       css/aia.css: {}

@@ -110,6 +110,37 @@ final class AiaAssessmentForm extends FormBase {
         'class' => ['aia-assessment'],
       ],
     ];
+    $form['assessment']['toolbar_links'] = [
+      '#type' => 'container',
+      '#weight' => -20,
+      '#attributes' => ['class' => ['aia-toolbar-links']],
+    ];
+    $form['assessment']['toolbar_links']['language_links'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['aia-language-links'],
+        'aria-label' => $this->t('Language selection'),
+      ],
+    ];
+    $currentLangcode = $this->languageManager->getCurrentLanguage()->getId() === 'fr' ? 'fr' : 'en';
+    $otherLangcode = $currentLangcode === 'fr' ? 'en' : 'fr';
+    $form['assessment']['toolbar_links']['language_links'][$otherLangcode] = [
+      '#type' => 'submit',
+      '#value' => (string) ($ui['swtchLang'] ?? ($otherLangcode === 'fr' ? 'Français' : 'English')),
+      '#submit' => ['::switchLanguage'],
+      '#limit_validation_errors' => [],
+      '#aia_language' => $otherLangcode,
+      '#attributes' => [
+        'class' => ['btn', 'btn-default'],
+        'lang' => $otherLangcode,
+      ],
+    ];
+    $form['assessment']['toolbar_links']['source'] = [
+      '#type' => 'link',
+      '#title' => (string) ($ui['linkProjectText'] ?? $this->t('Link to GitHub project repository')),
+      '#url' => Url::fromUri((string) ($ui['linkProjectAnchor'] ?? 'https://github.com/canada-ca/aia-eia-js')),
+      '#attributes' => ['class' => ['btn', 'btn-default', 'aia-source-link']],
+    ];
     $form['assessment']['storage_notice'] = [
       '#type' => 'html_tag',
       '#tag' => 'p',
@@ -244,8 +275,9 @@ final class AiaAssessmentForm extends FormBase {
     );
 
     $form['assessment']['actions'] = [
-      '#type' => 'actions',
-      '#attributes' => ['class' => ['aia-nav-actions']],
+      '#type' => 'container',
+      '#weight' => 100,
+      '#attributes' => ['class' => ['aia-nav-actions', 'form-actions']],
     ];
     if ($pageNumber > 0) {
       $form['assessment']['actions']['previous'] = [
@@ -279,49 +311,39 @@ final class AiaAssessmentForm extends FormBase {
       $liveAnswers,
     );
     $form['assessment']['score'] = [
-      '#type' => 'container',
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#weight' => 110,
       '#attributes' => [
         'class' => [
           'aia-current-score',
-          'alert',
           'aia-current-score--level-' . $score['level'],
-          match ((int) $score['level']) {
-            1 => 'alert-success',
-            3 => 'alert-warning',
-            4 => 'alert-danger',
-            default => 'alert-info',
-          },
         ],
         'aria-live' => 'polite',
       ],
-      'level' => [
-        '#markup' => $this->scoreItem(
+      '#value' => Markup::create(
+        '<span class="aia-current-score__icon" aria-hidden="true"></span>'
+        . $this->scoreItem(
           (string) ($ui['riskLevel'] ?? 'Impact Level'),
           (string) ($ui['IL'] ?? 'IL'),
           (string) $score['level'],
-        ),
-      ],
-      'total' => [
-        '#markup' => $this->scoreItem(
+        )
+        . $this->scoreItem(
           (string) ($ui['currentScore'] ?? 'Current Score'),
           (string) ($ui['CS'] ?? 'CS'),
           (string) $score['total'],
-        ),
-      ],
-      'raw' => [
-        '#markup' => $this->scoreItem(
+        )
+        . $this->scoreItem(
           (string) ($ui['rawRiskScore'] ?? 'Raw Impact Score'),
           (string) ($ui['RS'] ?? 'RS'),
           (string) $score['raw'],
-        ),
-      ],
-      'mitigation' => [
-        '#markup' => $this->scoreItem(
+        )
+        . $this->scoreItem(
           (string) ($ui['mitigationScore'] ?? 'Mitigation Score'),
           (string) ($ui['MS'] ?? 'MS'),
           (string) $score['mitigation'],
-        ),
-      ],
+        )
+      ),
     ];
     return $form;
   }
@@ -927,15 +949,15 @@ final class AiaAssessmentForm extends FormBase {
   }
 
   /**
-   * Builds one sticky score-bar cell with desktop and mobile labels.
+   * Builds one score-bar cell with desktop and mobile labels.
    */
-  private function scoreItem(string $fullLabel, string $shortLabel, string $value): Markup {
-    return Markup::create(sprintf(
+  private function scoreItem(string $fullLabel, string $shortLabel, string $value): string {
+    return sprintf(
       '<div class="aia-current-score__item"><span class="aia-score-full">%s</span><span class="aia-score-short">%s</span>: %s</div>',
       $this->escape($fullLabel),
       $this->escape($shortLabel),
       $this->escape($value),
-    ));
+    );
   }
 
   /**

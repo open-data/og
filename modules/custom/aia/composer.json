@@ -1,0 +1,11 @@
+{
+  "name": "opengov/aia",
+  "description": "Native Drupal implementation of the Algorithmic Impact Assessment.",
+  "type": "drupal-custom-module",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "php": ">=8.3",
+    "dompdf/dompdf": "^3.1",
+    "drupal/core": "^11"
+  }
+}

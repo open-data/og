@@ -183,7 +183,7 @@ class CronFunctions
         $options = [];
 
         $url = ($field_name == 'organizations')
-        ? 'https://open.canada.ca/data/en/api/action/datastore_search?resource_id=04cbec5c-5a3d-4d34-927d-e41c9e6e3736&limit=500'
+        ? 'https://open.canada.ca/data/en/api/action/datastore_search?resource_id=3faaafb4-00e2-4303-947d-ac786b62559f&limit=500'
         : 'https://open.canada.ca/data/api/action/scheming_dataset_schema_show?type=dataset';
 
         $url = filter_var($url, FILTER_SANITIZE_URL);
@@ -197,9 +197,9 @@ class CronFunctions
 
                     if ($field_name == 'organizations') {
                         foreach ($data['result'][$field_type] as $rsc) {
-                            $options[$rsc['open_canada_id']] = [
-                            'en' => $rsc['title_en'],
-                            'fr' => $rsc['title_fr']
+                            $options[$rsc['open_gov_ouvert']] = [
+                            'en' => $rsc['harmonized_name'],
+                            'fr' => $rsc['nom_harmonise']
                             ];
                         }
 

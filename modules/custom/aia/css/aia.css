@@ -1,0 +1,224 @@
+.aia-assessment,
+.aia-results {
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+.aia-assessment {
+  display: flex;
+  flex-direction: column;
+}
+
+.aia-toolbar-links,
+.aia-file-actions,
+.aia-nav-actions,
+.aia-file-actions .form-item,
+.aia-file-actions .form-actions,
+.aia-file-actions form,
+.aia-toolbar-form,
+.aia-toolbar-form .form-item,
+.aia-toolbar-form .form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-block-end: 1rem;
+}
+
+.aia-language-links,
+.aia-source-link {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.aia-file-input,
+.aia-toolbar-form .aia-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.aia-section-navigation {
+  margin-block: 1rem 1.25rem;
+}
+
+.aia-section-select {
+  max-width: 650px;
+}
+
+.aia-progress {
+  margin-bottom: 1.5rem;
+}
+
+.aia-assessment .form-required::after,
+.aia-assessment .form-item__label.form-required::after,
+.aia-assessment label.form-required::after,
+.aia-assessment .required-mark {
+  display: none !important;
+  content: none !important;
+}
+
+.aia-assessment fieldset,
+.aia-assessment fieldset.aia-panel {
+  margin-block: 0 1.5rem;
+  padding: 0;
+  border: 0;
+}
+
+.aia-assessment .aia-nav-actions .btn-primary,
+.aia-assessment .aia-nav-actions .button--primary {
+  color: #fff;
+  background-color: #278400;
+  border-color: #278400;
+}
+
+.aia-assessment .aia-nav-actions .btn-primary:hover,
+.aia-assessment .aia-nav-actions .btn-primary:focus,
+.aia-assessment .aia-nav-actions .button--primary:hover,
+.aia-assessment .aia-nav-actions .button--primary:focus {
+  color: #fff;
+  background-color: #1d6300;
+  border-color: #1d6300;
+}
+
+.aia-assessment .aia-current-score {
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 10;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 1rem 0 0;
+  padding: 0.9rem 1rem;
+  border: 0;
+  background-color: #d8eeca;
+  color: #278400;
+  font-size: 0.8em;
+}
+
+.aia-assessment .aia-current-score--level-2 {
+  background-color: #d9edf7;
+  color: #269abc;
+}
+
+.aia-assessment .aia-current-score--level-3 {
+  background-color: #f9f4d4;
+  color: #8a6d3b;
+}
+
+.aia-assessment .aia-current-score--level-4 {
+  background-color: #f2dede;
+  color: #a62a1e;
+}
+
+.aia-current-score__icon {
+  flex: 0 0 1.35rem;
+  width: 1.35rem;
+  height: 1.35rem;
+  margin-inline-end: 0.85rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  position: relative;
+}
+
+.aia-current-score__icon::after {
+  content: "";
+  position: absolute;
+  left: 0.38rem;
+  top: 0.18rem;
+  width: 0.32rem;
+  height: 0.55rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.aia-current-score__item {
+  flex: 1 1 0;
+  padding: 0 0.5rem;
+  white-space: nowrap;
+}
+
+.aia-score-short {
+  display: none;
+}
+
+.aia-on-this-page,
+.aia-result-section,
+.aia-requirements {
+  margin-block-start: 2rem;
+}
+
+.aia-answer {
+  padding-block: 0.85rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.aia-answer__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-block: 0.25rem;
+}
+
+.aia-answer__value {
+  flex: 1 1 70%;
+}
+
+.aia-answer__value--list {
+  list-style-position: inside;
+  display: list-item;
+  list-style-type: disc;
+  margin-inline-start: 1.25rem;
+}
+
+.aia-points {
+  flex: 0 0 16.66%;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.aia-answer__text {
+  white-space: pre-wrap;
+}
+
+@media (max-width: 767px) {
+  .aia-score-full {
+    display: none;
+  }
+
+  .aia-score-short {
+    display: inline;
+  }
+
+  .aia-current-score__item {
+    padding: 0.5rem 0.4rem;
+  }
+
+  .aia-points {
+    flex-basis: 100%;
+  }
+}
+
+@media print {
+  header,
+  footer,
+  nav,
+  .tabs,
+  .messages,
+  .aia-file-actions,
+  .aia-toolbar-links,
+  .aia-language-links,
+  .aia-current-score {
+    display: none !important;
+  }
+
+  .aia-results,
+  .aia-assessment {
+    max-width: none;
+    padding-bottom: 0;
+  }
+}

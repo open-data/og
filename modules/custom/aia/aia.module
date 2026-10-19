@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Theme hooks for the Algorithmic Impact Assessment module.
+ */
+
+/**
+ * Attaches WET-BOEW when the active theme does not already ship it.
+ */
+function aia_page_attachments(array &$attachments): void {
+  $route = \Drupal::routeMatch()->getRouteName();
+  if (!is_string($route) || !str_starts_with($route, 'aia.')) {
+    return;
+  }
+  if (\Drupal::theme()->getActiveTheme()->getName() === 'gcweb') {
+    return;
+  }
+  $attachments['#attached']['library'][] = 'aia/wet-boew';
+}
+
+/**
+ * Implements hook_theme().
+ */
+function aia_theme($existing, $type, $theme, $path): array {
+  return [
+    'aia_results' => [
+      'variables' => [
+        'score' => [],
+        'sections' => [],
+        'breakdowns' => [],
+        'requirements' => [],
+        'language_links' => [],
+        'reset_form' => [],
+        'ui' => [],
+        'answer_language' => 'en',
+        'export_url' => NULL,
+        'pdf_url' => NULL,
+        'restart_url' => NULL,
+      ],
+    ],
+  ];
+}

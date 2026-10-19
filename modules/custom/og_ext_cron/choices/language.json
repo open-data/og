@@ -1,4 +1,8 @@
 {
+    "zxx": {
+        "en": "No linguistic content; Not applicable",
+        "fr": "pas de contenu linguistique; non applicable"
+    },
     "en": {
         "en": "English",
         "fr": "anglais"
@@ -111,6 +115,10 @@
         "en": "Finnish",
         "fr": "finnois"
     },
+    "fil": {
+        "en": "Filipino",
+        "fr": "filipino"
+    },
     "gl": {
         "en": "Galician",
         "fr": "galicien"
@@ -142,6 +150,10 @@
     "id": {
         "en": "Indonesian",
         "fr": "indon\u00e9sien"
+    },
+    "moe": {
+        "en": "Innu-Aimun",
+        "fr": "innu-aimun"
     },
     "inuinnaqtun": {
         "en": "Inuinnaqtun",
@@ -330,9 +342,5 @@
     "yi": {
         "en": "Yiddish",
         "fr": "yiddish"
-    },
-    "zxx": {
-        "en": "No linguistic content; Not applicable",
-        "fr": "pas de contenu linguistique; non applicable"
     }
 }

@@ -131,6 +131,10 @@
         "en": "Correspondence - Memorandum",
         "fr": "Correspondance - note de service"
     },
+    "data_dictionary": {
+        "en": "Data Dictionary",
+        "fr": "Dictionnaire de donn\u00e9es"
+    },
     "dataset": {
         "en": "Dataset",
         "fr": "Jeu de donn\u00e9es"
@@ -342,6 +346,10 @@
     "routing_slip": {
         "en": "Routing Slip",
         "fr": "Bordereau d\u2019acheminement"
+    },
+    "schema": {
+        "en": "Schema",
+        "fr": "Sch\u00e9ma"
     },
     "blog_entry": {
         "en": "Social Media Resource - Blog Entry",

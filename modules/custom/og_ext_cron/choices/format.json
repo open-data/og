@@ -1,6 +1,7 @@
 {
     "AAC": "AAC",
     "AIFF": "AIFF",
+    "APRX": "APRX",
     "ASCII Grid": {
         "en": "ASCII Grid",
         "fr": "Grille ASCII"
@@ -13,7 +14,9 @@
     "BAG": "BAG",
     "BAM": "BAM",
     "BMP": "BMP",
+    "BUFR": "BUFR",
     "BWF": "BWF",
+    "CAP": "CAP",
     "CCT": "CCT",
     "CDED ASCII": "CDED ASCII",
     "CDF": "CDF",
@@ -21,6 +24,10 @@
     "COD": {
         "en": "Blackberry Application",
         "fr": "Application Blackberry"
+    },
+    "COG": {
+        "en": "Cloud Optimized GeoTIFF",
+        "fr": "GeoTIFF optimis\u00e9 pour le cloud"
     },
     "CSV": "CSV",
     "DBD": "DBD",
@@ -38,17 +45,18 @@
     "EPUB2": "EPUB2",
     "EPS": "EPS",
     "ESRI REST": "ESRI REST",
-    "EXE": "EXE",
     "FGDB\/GDB": "FGDB\/GDB",
     "FITS": "FITS",
     "Flat raster binary": {
         "en": "Flat raster binary",
         "fr": "Binaire raster plat"
     },
+    "FLV": "FLV",
     "GDB": {
         "en": "GeoSoftDatabases",
         "fr": "GeoSoftDatabases"
     },
+    "GeoParquet": "GeoParquet",
     "GeoPDF": "GeoPDF",
     "GeoRSS": "GeoRSS",
     "GeoTIF": "GeoTIF",
@@ -94,16 +102,22 @@
         "en": "MapInfo",
         "fr": "MapInfo"
     },
+    "MAPX": "MAPX",
+    "MD": "MD",
+    "MRC": "MRC",
     "MFX": "MFX",
     "MOV": "MOV",
+    "MKV": "MKV",
     "MPEG": "MPEG",
     "MPEG-1": "MPEG-1",
     "MP3": "MP3",
+    "MP4": "MP4",
     "MXD": "MXD",
     "NetCDF": "NetCDF",
     "ODP": "ODP",
     "ODS": "ODS",
     "ODT": "ODT",
+    "PBIX": "PBIX",
     "PDF": "PDF",
     "PDF\/A-1": "PDF\/A-1",
     "PDF\/A-2": "PDF\/A-2",
@@ -111,6 +125,7 @@
     "PNG": "PNG",
     "PPT": "PPT",
     "QLR": "QLR",
+    "PBF": "PBF",
     "PPTX": "PPTX",
     "RDF": "RDF",
     "TTL": {
@@ -147,6 +162,14 @@
     "TSV": "TSV",
     "TXT": "TXT",
     "VPF": "VPF",
+    "WATERML1": {
+        "en": "WaterML 1.0",
+        "fr": "WaterML 1.0"
+    },
+    "WATERML2": {
+        "en": "WaterML 2.0",
+        "fr": "WaterML 2.0"
+    },
     "WAV": "WAV",
     "WCS": "WCS",
     "WFS": "WFS",
@@ -162,5 +185,9 @@
     "other": {
         "en": "Other",
         "fr": "Autre"
+    },
+    "unknown": {
+        "en": "Unknown",
+        "fr": "Inconnu"
     }
 }

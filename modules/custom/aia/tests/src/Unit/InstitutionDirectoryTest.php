@@ -32,6 +32,18 @@ final class InstitutionDirectoryTest extends TestCase {
     self::assertSame(['aafc-aac', 'cra-arc'], array_column($choices, 'value'));
     self::assertSame('Agriculture and Agri-Food Canada', $choices[0]['text']['default']);
     self::assertSame('Agriculture et Agroalimentaire Canada', $choices[0]['text']['fr']);
+
+    $frenchChoices = InstitutionDirectory::mapOrganizations([
+      'cra-arc' => [
+        'en' => 'Canada Revenue Agency',
+        'fr' => 'Agence du revenu du Canada',
+      ],
+      'aafc-aac' => [
+        'en' => 'Agriculture and Agri-Food Canada',
+        'fr' => 'Agriculture et Agroalimentaire Canada',
+      ],
+    ], 'fr');
+    self::assertSame(['cra-arc', 'aafc-aac'], array_column($frenchChoices, 'value'));
   }
 
 }

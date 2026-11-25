@@ -25,6 +25,11 @@
   margin-block-end: 1rem;
 }
 
+.aia-toolbar-links {
+  justify-content: space-between;
+  width: 100%;
+}
+
 .aia-language-links,
 .aia-source-link {
   display: flex;
@@ -67,6 +72,51 @@
   border: 0;
 }
 
+.aia-assessment .aia-panel > legend,
+.aia-assessment .aia-question,
+.aia-assessment .aia-question > .form-item,
+.aia-assessment .form-radios,
+.aia-assessment .form-checkboxes,
+.aia-assessment .form-type-radio,
+.aia-assessment .form-type-checkbox {
+  margin-inline-start: 0;
+  padding-inline-start: 0;
+}
+
+.aia-assessment .aia-panel > .fieldset-wrapper,
+.aia-assessment .aia-panel > .fieldset__wrapper {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+.aia-assessment .aia-question:first-child {
+  margin-block-start: 0;
+}
+
+.aia-question-help {
+  margin-block: 0.75rem 1rem;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-inline-start: 4px solid #2572b4;
+  border-radius: 0;
+  background: #e8f2f4;
+}
+
+.aia-question-help > summary {
+  color: #284162;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.aia-question-help > summary:focus-visible {
+  outline: 3px solid #ffbf47;
+  outline-offset: 2px;
+}
+
+.aia-question-help > div {
+  margin-block-start: 0.75rem;
+}
+
 .aia-assessment .aia-nav-actions .btn-primary,
 .aia-assessment .aia-nav-actions .button--primary {
   color: #fff;
@@ -89,6 +139,7 @@
   z-index: 10;
   bottom: 0;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   width: 100%;
   margin: 1rem 0 0;
@@ -137,7 +188,7 @@
 }
 
 .aia-current-score__item {
-  flex: 1 1 0;
+  flex: 1 1 10rem;
   padding: 0 0.5rem;
   white-space: nowrap;
 }
@@ -185,7 +236,36 @@
   white-space: pre-wrap;
 }
 
+.aia-translation-field {
+  margin-block-end: 1rem;
+}
+
+.aia-export {
+  margin-block-start: 2rem;
+}
+
+.aia-route .wb-share {
+  display: none !important;
+}
+
 @media (max-width: 767px) {
+  .aia-toolbar-links,
+  .aia-file-actions,
+  .aia-nav-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .aia-toolbar-links .btn,
+  .aia-file-actions .btn,
+  .aia-nav-actions .btn {
+    width: 100%;
+  }
+
+  .aia-current-score__icon {
+    display: none;
+  }
+
   .aia-score-full {
     display: none;
   }

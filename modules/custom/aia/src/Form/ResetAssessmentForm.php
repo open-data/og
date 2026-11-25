@@ -80,6 +80,7 @@ final class ResetAssessmentForm extends FormBase {
       '#attributes' => [
         'class' => ['btn', 'btn-default'],
         'data-aia-reset' => TRUE,
+        'formnovalidate' => 'formnovalidate',
       ],
     ];
     return $form;
@@ -98,7 +99,7 @@ final class ResetAssessmentForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    foreach (['answers', 'page', 'completed', 'translations', 'answer_language'] as $key) {
+    foreach (['answers', 'page', 'completed', 'translations', 'answer_language', 'updated_at'] as $key) {
       $this->store()->delete($key);
     }
     $form_state->setRedirect('aia.assessment');

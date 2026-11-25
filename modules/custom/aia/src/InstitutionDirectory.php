@@ -28,7 +28,7 @@ final class InstitutionDirectory {
    *
    * @return list<array{value: string, text: array{default: string, fr: string}}>
    */
-  public function choices(): array {
+  public function choices(string $language = 'en'): array {
     $path = $this->filePath();
     if ($path === '' || !is_file($path)) {
       $this->logger()->warning('Open Government organizations.json was not found.');
@@ -50,7 +50,7 @@ final class InstitutionDirectory {
       return [];
     }
 
-    return self::mapOrganizations(is_array($payload) ? $payload : []);
+    return self::mapOrganizations(is_array($payload) ? $payload : [], $language);
   }
 
   /**
@@ -60,7 +60,7 @@ final class InstitutionDirectory {
    *
    * @return list<array{value: string, text: array{default: string, fr: string}}>
    */
-  public static function mapOrganizations(array $organizations): array {
+  public static function mapOrganizations(array $organizations, string $language = 'en'): array {
     $choices = [];
     foreach ($organizations as $id => $titles) {
       $value = trim((string) $id);
@@ -80,7 +80,20 @@ final class InstitutionDirectory {
         ],
       ];
     }
-    usort($choices, static fn (array $a, array $b): int => strcasecmp($a['text']['default'], $b['text']['default']));
+    $key = $language === 'fr' ? 'fr' : 'default';
+    if (class_exists(\Collator::class)) {
+      $collator = new \Collator($language === 'fr' ? 'fr_CA' : 'en_CA');
+      usort($choices, static fn (array $a, array $b): int => (int) $collator->compare(
+        $a['text'][$key],
+        $b['text'][$key],
+      ));
+    }
+    else {
+      usort($choices, static fn (array $a, array $b): int => strcasecmp(
+        $a['text'][$key],
+        $b['text'][$key],
+      ));
+    }
     return $choices;
   }
 

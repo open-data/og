@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\aia\Form;
 
 use Drupal\aia\ConditionEvaluator;
+use Drupal\aia\PortableAssessmentBuilder;
 use Drupal\aia\ScoreCalculator;
 use Drupal\aia\SurveyRepository;
 use Drupal\Component\Utility\Xss;
@@ -28,6 +29,7 @@ final class AiaAssessmentForm extends FormBase {
     protected SurveyRepository $surveyRepository,
     protected ConditionEvaluator $conditionEvaluator,
     protected ScoreCalculator $scoreCalculator,
+    protected PortableAssessmentBuilder $payloadBuilder,
     protected LanguageManagerInterface $languageManager,
     protected PrivateTempStoreFactory $tempStoreFactory,
   ) {}
@@ -40,6 +42,7 @@ final class AiaAssessmentForm extends FormBase {
       $container->get('aia.survey_repository'),
       $container->get('aia.condition_evaluator'),
       $container->get('aia.score_calculator'),
+      $container->get('aia.portable_assessment_builder'),
       $container->get('language_manager'),
       $container->get('tempstore.private'),
     );
@@ -85,6 +88,7 @@ final class AiaAssessmentForm extends FormBase {
     // otherwise replace "Please answer the question."
     $form['#attributes']['novalidate'] = 'novalidate';
     $form['#attached']['library'][] = 'aia/assessment';
+    $questions = $this->surveyRepository->getQuestions();
     $form['#attached']['drupalSettings']['aia']['state'] = [
       'version' => 'v1.0.1',
       'currentPage' => max(0, $pageNumber - 1),
@@ -93,13 +97,14 @@ final class AiaAssessmentForm extends FormBase {
       'completed' => (bool) $this->store()->get('completed'),
       'answerLanguage' => $this->store()->get('answer_language')
       ?? $this->getRequest()->getLocale(),
+      'updatedAt' => (int) ($this->store()->get('updated_at') ?? 0),
     ];
-    // Only auto-restore localStorage on a fresh GET with an empty Drupal
-    // session. Restoring after Next/Previous POSTs sends currentPage 0 and
-    // loops page 1 → 2 → 1.
-    $form['#attached']['drupalSettings']['aia']['allowRestore'] = $this->getRequest()->isMethod('GET')
-      && $answers === []
-      && $pageNumber === 0;
+    $form['#attached']['drupalSettings']['aia']['scoring'] =
+      $this->scoreCalculator->clientConfig($questions);
+    // Restore only on GET; JavaScript compares updatedAt so newer Drupal
+    // session data is never replaced by an older browser snapshot.
+    $form['#attached']['drupalSettings']['aia']['allowRestore'] =
+      $this->getRequest()->isMethod('GET');
     $form['#attached']['drupalSettings']['aia']['confirmRestart'] = (string) ($ui['alertConfirmRestart'] ?? '');
     $form['#cache']['max-age'] = 0;
     $form['assessment'] = [
@@ -142,10 +147,18 @@ final class AiaAssessmentForm extends FormBase {
       '#attributes' => ['class' => ['btn', 'btn-default', 'aia-source-link']],
     ];
     $form['assessment']['storage_notice'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'p',
-      '#value' => $this->t('Your answers are stored temporarily in this session and mirrored to local browser storage for recovery.'),
+      '#type' => 'container',
       '#attributes' => ['class' => ['alert', 'alert-info', 'mrgn-tp-lg', 'mrgn-bttm-lg']],
+      'text' => [
+        '#markup' => '<p>' . $this->escape(
+          ($page['name'] ?? '') === 'projectDetails'
+            ? (string) ($ui['storagePrivacyNotice'] ?? '')
+            : $this->chrome(
+              'Responses are saved automatically in this browser for recovery.',
+              'Les réponses sont enregistrées automatiquement dans ce navigateur pour permettre leur récupération.',
+            ),
+        ) . '</p>',
+      ],
     ];
     $form['assessment']['file_actions'] = [
       '#type' => 'container',
@@ -186,6 +199,7 @@ final class AiaAssessmentForm extends FormBase {
       '#attributes' => [
         'class' => ['btn', 'btn-default'],
         'data-aia-reset' => TRUE,
+        'formnovalidate' => 'formnovalidate',
       ],
       '#access' => $answers !== [] || $pageNumber > 0,
     ];
@@ -306,10 +320,7 @@ final class AiaAssessmentForm extends FormBase {
         '#attributes' => ['class' => ['btn', $pageNumber === count($pages) - 1 ? 'btn-primary' : 'btn-success']],
       ];
     }
-    $score = $this->scoreCalculator->calculate(
-      $this->surveyRepository->getQuestions(),
-      $liveAnswers,
-    );
+    $score = $this->scoreCalculator->calculate($questions, $liveAnswers);
     $form['assessment']['score'] = [
       '#type' => 'html_tag',
       '#tag' => 'div',
@@ -344,6 +355,22 @@ final class AiaAssessmentForm extends FormBase {
           (string) $score['mitigation'],
         )
       ),
+    ];
+    $form['assessment']['report_problem'] = [
+      '#type' => 'container',
+      '#weight' => 120,
+      '#attributes' => ['class' => ['aia-report-problem', 'mrgn-tp-lg']],
+      'link' => [
+        '#type' => 'link',
+        '#title' => $this->chrome(
+          'Report a problem on this page',
+          'Signaler un problème sur cette page',
+        ),
+        '#url' => Url::fromUri($currentLangcode === 'fr'
+          ? 'https://www.canada.ca/fr/signaler-probleme.html'
+          : 'https://www.canada.ca/en/report-problem.html'),
+        '#attributes' => ['class' => ['btn', 'btn-default']],
+      ],
     ];
     return $form;
   }
@@ -409,7 +436,7 @@ final class AiaAssessmentForm extends FormBase {
       '#description' => Markup::create(Xss::filterAdmin($description)),
       '#required' => $required,
       '#default_value' => $default,
-      '#wrapper_attributes' => ['class' => ['form-group']],
+      '#wrapper_attributes' => ['class' => ['form-group', 'aia-question']],
     ];
     if ($required) {
       $element['#required_error'] = $this->chrome(
@@ -422,7 +449,7 @@ final class AiaAssessmentForm extends FormBase {
       $help = $this->surveyRepository->text($question['help']);
       if ($help !== '') {
         $element['#suffix'] = Markup::create(sprintf(
-          '<details class="well well-sm"><summary>%s</summary><div>%s</div></details>',
+          '<details class="well well-sm aia-question-help"><summary>%s</summary><div>%s</div></details>',
           $this->escape((string) $this->t('Show help')),
           Xss::filterAdmin($help),
         ));
@@ -438,8 +465,18 @@ final class AiaAssessmentForm extends FormBase {
 
       case 'dropdown':
         $element['#type'] = 'select';
-        $element['#empty_option'] = $this->t('- Select -');
+        $element['#empty_option'] = $this->chrome('- Choose -', '- Choisir -');
         $element['#options'] = $this->options($question);
+        if (
+          ($question['name'] ?? '') === 'projectDetailsDepartment-NS' &&
+          is_scalar($default) &&
+          !isset($element['#options'][(string) $default])
+        ) {
+          $legacyLabel = $this->surveyRepository->legacyDepartmentLabel((string) $default);
+          if ($legacyLabel !== '') {
+            $element['#options'][(string) $default] = $legacyLabel;
+          }
+        }
         $element['#ajax'] = $this->ajaxDefinition();
         $element['#limit_validation_errors'] = [];
         $element['#attributes']['class'][] = 'form-control';
@@ -464,6 +501,10 @@ final class AiaAssessmentForm extends FormBase {
         $element['#type'] = 'textfield';
         if (($question['inputType'] ?? '') === 'number') {
           $element['#type'] = 'number';
+        }
+        else {
+          // SurveyJS does not impose Drupal's implicit 128-character limit.
+          $element['#maxlength'] = 65_535;
         }
         $element['#attributes']['class'][] = 'form-control';
         break;
@@ -490,7 +531,10 @@ final class AiaAssessmentForm extends FormBase {
     return [
       'callback' => '::ajaxRebuild',
       'wrapper' => 'aia-form-wrapper',
-      'event' => 'change',
+      // JavaScript emits this event after rapid changes settle, preventing
+      // overlapping wrapper rebuilds from restoring stale checkbox values.
+      'event' => 'aia:conditional-change',
+      'disable-refocus' => TRUE,
     ];
   }
 
@@ -560,15 +604,14 @@ final class AiaAssessmentForm extends FormBase {
   public function exportAssessment(array &$form, FormStateInterface $form_state): void {
     $pageNumber = (int) ($this->store()->get('page') ?? 0);
     $this->savePageAnswers($form_state, $pageNumber);
-    $payload = [
-      'version' => 'v1.0.1',
-      'currentPage' => max(0, $pageNumber - 1),
-      'data' => $this->store()->get('answers') ?? [],
-      'translationsOnResult' => $this->store()->get('translations') ?? [],
-      'completed' => (bool) $this->store()->get('completed'),
-      'answerLanguage' => $this->store()->get('answer_language')
-      ?? $this->getRequest()->getLocale(),
-    ];
+    $payload = $this->payloadBuilder->build(
+      $this->store()->get('answers') ?? [],
+      $pageNumber,
+      $this->store()->get('translations') ?? [],
+      (bool) $this->store()->get('completed'),
+      (string) ($this->store()->get('answer_language') ?? $this->getRequest()->getLocale()),
+      (int) ($this->store()->get('updated_at') ?? $this->timestamp()),
+    );
     $response = new Response(
       json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR),
     );
@@ -607,6 +650,7 @@ final class AiaAssessmentForm extends FormBase {
     $this->store()->delete('completed');
     $this->store()->delete('translations');
     $this->store()->delete('answer_language');
+    $this->store()->delete('updated_at');
     $form_state->setRedirect('aia.assessment');
   }
 
@@ -655,6 +699,7 @@ final class AiaAssessmentForm extends FormBase {
       is_string($payload['answerLanguage'] ?? NULL)
         ? $payload['answerLanguage']
         : NULL,
+      (int) ($payload['updatedAt'] ?? 0),
     );
     $this->messenger()->addStatus($this->t('Assessment progress loaded.'));
     $form_state->setRedirect(
@@ -703,6 +748,7 @@ final class AiaAssessmentForm extends FormBase {
       is_string($payload['answerLanguage'] ?? NULL)
         ? $payload['answerLanguage']
         : NULL,
+      (int) ($payload['updatedAt'] ?? 0),
     );
     $this->messenger()->addStatus($this->t('Browser progress restored.'));
     $form_state->setRedirect(
@@ -725,6 +771,11 @@ final class AiaAssessmentForm extends FormBase {
       $answers['decisionSector3'] = $answers['impact4'];
       unset($answers['impact4']);
     }
+    if (is_scalar($answers['projectDetailsDepartment-NS'] ?? NULL)) {
+      $answers['projectDetailsDepartment-NS'] = $this->surveyRepository->normalizeDepartment(
+        (string) $answers['projectDetailsDepartment-NS'],
+      );
+    }
 
     $normalized = [];
     foreach ($this->surveyRepository->getQuestionsByName() as $name => $question) {
@@ -744,6 +795,13 @@ final class AiaAssessmentForm extends FormBase {
         static fn (array $choice): string => (string) ($choice['value'] ?? ''),
         $question['choices'] ?? [],
       ), TRUE);
+      if (
+        $name === 'projectDetailsDepartment-NS' &&
+        is_scalar($value) &&
+        $this->surveyRepository->legacyDepartmentLabel((string) $value) !== ''
+      ) {
+        $choices[(string) $value] = TRUE;
+      }
       if ($type === 'checkbox' && is_array($value)) {
         $selected = array_values(array_unique(array_filter(
           array_map(
@@ -819,6 +877,7 @@ final class AiaAssessmentForm extends FormBase {
     int $requestedPage,
     ?bool $completed = NULL,
     ?string $answerLanguage = NULL,
+    int $updatedAt = 0,
   ): void {
     $this->purgeHiddenAnswers($answers);
     $lastPage = max(0, count($this->visiblePages($answers)) - 1);
@@ -841,6 +900,7 @@ final class AiaAssessmentForm extends FormBase {
     elseif ($answers !== []) {
       $this->store()->set('answer_language', $this->getRequest()->getLocale());
     }
+    $this->store()->set('updated_at', max($updatedAt, $this->timestamp()));
   }
 
   /**
@@ -883,7 +943,15 @@ final class AiaAssessmentForm extends FormBase {
 
     $this->purgeHiddenAnswers($answers);
     $this->store()->set('answers', $answers);
+    $this->store()->set('updated_at', $this->timestamp());
     $this->store()->delete('completed');
+  }
+
+  /**
+   * Returns a millisecond revision timestamp for browser/server precedence.
+   */
+  private function timestamp(): int {
+    return (int) floor(microtime(TRUE) * 1000);
   }
 
   /**
@@ -952,10 +1020,17 @@ final class AiaAssessmentForm extends FormBase {
    * Builds one score-bar cell with desktop and mobile labels.
    */
   private function scoreItem(string $fullLabel, string $shortLabel, string $value): string {
+    $key = match ($shortLabel) {
+      'IL' => 'level',
+      'RS' => 'raw',
+      'MS' => 'mitigation',
+      default => 'total',
+    };
     return sprintf(
-      '<div class="aia-current-score__item"><span class="aia-score-full">%s</span><span class="aia-score-short">%s</span>: %s</div>',
+      '<div class="aia-current-score__item"><span class="aia-score-full">%s</span><span class="aia-score-short">%s</span>: <span data-aia-score="%s">%s</span></div>',
       $this->escape($fullLabel),
       $this->escape($shortLabel),
+      $key,
       $this->escape($value),
     );
   }

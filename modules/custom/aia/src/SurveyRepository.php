@@ -15,6 +15,29 @@ use Drupal\Core\Render\Markup;
 final class SurveyRepository {
 
   /**
+   * Legacy institutions whose official names changed materially.
+   */
+  private const LEGACY_DEPARTMENT_ALIASES = [
+    '005' => 'dfatd-maecd',
+    '007' => 'ec',
+    '012' => 'ced-dec',
+    '015' => 'elections',
+    '019' => 'ppsc-sppc',
+    '033' => 'ic',
+    '042' => 'aandc-aadnc',
+    '050' => 'cic',
+    '055' => 'csec-cstc',
+    '074' => 'cer-rec',
+    '083' => 'wage',
+    '088' => 'ps-sp',
+    '101' => 'tsb-bst',
+    '103' => 'nsira-ossnr',
+    '124' => 'pc',
+    '127' => 'pwgsc-tpsgc',
+    '142' => 'infc',
+  ];
+
+  /**
    * Parsed questionnaire data.
    */
   private ?array $survey = NULL;
@@ -23,6 +46,13 @@ final class SurveyRepository {
    * Parsed UI and requirements data indexed by language.
    */
   private array $uiData = [];
+
+  /**
+   * Legacy department values indexed in both directions where names match.
+   */
+  private array $legacyDepartments = [];
+
+  private array $departmentToLegacy = [];
 
   public function __construct(
     private readonly ModuleExtensionList $moduleExtensionList,
@@ -107,6 +137,31 @@ final class SurveyRepository {
   public function text(string|array|null $value, ?string $language = NULL): string {
     $language ??= $this->languageManager->getCurrentLanguage()->getId();
     return self::localize($value, $language);
+  }
+
+  /**
+   * Converts a legacy department code to the current organization identifier.
+   */
+  public function normalizeDepartment(string $value): string {
+    $this->getSurvey();
+    return $this->legacyDepartments[$value]['current'] ?? $value;
+  }
+
+  /**
+   * Converts a current organization identifier for legacy JSON consumers.
+   */
+  public function exportDepartment(string $value): string {
+    $this->getSurvey();
+    return $this->departmentToLegacy[$value] ?? $value;
+  }
+
+  /**
+   * Gets the bundled label for an unmatched legacy department code.
+   */
+  public function legacyDepartmentLabel(string $value): string {
+    $this->getSurvey();
+    $choice = $this->legacyDepartments[$value]['choice'] ?? NULL;
+    return is_array($choice) ? $this->text($choice['text'] ?? '') : '';
   }
 
   /**
@@ -198,13 +253,106 @@ final class SurveyRepository {
     if ($this->institutionDirectory === NULL) {
       return;
     }
-    $choices = $this->institutionDirectory->choices();
+    $choices = $this->institutionDirectory->choices(
+      $this->languageManager->getCurrentLanguage()->getId(),
+    );
     if ($choices === []) {
       return;
     }
     if (isset($this->survey['pages']) && is_array($this->survey['pages'])) {
+      $legacyChoices = $this->findDepartmentChoices($this->survey['pages']);
+      $this->buildDepartmentAliases($legacyChoices, $choices);
       $this->replaceDepartmentChoices($this->survey['pages'], $choices);
     }
+  }
+
+  /**
+   * Finds the bundled department choices before replacing them.
+   */
+  private function findDepartmentChoices(array $elements): array {
+    foreach ($elements as $element) {
+      if (($element['name'] ?? '') === 'projectDetailsDepartment-NS') {
+        return is_array($element['choices'] ?? NULL) ? $element['choices'] : [];
+      }
+      foreach (['elements', 'pages'] as $children) {
+        if (isset($element[$children]) && is_array($element[$children])) {
+          $match = $this->findDepartmentChoices($element[$children]);
+          if ($match !== []) {
+            return $match;
+          }
+        }
+      }
+    }
+    return [];
+  }
+
+  /**
+   * Builds conservative bilingual aliases for unchanged department names.
+   */
+  private function buildDepartmentAliases(array $legacyChoices, array $currentChoices): void {
+    $currentByName = [];
+    $currentIds = [];
+    foreach ($currentChoices as $choice) {
+      $currentIds[(string) ($choice['value'] ?? '')] = TRUE;
+      foreach (['default', 'fr'] as $language) {
+        $name = self::departmentName((string) ($choice['text'][$language] ?? ''));
+        if ($name !== '') {
+          $currentByName[$name][] = (string) $choice['value'];
+        }
+      }
+    }
+    foreach ($legacyChoices as $choice) {
+      $legacy = (string) ($choice['value'] ?? '');
+      if ($legacy === '') {
+        continue;
+      }
+      $legacyAliases = str_starts_with($legacy, 'item')
+        ? [$legacy, substr($legacy, 4)]
+        : [$legacy, 'item' . $legacy];
+      foreach ($legacyAliases as $legacyAlias) {
+        $this->legacyDepartments[$legacyAlias] = ['choice' => $choice];
+      }
+      $matches = [];
+      foreach (['default', 'fr'] as $language) {
+        $name = self::departmentName((string) ($choice['text'][$language] ?? ''));
+        if (count($currentByName[$name] ?? []) === 1) {
+          $matches[] = $currentByName[$name][0];
+        }
+      }
+      $matches = array_values(array_unique($matches));
+      if (
+        $matches === [] &&
+        isset(self::LEGACY_DEPARTMENT_ALIASES[$legacy], $currentIds[self::LEGACY_DEPARTMENT_ALIASES[$legacy]])
+      ) {
+        $matches[] = self::LEGACY_DEPARTMENT_ALIASES[$legacy];
+      }
+      if (count($matches) === 1) {
+        $current = $matches[0];
+        foreach ($legacyAliases as $legacyAlias) {
+          $this->legacyDepartments[$legacyAlias]['current'] = $current;
+        }
+        $english = mb_strtolower((string) ($choice['text']['default'] ?? ''));
+        if (
+          !isset($this->departmentToLegacy[$current]) ||
+          !str_contains($english, 'administered activities')
+        ) {
+          $this->departmentToLegacy[$current] = str_starts_with($legacy, 'item')
+            ? $legacy
+            : 'item' . $legacy;
+        }
+      }
+    }
+  }
+
+  /**
+   * Normalizes harmless naming differences between old and current lists.
+   */
+  private static function departmentName(string $name): string {
+    $name = mb_strtolower($name);
+    $name = preg_replace('/\([^)]*\)/u', ' ', $name) ?? $name;
+    $name = preg_replace('/\b(department|ministère)\s+(of|de|du|des|de la|de l’|de l\')?\b/u', ' ', $name) ?? $name;
+    $name = preg_replace('/\b(canada|canadian|of|the|du|de|des|la|le|l|d)\b/u', ' ', $name) ?? $name;
+    return trim(preg_replace('/[^\pL\pN]+/u', ' ', $name) ?? $name);
   }
 
   /**

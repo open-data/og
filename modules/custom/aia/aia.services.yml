@@ -13,6 +13,14 @@ services:
   aia.score_calculator:
     class: Drupal\aia\ScoreCalculator
 
+  aia.assessment_report_builder:
+    class: Drupal\aia\AssessmentReportBuilder
+    arguments: ['@aia.survey_repository', '@aia.score_calculator']
+
+  aia.portable_assessment_builder:
+    class: Drupal\aia\PortableAssessmentBuilder
+    arguments: ['@aia.survey_repository']
+
   aia.path_processor:
     class: Drupal\aia\PathProcessor\AiaPathProcessor
     arguments: ['@language_manager']

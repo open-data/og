@@ -11,6 +11,7 @@ require_once __DIR__ . '/bootstrap.php';
 
 use Drupal\aia\ConditionEvaluator;
 use Drupal\aia\InstitutionDirectory;
+use Drupal\aia\PortableAssessmentBuilder;
 use Drupal\aia\ScoreCalculator;
 use Drupal\aia\SurveyRepository;
 
@@ -84,6 +85,44 @@ aia_assert(in_array('cra-arc', $institutionValues, TRUE), 'CRA uses the Open Gov
 $aafc = array_values(array_filter($institutionChoices, static fn (array $choice): bool => $choice['value'] === 'aafc-aac'))[0];
 aia_assert($aafc['text']['default'] === 'Agriculture and Agri-Food Canada', 'Organization English titles are used.');
 aia_assert($aafc['text']['fr'] === 'Agriculture et Agroalimentaire Canada', 'Organization French titles are used.');
+$frenchChoices = InstitutionDirectory::mapOrganizations([
+  'cra-arc' => ['en' => 'Canada Revenue Agency', 'fr' => 'Agence du revenu du Canada'],
+  'aafc-aac' => ['en' => 'Agriculture and Agri-Food Canada', 'fr' => 'Agriculture et Agroalimentaire Canada'],
+], 'fr');
+aia_assert(
+  array_column($frenchChoices, 'value') === ['cra-arc', 'aafc-aac'],
+  'French department choices sort by French title.',
+);
+$repositoryReflection = new ReflectionClass(SurveyRepository::class);
+$repository = $repositoryReflection->newInstanceWithoutConstructor();
+$surveyProperty = $repositoryReflection->getProperty('survey');
+$surveyProperty->setValue($repository, []);
+$aliasBuilder = $repositoryReflection->getMethod('buildDepartmentAliases');
+$aliasBuilder->invoke($repository, [
+  ['value' => '001', 'text' => ['default' => 'Agriculture and Agri-Food (Department of)', 'fr' => 'Agriculture et de l’Agroalimentaire (Ministère de l’)']],
+  ['value' => '122', 'text' => ['default' => 'Canada Revenue Agency - (Administered Activities)', 'fr' => 'Agence du revenu du Canada - (Activités administrées)']],
+  ['value' => '130', 'text' => ['default' => 'Canada Revenue Agency', 'fr' => 'Agence du revenu du Canada']],
+], [
+  ['value' => 'aafc-aac', 'text' => ['default' => 'Agriculture and Agri-Food Canada', 'fr' => 'Agriculture et Agroalimentaire Canada']],
+  ['value' => 'cra-arc', 'text' => ['default' => 'Canada Revenue Agency', 'fr' => 'Agence du revenu du Canada']],
+]);
+aia_assert($repository->normalizeDepartment('001') === 'aafc-aac', 'Numeric legacy department ids import as current ids.');
+aia_assert($repository->normalizeDepartment('item001') === 'aafc-aac', 'itemNNN legacy department ids import as current ids.');
+aia_assert($repository->exportDepartment('aafc-aac') === 'item001', 'Current department ids export for the legacy AIA.');
+aia_assert($repository->exportDepartment('cra-arc') === 'item130', 'Canonical legacy ids are preferred over administered-activity duplicates.');
+aia_assert($repository->legacyDepartmentLabel('999') === '', 'Unknown legacy department ids remain distinguishable.');
+$portable = (new PortableAssessmentBuilder($repository))->build(
+  ['projectDetailsDepartment-NS' => 'aafc-aac', 'projectDetailsTitle' => str_repeat('x', 500)],
+  3,
+  ['projectDetailsTitle' => str_repeat('é', 500)],
+  TRUE,
+  'fr',
+  123456,
+);
+aia_assert($portable['currentPage'] === 2, 'Shared portable payload uses legacy page numbering.');
+aia_assert($portable['data']['projectDetailsDepartment-NS'] === 'item001', 'Shared portable payload exports a legacy department id.');
+aia_assert(strlen($portable['data']['projectDetailsTitle']) === 500, 'Long single-line answers round trip without truncation.');
+aia_assert($portable['updatedAt'] === 123456, 'Shared portable payload retains the state revision.');
 
 aia_assert(SurveyRepository::localize(['default' => 'Assessment', 'fr' => 'Évaluation'], 'fr') === 'Évaluation', 'French UI strings localize.');
 $sections = SurveyRepository::formatRequirementText("Intro with <a href=\"https://example.com\">link</a>.\n\nFirst item\nSecond item");
@@ -94,6 +133,21 @@ aia_assert(array_map('strval', $sections[0]['list']) === ['First item', 'Second 
 $survey = json_decode((string) file_get_contents(dirname(__DIR__) . '/data/survey-enfr.json'), TRUE, 512, JSON_THROW_ON_ERROR);
 aia_assert(count($survey['pages']) === 18, 'Survey has 18 pages.');
 aia_assert($survey['firstPageIsStarted'] === TRUE, 'Welcome page is a start page.');
+$matrixViews = 0;
+foreach (['item1', 'item2'] as $phase) {
+  foreach (['en', 'fr'] as $language) {
+    $visible = array_values(array_filter(
+      $survey['pages'],
+      static fn (array $page): bool => $evaluator->evaluate(
+        $page['visibleIf'] ?? NULL,
+        ['projectDetailsPhase' => $phase],
+      ),
+    ));
+    aia_assert(count($visible) === 14, "$language $phase has welcome plus 13 visible assessment sections.");
+    $matrixViews += count($visible) - 1;
+  }
+}
+aia_assert($matrixViews === 52, 'Both phases and languages cover the complete 52-view section matrix.');
 
 $questions = [];
 $conditionCount = 0;
@@ -130,6 +184,21 @@ $live = $calculator->calculate($questions, [
   'decisionSector1' => ['item1-1', 'item2-1', 'item3-1'],
 ]);
 aia_assert($live['raw'] === 3 && $live['level'] === 1, 'Sample design-branch answers score level 1 with raw 3.');
+$questionIndex = array_column($questions, NULL, 'name');
+aia_assert(
+  $calculator->value('item6-1') === 1 &&
+  $calculator->value('Free-text specification') === 0,
+  'Q30 Other contributes one point and its explanatory text contributes none.',
+);
+aia_assert(
+  in_array('item6-1', array_column($questionIndex['decisionSector1']['choices'], 'value'), TRUE),
+  'Q30 retains the canonical scored Other choice.',
+);
+$clientScoring = $calculator->clientConfig($questions);
+aia_assert(
+  ($clientScoring['questions']['decisionSector1']['values']['item6-1'] ?? NULL) === 1,
+  'Immediate browser scoring uses the authoritative Q30 value.',
+);
 aia_assert($calculator->sectionKey('impact4A') === 'impactA', 'Risk section keys strip every digit.');
 aia_assert($calculator->sectionKey('fairnessDesign10', TRUE) === 'fairnessDesign0', 'Mitigation section keys strip the first digit.');
 $sampleAreas = $calculator->areaBreakdowns($questions, [

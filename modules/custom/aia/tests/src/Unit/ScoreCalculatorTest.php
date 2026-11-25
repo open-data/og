@@ -60,6 +60,32 @@ final class ScoreCalculatorTest extends TestCase {
   }
 
   /**
+   * Browser metadata mirrors authoritative values, including Q30 Other.
+   */
+  public function testClientScoringMetadata(): void {
+    $config = $this->calculator->clientConfig([
+      [
+        'type' => 'checkbox',
+        'name' => 'decisionSector1',
+        'choices' => [
+          ['value' => 'item1-1'],
+          ['value' => 'item6-1'],
+        ],
+        '_panel' => ['name' => 'decisionSectorPanel-RS'],
+      ],
+      [
+        'type' => 'comment',
+        'name' => 'decisionSector2',
+      ],
+    ]);
+
+    self::assertSame(1, $config['questions']['decisionSector1']['values']['item6-1']);
+    self::assertSame(2, $config['maximumRaw']);
+    self::assertArrayNotHasKey('decisionSector2', $config['questions']);
+    self::assertSame(0, $this->calculator->value('Other details'));
+  }
+
+  /**
    * Tests score classification from source names.
    */
   public function testScoreTypeFromQuestionAndPanelNames(): void {

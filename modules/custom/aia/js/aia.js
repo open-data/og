@@ -4,6 +4,9 @@
   const storageKey = 'aia-eia-progress-v1';
   const restoreGuardKey = 'aia-eia-restore-pending';
   const maximumPayloadSize = 2000000;
+  const conditionalDelay = 120;
+  let conditionalTimer;
+  let conditionalTarget;
 
   function storageGet(type, key) {
     try {
@@ -65,8 +68,84 @@
     });
     Object.assign(state.data, checkboxValues);
     state.completed = false;
+    state.updatedAt = Math.max(Date.now(), Number(state.updatedAt || 0) + 1);
+    drupalSettings.aia.state = state;
     storageSet('localStorage', storageKey, JSON.stringify(state));
     return state;
+  }
+
+  function updateScore(state) {
+    const config = drupalSettings.aia && drupalSettings.aia.scoring;
+    if (!config || !config.questions) {
+      return;
+    }
+    let raw = 0;
+    let mitigation = 0;
+    Object.entries(config.questions).forEach(([name, question]) => {
+      const selected = Array.isArray(state.data[name])
+        ? state.data[name]
+        : [state.data[name]];
+      const value = selected.reduce(
+        (total, item) => total + Number(question.values[String(item)] || 0),
+        0,
+      );
+      if (Number(question.type) === 2) {
+        raw += value;
+      }
+      else if (Number(question.type) === 3) {
+        mitigation += value;
+      }
+    });
+    const maximumRaw = Number(config.maximumRaw || 0);
+    const maximumMitigation = Number(config.maximumMitigation || 0);
+    const total = mitigation >= 0.8 * (maximumMitigation / 2)
+      ? Math.round(0.85 * raw)
+      : raw;
+    const level = total <= maximumRaw * 0.25
+      ? 1
+      : total <= maximumRaw * 0.5
+        ? 2
+        : total <= maximumRaw * 0.75 ? 3 : 4;
+    Object.entries({raw, mitigation, total, level}).forEach(([key, value]) => {
+      document.querySelectorAll(`[data-aia-score="${key}"]`).forEach((item) => {
+        item.textContent = String(value);
+      });
+    });
+    document.querySelectorAll('.aia-current-score').forEach((scoreBar) => {
+      Array.from(scoreBar.classList)
+        .filter((name) => name.startsWith('aia-current-score--level-'))
+        .forEach((name) => scoreBar.classList.remove(name));
+      scoreBar.classList.add(`aia-current-score--level-${level}`);
+    });
+  }
+
+  function queueConditionalRebuild(target) {
+    if (!target.matches('select[data-drupal-selector], input[type="radio"][data-drupal-selector], input[type="checkbox"][data-drupal-selector]')) {
+      return;
+    }
+    conditionalTarget = target;
+    window.clearTimeout(conditionalTimer);
+    conditionalTimer = window.setTimeout(flushConditionalRebuild, conditionalDelay);
+  }
+
+  function flushConditionalRebuild() {
+    const instances = Drupal.ajax && Drupal.ajax.instances
+      ? Drupal.ajax.instances
+      : [];
+    if (Object.values(instances).some((instance) => instance && instance.ajaxing)) {
+      conditionalTimer = window.setTimeout(flushConditionalRebuild, 30);
+      return;
+    }
+    const target = conditionalTarget;
+    conditionalTarget = null;
+    const liveTarget = target && target.isConnected
+      ? target
+      : target && target.name
+        ? document.getElementsByName(target.name)[0]
+        : null;
+    if (liveTarget) {
+      liveTarget.dispatchEvent(new CustomEvent('aia:conditional-change', {bubbles: true}));
+    }
   }
 
   function parseSavedState(value) {
@@ -94,13 +173,14 @@
     if (!drupalSettings.aia || !drupalSettings.aia.allowRestore) {
       return false;
     }
-    if (!savedState || hasAnswers(currentState) || !hasAnswers(savedState)) {
+    if (!savedState || !hasAnswers(savedState)) {
       return false;
     }
-    const serverPage = Number(currentState && currentState.currentPage);
-    const savedPage = Number(savedState.currentPage);
-    return !(Number.isFinite(serverPage) && Number.isFinite(savedPage) &&
-      serverPage > savedPage);
+    const savedRevision = Number(savedState.updatedAt || 0);
+    if (savedRevision === 0) {
+      return !hasAnswers(currentState);
+    }
+    return savedRevision > Number(currentState.updatedAt || 0);
   }
 
   Drupal.behaviors.aiaActions = {
@@ -133,8 +213,25 @@
           storageSet('localStorage', storageKey, JSON.stringify(currentState));
         }
 
-        form.addEventListener('input', () => mirrorForm(form));
-        form.addEventListener('change', () => mirrorForm(form));
+        const snapshot = () => {
+          const state = mirrorForm(form);
+          updateScore(state);
+          return state;
+        };
+        form.addEventListener('input', snapshot);
+        form.addEventListener('change', (event) => {
+          snapshot();
+          queueConditionalRebuild(event.target);
+        });
+        form.addEventListener('submit', () => {
+          window.clearTimeout(conditionalTimer);
+          snapshot();
+        }, true);
+        window.addEventListener('pagehide', () => {
+          window.clearTimeout(conditionalTimer);
+          snapshot();
+        });
+        updateScore(currentState);
       });
 
       once('aia-import', '[data-aia-import-submit]', context).forEach((submit) => {
@@ -167,6 +264,29 @@
           saved.completed = true;
           storageSet('localStorage', storageKey, JSON.stringify(saved));
         }
+      });
+
+      once('aia-translations', '#aia-results-translation-form', context).forEach((form) => {
+        const snapshotTranslations = () => {
+          const saved = parseSavedState(storageGet('localStorage', storageKey));
+          if (!saved) {
+            return;
+          }
+          const translations = {};
+          new FormData(form).forEach((value, name) => {
+            const match = name.match(/^translations\[([^\]]+)\]$/);
+            if (match && typeof value === 'string' && value.trim() !== '') {
+              translations[match[1]] = value;
+            }
+          });
+          saved.translationsOnResult = translations;
+          saved.updatedAt = Math.max(Date.now(), Number(saved.updatedAt || 0) + 1);
+          storageSet('localStorage', storageKey, JSON.stringify(saved));
+        };
+        form.addEventListener('input', snapshotTranslations);
+        form.addEventListener('change', snapshotTranslations);
+        form.addEventListener('submit', snapshotTranslations, true);
+        window.addEventListener('pagehide', snapshotTranslations);
       });
 
       once('aia-print', '[data-aia-print]', context).forEach((button) => {

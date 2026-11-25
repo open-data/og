@@ -20,6 +20,16 @@ function aia_page_attachments(array &$attachments): void {
 }
 
 /**
+ * Marks AIA pages so theme-provided sharing controls can be suppressed.
+ */
+function aia_preprocess_html(array &$variables): void {
+  $route = \Drupal::routeMatch()->getRouteName();
+  if (is_string($route) && str_starts_with($route, 'aia.')) {
+    $variables['attributes']['class'][] = 'aia-route';
+  }
+}
+
+/**
  * Implements hook_theme().
  */
 function aia_theme($existing, $type, $theme, $path): array {
@@ -35,7 +45,9 @@ function aia_theme($existing, $type, $theme, $path): array {
         'ui' => [],
         'answer_language' => 'en',
         'export_url' => NULL,
-        'pdf_url' => NULL,
+        'pdf_urls' => [],
+        'translation_form' => [],
+        'report_problem' => [],
         'restart_url' => NULL,
       ],
     ],

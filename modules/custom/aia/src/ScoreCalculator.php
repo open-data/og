@@ -63,6 +63,45 @@ final class ScoreCalculator {
   }
 
   /**
+   * Returns compact metadata for immediate browser-side score updates.
+   *
+   * PHP remains authoritative on navigation and the results page. This data
+   * lets the browser mirror the same suffix-based arithmetic without waiting
+   * for a full Form API AJAX rebuild.
+   */
+  public function clientConfig(array $questions): array {
+    $config = [
+      'questions' => [],
+      'maximumRaw' => 0,
+      'maximumMitigation' => 0,
+    ];
+    foreach ($questions as $question) {
+      if (!$this->isScoreable($question)) {
+        continue;
+      }
+      $name = (string) ($question['name'] ?? '');
+      $type = $this->scoreType($question);
+      $maximum = $this->maximum($question);
+      if ($type === self::RAW_SCORE) {
+        $config['maximumRaw'] += $maximum;
+      }
+      elseif ($type === self::MITIGATION_SCORE) {
+        $config['maximumMitigation'] += $maximum;
+      }
+      $values = [];
+      foreach ($question['choices'] ?? [] as $choice) {
+        $value = (string) ($choice['value'] ?? '');
+        $values[$value] = $this->value($value);
+      }
+      $config['questions'][$name] = [
+        'type' => $type,
+        'values' => $values,
+      ];
+    }
+    return $config;
+  }
+
+  /**
    * Scores every scoreable question whose name contains a section substring.
    *
    * Matches the public app getter: questionNames.filter(name => name.includes(section)).

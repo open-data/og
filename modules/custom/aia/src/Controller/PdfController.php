@@ -6,6 +6,7 @@ namespace Drupal\aia\Controller;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Drupal\aia\AssessmentReportBuilder;
 use Drupal\aia\ScoreCalculator;
 use Drupal\aia\SurveyRepository;
 use Drupal\Core\Controller\ControllerBase;
@@ -24,6 +25,7 @@ final class PdfController extends ControllerBase {
   public function __construct(
     private readonly SurveyRepository $surveyRepository,
     private readonly ScoreCalculator $scoreCalculator,
+    private readonly AssessmentReportBuilder $reportBuilder,
     private readonly PrivateTempStoreFactory $tempStoreFactory,
   ) {}
 
@@ -34,6 +36,7 @@ final class PdfController extends ControllerBase {
     return new static(
       $container->get('aia.survey_repository'),
       $container->get('aia.score_calculator'),
+      $container->get('aia.assessment_report_builder'),
       $container->get('tempstore.private'),
     );
   }
@@ -60,8 +63,7 @@ final class PdfController extends ControllerBase {
     $ui = $this->surveyRepository->getUiData($language);
     $translations = $this->store()->get('translations') ?? [];
     $answerLanguage = $this->store()->get('answer_language') === 'fr' ? 'fr' : 'en';
-    $sections = $this->buildAnswerSections(
-      $questions,
+    $sections = $this->reportBuilder->build(
       $answers,
       $translations,
       $answerLanguage,
@@ -106,11 +108,8 @@ final class PdfController extends ControllerBase {
       . $this->escape($requirements['privacy_text']) . '</p>';
     $html .= '<h2 class="page-break">Section 3: '
       . $this->escape((string) $ui['resultSectionQA']) . '</h2>';
-    $sectionNumber = 0;
     foreach ($sections as $section) {
-      $sectionNumber++;
-      $html .= '<h3>Section 3.' . $sectionNumber . ': '
-        . $this->escape($section['title']) . '</h3>';
+      $html .= '<h3>' . $this->escape($section['title']) . '</h3>';
       $lastGroup = '';
       foreach ($section['items'] as $index => $item) {
         if ($item['group'] !== '' && $item['group'] !== $lastGroup) {
@@ -119,9 +118,9 @@ final class PdfController extends ControllerBase {
         }
         $html .= '<dl><dt>' . ($index + 1) . '. '
           . $this->escape($item['question']) . '</dt><dd>';
-        if (count($item['answers']) > 1) {
+        if (count($item['answer_items']) > 1) {
           $html .= '<ul>';
-          foreach ($item['answers'] as $answer) {
+          foreach ($item['answer_items'] as $answer) {
             $html .= '<li>' . nl2br($this->escape($answer['label']))
               . $this->renderModifier($answer['points'], (string) $ui['modifier'])
               . '</li>';
@@ -129,7 +128,7 @@ final class PdfController extends ControllerBase {
           $html .= '</ul>';
         }
         else {
-          $answer = reset($item['answers']);
+          $answer = reset($item['answer_items']);
           $html .= nl2br($this->escape((string) ($answer['label'] ?? '')))
             . $this->renderModifier($answer['points'] ?? NULL, (string) $ui['modifier']);
         }
@@ -151,87 +150,6 @@ final class PdfController extends ControllerBase {
     $response->headers->set('Content-Disposition', sprintf('attachment; filename="aia-%s.pdf"', $language));
     $response->headers->set('Cache-Control', 'private, no-store');
     return $response;
-  }
-
-  /**
-   * Builds the three upstream result sections in the requested language.
-   */
-  private function buildAnswerSections(
-    array $questions,
-    array $answers,
-    array $translations,
-    string $answerLanguage,
-    string $language,
-  ): array {
-    $ui = $this->surveyRepository->getUiData($language);
-    $sections = [
-      'project' => ['title' => (string) $ui['resultSectionPD'], 'items' => []],
-      'risk' => ['title' => (string) $ui['resultSectionRQA'], 'items' => []],
-      'mitigation' => ['title' => (string) $ui['resultSectionMQA'], 'items' => []],
-    ];
-    foreach ($questions as $question) {
-      $name = (string) ($question['name'] ?? '');
-      if ($name === '' || !array_key_exists($name, $answers)) {
-        continue;
-      }
-      $type = $this->scoreCalculator->scoreType($question);
-      $panelName = (string) ($question['_panel']['name'] ?? '');
-      if (
-        $type === ScoreCalculator::NOT_SCORED &&
-        !in_array($panelName, ['projectDetailsPanel-NS', 'aboutSystemPanel-NS'], TRUE)
-      ) {
-        continue;
-      }
-      $sectionKey = match ($type) {
-        ScoreCalculator::RAW_SCORE => 'risk',
-        ScoreCalculator::MITIGATION_SCORE => 'mitigation',
-        default => 'project',
-      };
-      $answer = $answers[$name];
-      if (
-        $language !== $answerLanguage &&
-        in_array($question['type'] ?? '', ['text', 'comment'], TRUE) &&
-        isset($translations[$name])
-      ) {
-        $answer = $translations[$name];
-      }
-      $labels = [];
-      foreach ($question['choices'] ?? [] as $choice) {
-        $labels[(string) ($choice['value'] ?? '')] = SurveyRepository::localize(
-          $choice['text'] ?? $choice['value'] ?? '',
-          $language,
-        );
-      }
-      $scoreable = $this->scoreCalculator->isScoreable($question);
-      $answerItems = array_map(
-        fn (mixed $value): array => [
-          'label' => $labels[(string) $value] ?? (string) $value,
-          'points' => $scoreable ? $this->scoreCalculator->value($value) : NULL,
-        ],
-        is_array($answer) ? $answer : [$answer],
-      );
-      $sections[$sectionKey]['items'][] = [
-        'group' => $this->localizedGroupTitle($question, $language),
-        'question' => SurveyRepository::localize(
-          $question['title'] ?? $name,
-          $language,
-        ),
-        'answers' => $answerItems,
-      ];
-    }
-    return $sections;
-  }
-
-  /**
-   * Returns the localized page and panel heading for a question.
-   */
-  private function localizedGroupTitle(array $question, string $language): string {
-    $page = SurveyRepository::localize($question['_page']['title'] ?? NULL, $language);
-    $panel = SurveyRepository::localize($question['_panel']['title'] ?? NULL, $language);
-    if ($page !== '' && $panel !== '' && $page !== $panel) {
-      return $page . ' – ' . $panel;
-    }
-    return $panel !== '' ? $panel : $page;
   }
 
   /**

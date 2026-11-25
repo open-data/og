@@ -1,0 +1,24 @@
+wet-boew:
+  remote: https://wet-boew.github.io/wet-boew-styleguide/index-en.html
+  version: 4.0.89
+  license:
+    name: MIT
+    url: https://github.com/wet-boew/wet-boew/blob/master/License-en.html
+    gpl-compatible: true
+  css:
+    theme:
+      https://www.canada.ca/etc/designs/canada/wet-boew/css/wet-boew.min.css: { type: external, minified: true }
+      https://www.canada.ca/etc/designs/canada/wet-boew/css/theme.min.css: { type: external, minified: true }
+
+assessment:
+  version: '1.0.9'
+  css:
+    theme:
+      css/aia.css: {}
+  js:
+    js/aia.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/drupal.ajax
+    - core/once

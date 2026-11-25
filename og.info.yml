@@ -86,6 +86,7 @@ install:
   - webform_ui
   - webform
   # custom
+  - aia
   - alter_block
   - alter_view
   - content_type_breadcrumb

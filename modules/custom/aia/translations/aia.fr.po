@@ -1,0 +1,234 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: AIA 1.0.1\n"
+"Language: fr\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Algorithmic Impact Assessment"
+msgstr "Évaluation de l’incidence algorithmique"
+
+msgid "Complete an Algorithmic Impact Assessment."
+msgstr "Remplir une évaluation de l’incidence algorithmique."
+
+msgid "Assessment results"
+msgstr "Résultats de l’évaluation"
+
+msgid "Page @current"
+msgstr "Page @current"
+
+msgid "Save"
+msgstr "Sauvegarder"
+
+msgid "Start Again"
+msgstr "Recommencer"
+
+msgid "Save or load progress"
+msgstr "Enregistrer ou charger la progression"
+
+msgid "Download JSON file"
+msgstr "Télécharger le fichier JSON"
+
+msgid "Upload JSON file"
+msgstr "Téléverser un fichier JSON"
+
+msgid "Select an AIA JSON progress file (maximum 2 MB)."
+msgstr "Sélectionnez un fichier de progression JSON de l’EIA (maximum 2 Mo)."
+
+msgid "Load progress"
+msgstr "Charger la progression"
+
+msgid "Previous"
+msgstr "Précédent"
+
+msgid "Next"
+msgstr "Suivant"
+
+msgid "View results"
+msgstr "Afficher les résultats"
+
+msgid "Complete"
+msgstr "Terminer"
+
+msgid "Please answer the question."
+msgstr "La réponse à cette question est obligatoire."
+
+msgid "Start again"
+msgstr "Recommencer"
+
+msgid "- Select -"
+msgstr "- Sélectionner -"
+
+msgid "Show help"
+msgstr "Afficher l’aide"
+
+msgid "Go to section"
+msgstr "Aller à la section"
+
+msgid "Go"
+msgstr "Aller"
+
+msgid "Data quality"
+msgstr "Qualité des données"
+
+msgid "Procedural fairness"
+msgstr "Équité procédurale"
+
+msgid "Privacy"
+msgstr "Confidentialité"
+
+msgid "Introduction"
+msgstr "Introduction"
+
+msgid "Delete all answers and start again?"
+msgstr "Supprimer toutes les réponses et recommencer?"
+
+msgid "Assessment progress loaded."
+msgstr "La progression de l’évaluation a été chargée."
+
+msgid "Impact level"
+msgstr "Niveau d’incidence"
+
+msgid "Final score"
+msgstr "Cote actuelle"
+
+msgid "Raw risk score"
+msgstr "Cote d’incidence brute"
+
+msgid "Mitigation score"
+msgstr "Cote d’atténuation"
+
+msgid "Project details"
+msgstr "Détails du projet"
+
+msgid "Risk questions"
+msgstr "Questions sur les risques"
+
+msgid "Mitigation questions"
+msgstr "Questions sur l’atténuation"
+
+msgid "Risk score by area"
+msgstr "Cote de risque par domaine"
+
+msgid "Mitigation score by area"
+msgstr "Cote d’atténuation par domaine"
+
+msgid "Area"
+msgstr "Domaine"
+
+msgid "Questions"
+msgstr "Questions"
+
+msgid "Project score"
+msgstr "Cote du projet"
+
+msgid "Maximum score"
+msgstr "Cote maximale"
+
+msgid "Print or save as PDF"
+msgstr "Imprimer ou enregistrer en PDF"
+
+msgid "Return to assessment"
+msgstr "Retourner à l’évaluation"
+
+msgid "Restore browser progress"
+msgstr "Restaurer la progression du navigateur"
+
+msgid "Browser progress restored."
+msgstr "La progression du navigateur a été restaurée."
+
+msgid "Translate free-text answers"
+msgstr "Traduire les réponses en texte libre"
+
+msgid "Save translations"
+msgstr "Enregistrer les traductions"
+
+msgid "Result translations saved."
+msgstr "Les traductions des résultats ont été enregistrées."
+
+msgid "Add @language translations for free-text answers before downloading that PDF."
+msgstr "Ajoutez des traductions @language des réponses en texte libre avant de télécharger ce PDF."
+
+msgid "Original: @answer"
+msgstr "Original : @answer"
+
+msgid "French"
+msgstr "Français"
+
+msgid "English"
+msgstr "anglaises"
+
+msgid "Download English PDF"
+msgstr "Télécharger le PDF anglais"
+
+msgid "Download French PDF"
+msgstr "Télécharger le PDF français"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Your answers are stored temporarily in this Drupal session and mirrored to local browser storage for recovery."
+msgstr "Vos réponses sont enregistrées temporairement dans cette session Drupal et copiées dans le stockage local du navigateur pour permettre leur récupération."
+
+msgid "View the source project"
+msgstr "Consulter le projet source"
+
+msgid "On this page"
+msgstr "Sur cette page"
+
+msgid "points"
+msgstr "points"
+
+msgid "Positive mitigation measures"
+msgstr "Mesures d’atténuation positives"
+
+msgid "Language selection"
+msgstr "Sélection de la langue"
+
+msgid "Start"
+msgstr "Commencer"
+
+msgid "Select a valid JSON progress file."
+msgstr "Sélectionnez un fichier de progression JSON valide."
+
+msgid "The progress file must be JSON and no larger than 2 MB."
+msgstr "Le fichier de progression doit être au format JSON et ne pas dépasser 2 Mo."
+
+msgid "The selected file does not contain valid JSON."
+msgstr "Le fichier sélectionné ne contient pas de données JSON valides."
+
+msgid "The selected file is not an AIA progress file."
+msgstr "Le fichier sélectionné n’est pas un fichier de progression de l’EIA."
+
+msgid "Browser progress could not be restored because it is larger than 2 MB."
+msgstr "La progression du navigateur n’a pas pu être restaurée, car elle dépasse 2 Mo."
+
+msgid "Browser progress could not be restored because it is invalid."
+msgstr "La progression du navigateur n’a pas pu être restaurée, car elle n’est pas valide."
+
+msgid "Current score: @total; raw risk: @raw; mitigation: @mitigation; impact level: @level"
+msgstr "Cote actuelle : @total; incidence brute : @raw; atténuation : @mitigation; niveau d’incidence : @level"
+
+msgid "Section 1: Impact level"
+msgstr "Section 1 : Niveau d’incidence"
+
+msgid "Section 3: Questions and answers"
+msgstr "Section 3 : Questions et réponses"
+
+msgid "Section 3.1: Project details"
+msgstr "Section 3.1 : Détails du projet"
+
+msgid "Section 3.2: Impact questions and answers"
+msgstr "Section 3.2 : Questions et réponses liées aux incidences"
+
+msgid "Section 3.3: Mitigation questions and answers"
+msgstr "Section 3.3 : Questions et réponses liées aux mesures d’atténuation"
+
+msgid "Raw impact score"
+msgstr "Cote d’incidence brute"
+
+msgid "Points"
+msgstr "Points"
+
+msgid "Translation saved."
+msgstr "Traduction enregistrée."
